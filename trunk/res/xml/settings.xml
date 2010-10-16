@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="General settings">
+		<ListPreference android:key="SETTING_UNITS"
+					    android:title="@string/settings_units_label"
+					    android:entries="@array/settings_units_options"
+					    android:entryValues="@array/settings_units_values"
+					    android:dialogTitle="@string/settings_units_label"
+					    android:defaultValue="0" />
+		<CheckBoxPreference android:key="SETTING_ENABLE_NOTIFICATIONS"
+							android:title="@string/settings_notifications_label"
+							android:defaultValue="true" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Notification settings">
+		<ListPreference android:key="SETTINGS_NOTIFICATION_INTERVAL"
+						android:title="@string/settings_notification_interval"
+						android:entries="@array/settings_interval_options"
+						android:entryValues="@array/settings_interval_values"
+						android:dialogTitle="@string/settings_notification_interval"
+						android:dependency="SETTING_ENABLE_NOTIFICATIONS" />
+	</PreferenceCategory>
+</PreferenceScreen>

@@ -2,4 +2,11 @@
 <resources>
     <string name="hello">Hello World, h2droid!</string>
     <string name="app_name">H2drOid</string>
+    
+    <!-- main_menu strings -->
+    <string name="menu_settings_label">Settings</string>
+    <string name="menu_settings_shortcut">s</string>
+    <string name="settings_units_label">Unit system</string>
+    <string name="settings_notifications_label">Notifications</string>
+    <string name="settings_notification_interval">Notification interval</string>
 </resources>

@@ -19,22 +19,27 @@
 				android:id="@+id/add_one_serving_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="+8 oz" />
+				android:text="@string/one_serving_button_label" />
 			<Button
 				android:id="@+id/add_two_servings_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="+16 oz" />
+				android:text="@string/two_serving_button_label" />
 			<Button
-				android:id="@+id/add_one_and_half_servings_button"
+				android:id="@+id/add_custom_serving_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="+20 oz" />
+				android:text="@string/custom_serving_button_label" />
 			<Button
 				android:id="@+id/undo_last_serving_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="Undo" />
+				android:text="@string/undo_serving_button_label" />
 		</TableRow>
 	</TableLayout>
+	<TextView
+		android:id="@+id/consumption_textview"
+		android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+		android:text="@string/consumption_label" />
 </LinearLayout>

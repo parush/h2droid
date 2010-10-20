@@ -9,4 +9,13 @@
     <string name="settings_units_label">Unit system</string>
     <string name="settings_notifications_label">Notifications</string>
     <string name="settings_notification_interval">Notification interval</string>
+    <string name="settings_goal_label">Daily Goal</string>
+    <string name="settings_goal_summary">Amount of water needed to reach your goal</string>
+    
+    <!-- main layout strings -->
+    <string name="one_serving_button_label">+8 oz</string>
+    <string name="two_serving_button_label">+16 oz</string>
+    <string name="custom_serving_button_label">+N oz</string>
+    <string name="undo_serving_button_label">Undo</string>
+    <string name="consumption_label">Today\'s water consumption: 0 oz</string>
 </resources>

@@ -5,13 +5,13 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
 public class Entry {
-	private Date date;
+	private String date;
 	private double nonMetricAmount;
 	private double metricAmount;
 	
 	private static final double ouncePerMililiter = 0.0338140227;
 	
-	public Date getDate() { return date; }
+	public String getDate() { return date; }
 	public double getNonMetricAmount() { return nonMetricAmount; }
 	public double getMetricAmount() { return metricAmount; }
 	
@@ -24,8 +24,15 @@ public class Entry {
 	 * Depending on _isNonMetric, units will be converted to get 
 	 * the other amount for second double field
 	 */
-	public Entry(Date _date, double _amount, boolean _isNonMetric) {
-		date = _date;
+	public Entry(String _date, double _amount, boolean _isNonMetric) {
+		// If no date is passed, generate date/time for now
+		if (_date == null) {
+			Date now = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			date = sdf.format(now);
+		} else {
+			date = _date;
+		}
 		
 		if (_isNonMetric) {
 			nonMetricAmount = _amount;
@@ -42,26 +49,25 @@ public class Entry {
 	 * @param _isNonMetric
 	 */
 	public Entry(double _amount, boolean _isNonMetric) {
-		this(new Date(), _amount, _isNonMetric);
+		this(null, _amount, _isNonMetric);
 	}
 	
 	/** Received amount in non-Metric units, convert to Metric */
 	private double convertToMetric(double _amount) {
-		return round((_amount / ouncePerMililiter), 2, BigDecimal.ROUND_UP);
+		//return round((_amount / ouncePerMililiter), 2, BigDecimal.ROUND_UP);
+		return _amount / ouncePerMililiter;
 	}
 	
 	/** Received amount in Metric units, convert to non-Metric */
 	private double convertToNonMetric(double _amount) {
-		return round((_amount * ouncePerMililiter), 2, BigDecimal.ROUND_UP);
+		//return round((_amount * ouncePerMililiter), 2, BigDecimal.ROUND_UP);
+		return _amount * ouncePerMililiter;
 	}
 	
 	/** Entry toString */
 	@Override
 	public String toString() {
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-		String dateString = sdf.format(date);
-		
-		return (dateString + "- metric: " + metricAmount + " ml - nonmetric: "
+		return (date + "- metric: " + metricAmount + " ml - nonmetric: "
 			   + nonMetricAmount + " fl oz"); 
 	}
 	

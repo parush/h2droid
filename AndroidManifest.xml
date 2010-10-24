@@ -18,7 +18,8 @@
         		  android:label="@string/menu_settings_label"
         		  android:theme="@android:style/Theme.Light" >
         </activity>
-
+		<provider android:name=".WaterProvider"
+				  android:authorities="com.frankcalise.provider.h2droid" />
     </application>
     <uses-sdk android:minSdkVersion="7" />
 

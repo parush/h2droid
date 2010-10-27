@@ -19,22 +19,26 @@
 				android:id="@+id/add_one_serving_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/one_serving_button_label" />
+				android:text="@string/one_serving_button_label"
+				android:onClick="onOneServingClick" />
 			<Button
 				android:id="@+id/add_two_servings_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/two_serving_button_label" />
+				android:text="@string/two_serving_button_label"
+				android:onClick="onTwoServingsClick" />
 			<Button
 				android:id="@+id/add_custom_serving_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/custom_serving_button_label" />
+				android:text="@string/custom_serving_button_label"
+				android:onClick="onCustomServingClick" />
 			<Button
 				android:id="@+id/undo_last_serving_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:text="@string/undo_serving_button_label" />
+				android:text="@string/undo_serving_button_label"
+				android:onClick="onUndoClick" />
 		</TableRow>
 	</TableLayout>
 	<TextView

@@ -10,13 +10,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class h2droid extends Activity {
 	private int mConsumption = 0;
@@ -28,43 +28,6 @@ public class h2droid extends Activity {
         
         // Set up main layout
         setContentView(R.layout.main);
-        
-        // Set up click listeners for
-        // add serving and undo buttons
-        Button oneServingButton = (Button)findViewById(R.id.add_one_serving_button);
-        oneServingButton.setOnClickListener(new OnClickListener() {
-        	public void onClick(View arg0) {
-        		Log.d("ADD", "One serving");
-        		Entry oneServing = new Entry(8, true);
-        		addNewEntry(oneServing);
-        	}
-        });
-        
-        Button twoServingsButton = (Button)findViewById(R.id.add_two_servings_button);
-        twoServingsButton.setOnClickListener(new OnClickListener() {
-        	public void onClick(View arg0) {
-        		Log.d("ADD", "Two servings");
-        		Entry twoServings = new Entry(16, true);
-        		addNewEntry(twoServings);
-        	}
-        });
-        
-        Button customServingButton = (Button)findViewById(R.id.add_custom_serving_button);
-        customServingButton.setOnClickListener(new OnClickListener() {
-        	public void onClick(View arg0) {
-        		Log.d("ADD", "Custom serving");
-        		// TODO popup dialog with custom add info
-        	}
-        });
-        
-        Button undoButton = (Button)findViewById(R.id.undo_last_serving_button);
-        undoButton.setOnClickListener(new OnClickListener() {
-        	public void onClick(View arg0) {
-        		Log.d("UNDO", "Last serving");
-        		// TODO remove last entry from today
-        		undoTodaysLastEntry();
-        	}
-        });
     }
     
     /** Called when activity returns to foreground */
@@ -74,8 +37,6 @@ public class h2droid extends Activity {
     	
     	loadTodaysEntriesFromProvider();
     }
-    
-    
     
     /** Set up menu for main activity */
     @Override
@@ -100,6 +61,35 @@ public class h2droid extends Activity {
     	return false;
     }
     
+    /** Handle "add one serving" action */
+    public void onOneServingClick(View v) {
+		Log.d("ADD", "One serving");
+		Entry oneServing = new Entry(8, true);
+		addNewEntry(oneServing);
+    }
+    
+    /** Handle "add two servings" action */
+    public void onTwoServingsClick(View v) {
+		Log.d("ADD", "Two servings");
+		Entry twoServings = new Entry(16, true);
+		addNewEntry(twoServings);
+    }
+    
+    /** Handle "add custom serving" action */
+    public void onCustomServingClick(View v) {
+    	Log.d("ADD", "Custom serving");
+    	// TODO bring up dialog or another activity for
+    	// adding some amount of water other than
+    	// one or two servings
+    }
+    
+    /** Handle "undo last serving" action */
+    public void onUndoClick(View v) {
+    	Log.d("UNDO", "Last serving");
+		// TODO remove last entry from today
+		undoTodaysLastEntry();
+    }
+    
     private void addNewEntry(Entry _entry) {
     	Log.d("CONTENT", "in addNewEntry");
     	    	
@@ -114,6 +104,12 @@ public class h2droid extends Activity {
     	cr.insert(WaterProvider.CONTENT_URI, values);
     	
     	mConsumption += _entry.getNonMetricAmount();
+    	
+    	// Make a toast displaying add complete
+    	String toastMsg = String.format("Added %.1f fl oz", _entry.getNonMetricAmount());
+    	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
+    	toast.setGravity(Gravity.BOTTOM, 0, 0);
+    	toast.show();
     	
     	// Update the amount of consumption on UI
     	updateConsumptionTextView();
@@ -187,7 +183,20 @@ public class h2droid extends Activity {
     /** Update the today's consumption TextView */
     private void updateConsumptionTextView() {
     	// TODO really need to load total from db here
+    	double percentGoal = (mConsumption / 64.0) * 100.0;
+    	double delta = mConsumption - 64.0;
+    	String sign;
+    	if (delta >= 0) {
+    		sign = "+";
+    	} else {
+    		sign = "Ñ";
+    	}
+    	if (percentGoal > 100.0) {
+    		percentGoal = 100.0;
+    	}
     	TextView tv = (TextView)findViewById(R.id.consumption_textview);
-    	tv.setText("Today's water consumption: " + mConsumption + " oz");
+    	tv.setText("Today's water consumption: " + mConsumption + " oz\n" + 
+    			   "Goal percent complete: " + percentGoal + "% (" + 
+    			   sign + delta + " fl oz)");
     }
 }

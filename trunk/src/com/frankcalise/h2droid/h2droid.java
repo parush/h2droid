@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -117,34 +118,38 @@ public class h2droid extends Activity {
     
     private void undoTodaysLastEntry() {
     	Log.d("UNDO", "in undo");
-    	String order = WaterProvider.KEY_DATE + " DESC LIMIT 1";
-    	//String where = "date('" + now + "') = date('" + WaterProvider.KEY_DATE + "')";
-    	//Log.d("UNDO", "WHERE: " + where);
+    	Date now = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    	
+    	String sortOrder = WaterProvider.KEY_DATE + " DESC LIMIT 1";
+    	String[] projection = {WaterProvider.KEY_ID};
+    	String where = "'" + sdf.format(now) + "' = date(" + WaterProvider.KEY_DATE + ")";
+    	
     	ContentResolver cr = getContentResolver();
     	
-    	// Get latest entry
-    	Cursor c = cr.query(WaterProvider.CONTENT_URI,
-    					    null, null, null, order);
-    	//int results = cr.delete(WaterProvider.CONTENT_URI, where, null)
+    	Cursor c = cr.query(WaterProvider.CONTENT_URI, projection, where, null, sortOrder);
+    	int results = 0;
     	if (c.moveToFirst()) {
-			String date = c.getString(WaterProvider.DATE_COLUMN);			
-			double metricAmount = c.getDouble(WaterProvider.AMOUNT_COLUMN);
-			boolean isNonMetric = false;
-			
-			Entry e = new Entry(date, metricAmount, isNonMetric);
-			
-			mConsumption -= e.getNonMetricAmount();
-			updateConsumptionTextView();
-			
-			Log.d("UNDO", e.toString());
-			
-			// TODO actually remove this entry
+    		Log.d("UNDO", "id = " + c.getInt(0));
+    		final Uri uri = Uri.parse("content://com.frankcalise.provider.h2droid/entries/" + c.getInt(0));
+    		results = cr.delete(uri, null, null);
     	} else {
-    		// No entries for today
-    		Log.d("UNDO", "No entries");
+    		Log.d("UNDO", "no entries from today!");
     	}
     	
-    	c.close();	
+    	c.close();
+    	
+    	String toastMsg;
+    	if (results > 0) {
+    		loadTodaysEntriesFromProvider();
+    		toastMsg = "Undoing last entry...";
+    	} else {
+    		toastMsg = "No entries from today!";
+    	}
+    	
+    	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
+    	toast.setGravity(Gravity.BOTTOM, 0, 0);
+    	toast.show();
     }
     
     private void loadTodaysEntriesFromProvider() {
@@ -152,7 +157,7 @@ public class h2droid extends Activity {
     	
     	Log.d("CONTENT", "in loadTodaysEntriesFromProvider()");
     	
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");// HH:mm:ss");
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     	Date now = new Date();
     	String where = "'" + sdf.format(now) + "' = date(" + WaterProvider.KEY_DATE + ")";
     	

@@ -4,6 +4,10 @@
     <string name="app_name">H2drOid</string>
     
     <!-- main_menu strings -->
+    <string name="menu_about_label">About</string>
+    <string name="menu_about_shortcut">a</string>
+    <string name="menu_reset_label">Reset Today\'s Data</string>
+    <string name="menu_reset_shortcut">r</string>
     <string name="menu_settings_label">Settings</string>
     <string name="menu_settings_shortcut">s</string>
     <string name="settings_units_label">Unit system</string>
@@ -18,4 +22,16 @@
     <string name="custom_serving_button_label">+N oz</string>
     <string name="undo_serving_button_label">Undo</string>
     <string name="consumption_label">Today\'s water consumption: 0 oz</string>
+    
+    <!-- about activity -->
+    <string name="about_title">About H2drOid</string>
+    <string name="about_text">Version: 1.0\n\n
+    	Developed by Frank Calise\n
+    	fcalise@gmail.com\n
+    	http://frankcalise.com\n
+    	http://twitter.com/frankcalise
+    </string>
+    
+    <!-- add custom entry activity -->
+    <string name="custom_entry_title">Add new entry</string>
 </resources>

@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class h2droid extends Activity {
-	private int mConsumption = 0;
+	private double mConsumption = 0;
 	
     /** Called when the activity is first created. */
     @Override
@@ -57,6 +57,13 @@ public class h2droid extends Activity {
     		case R.id.menu_settings:
     			startActivity(new Intent(this, Settings.class));
     			return true;
+    		case R.id.menu_about:
+    			startActivity(new Intent(this, AboutActivity.class));
+    			return true;
+    		case R.id.menu_reset:
+    			Log.d("RESET", "reset all of today's data - launch asynctask with delete uri");
+    			return true;
+    		default: break;
     	}
     	
     	return false;
@@ -82,6 +89,7 @@ public class h2droid extends Activity {
     	// TODO bring up dialog or another activity for
     	// adding some amount of water other than
     	// one or two servings
+    	startActivity(new Intent(this, CustomEntryActivity.class));
     }
     
     /** Handle "undo last serving" action */
@@ -190,18 +198,15 @@ public class h2droid extends Activity {
     	// TODO really need to load total from db here
     	double percentGoal = (mConsumption / 64.0) * 100.0;
     	double delta = mConsumption - 64.0;
-    	String sign;
-    	if (delta >= 0) {
-    		sign = "+";
-    	} else {
-    		sign = "Ñ";
-    	}
+
     	if (percentGoal > 100.0) {
     		percentGoal = 100.0;
     	}
+    	
     	TextView tv = (TextView)findViewById(R.id.consumption_textview);
-    	tv.setText("Today's water consumption: " + mConsumption + " oz\n" + 
-    			   "Goal percent complete: " + percentGoal + "% (" + 
-    			   sign + delta + " fl oz)");
+    	String dailyTotal = String.format("Today's water consumption: %.1f fl oz\n" +
+    									   "Goal percent complete: %.1f%% (%+.1f fl oz)",
+    									   mConsumption, percentGoal, delta);
+    	tv.setText(dailyTotal);
     }
 }

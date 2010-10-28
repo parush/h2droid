@@ -18,6 +18,13 @@
         		  android:label="@string/menu_settings_label"
         		  android:theme="@android:style/Theme.Light" >
         </activity>
+        <activity android:name=".AboutActivity"
+        		  android:label="@string/about_title"
+        		  android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity android:name=".CustomEntryActivity"
+        		  android:label="@string/custom_entry_title" >
+        </activity>
 		<provider android:name=".WaterProvider"
 				  android:authorities="com.frankcalise.provider.h2droid" />
     </application>

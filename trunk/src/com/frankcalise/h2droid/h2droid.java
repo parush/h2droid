@@ -62,6 +62,7 @@ public class h2droid extends Activity {
     			return true;
     		case R.id.menu_reset:
     			Log.d("RESET", "reset all of today's data - launch asynctask with delete uri");
+    			resetTodaysEntries();
     			return true;
     		default: break;
     	}
@@ -158,6 +159,33 @@ public class h2droid extends Activity {
     	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
     	toast.setGravity(Gravity.BOTTOM, 0, 0);
     	toast.show();
+    }
+    
+    private void resetTodaysEntries() {
+    	Date now = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    	
+    	String where = "'" + sdf.format(now) + "' = date(" + WaterProvider.KEY_DATE + ")";
+    	
+    	ContentResolver cr = getContentResolver();
+    	
+    	int results = cr.delete(WaterProvider.CONTENT_URI, where, null);
+    	
+    	String toastMsg;
+    	if (results > 0) {
+    		Log.d("RESET", "deleted some rows");
+    		toastMsg = "Deleting today's entries...";
+    	} else {
+    		Log.d("RESET", "there were no entries for today");
+    		toastMsg = "No entries from today!";
+    	}
+    	
+    	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
+    	toast.setGravity(Gravity.BOTTOM, 0, 0);
+    	toast.show();
+    	
+    	mConsumption = 0;
+    	updateConsumptionTextView();
     }
     
     private void loadTodaysEntriesFromProvider() {

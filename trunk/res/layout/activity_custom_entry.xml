@@ -4,8 +4,50 @@
 	android:layout_height="fill_parent"
 	android:orientation="vertical">
 	<EditText
-		android:id="@+id/edit_text"
+		android:id="@+id/amount_edittext"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:inputType="number|numberDecimal" />
+	<RadioGroup
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical" >
+		<RadioButton
+			android:id="@+id/radio_metric"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/custom_entry_metric_label"
+			android:checked="true"
+			android:onClick="onRadioClick" />
+		<RadioButton
+			android:id="@+id/radio_non_metric"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/custom_entry_non_metric_label"
+			android:onClick="onRadioClick" />	
+	</RadioGroup>
+	<TextView
+		android:id="@+id/conversion_textview"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" />
+	<TableLayout
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_gravity="center"
+		android:stretchColumns="*">
+		<TableRow>
+			<Button
+				android:id="@+id/save_button"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/custom_entry_save_label"
+				android:onClick="onSaveClick" />
+			<Button
+				android:id="@+id/cancel_button"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/custom_entry_cancel_label"
+				android:onClick="onCancelClick" />
+		</TableRow>
+	</TableLayout>
 </LinearLayout>

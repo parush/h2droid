@@ -3,8 +3,10 @@
     <string name="app_name">H2drOid</string>
     
     <!-- main_menu strings -->
+    <string name="menu_add_label">Add Entry</string>
+    <string name="menu_add_shortcut">a</string>
     <string name="menu_about_label">About</string>
-    <string name="menu_about_shortcut">a</string>
+    <string name="menu_about_shortcut">b</string>
     <string name="menu_reset_label">Reset Today\'s Data</string>
     <string name="menu_reset_shortcut">r</string>
     <string name="menu_settings_label">Settings</string>
@@ -33,4 +35,8 @@
     
     <!-- add custom entry activity -->
     <string name="custom_entry_title">Add new entry</string>
+    <string name="custom_entry_metric_label">Metric</string>
+    <string name="custom_entry_non_metric_label">Non-Metric</string>
+    <string name="custom_entry_save_label">Save</string>
+    <string name="custom_entry_cancel_label">Cancel</string>
 </resources>

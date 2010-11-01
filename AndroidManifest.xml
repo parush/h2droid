@@ -19,8 +19,7 @@
         		  android:theme="@android:style/Theme.Light" >
         </activity>
         <activity android:name=".AboutActivity"
-        		  android:label="@string/about_title"
-        		  android:theme="@android:style/Theme.Dialog" >
+        		  android:label="@string/about_title" >
         </activity>
         <activity android:name=".CustomEntryActivity"
         		  android:label="@string/custom_entry_title" >

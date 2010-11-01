@@ -9,7 +9,7 @@ public class Entry {
 	private double nonMetricAmount;
 	private double metricAmount;
 	
-	private static final double ouncePerMililiter = 0.0338140227;
+	public static final double ouncePerMililiter = 0.0338140227;
 	
 	public String getDate() { return date; }
 	public double getNonMetricAmount() { return nonMetricAmount; }
@@ -54,13 +54,11 @@ public class Entry {
 	
 	/** Received amount in non-Metric units, convert to Metric */
 	private double convertToMetric(double _amount) {
-		//return round((_amount / ouncePerMililiter), 2, BigDecimal.ROUND_UP);
 		return _amount / ouncePerMililiter;
 	}
 	
 	/** Received amount in Metric units, convert to non-Metric */
 	private double convertToNonMetric(double _amount) {
-		//return round((_amount * ouncePerMililiter), 2, BigDecimal.ROUND_UP);
 		return _amount * ouncePerMililiter;
 	}
 	
@@ -69,13 +67,5 @@ public class Entry {
 	public String toString() {
 		return (date + "- metric: " + metricAmount + " ml - nonmetric: "
 			   + nonMetricAmount + " fl oz"); 
-	}
-	
-	/** Helper function for rounding double values */
-	private static double round(double unrounded, int precision, int roundingMode) {
-	    BigDecimal bd = new BigDecimal(unrounded);
-	    BigDecimal rounded = bd.setScale(precision, roundingMode);
-	    
-	    return rounded.doubleValue();
 	}
 }

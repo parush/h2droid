@@ -64,6 +64,9 @@ public class h2droid extends Activity {
     			Log.d("RESET", "reset all of today's data - launch asynctask with delete uri");
     			resetTodaysEntries();
     			return true;
+    		case R.id.menu_add:
+    			startActivity(new Intent(this, CustomEntryActivity.class));
+    			return true;
     		default: break;
     	}
     	
@@ -87,7 +90,6 @@ public class h2droid extends Activity {
     /** Handle "add custom serving" action */
     public void onCustomServingClick(View v) {
     	Log.d("ADD", "Custom serving");
-    	// TODO bring up dialog or another activity for
     	// adding some amount of water other than
     	// one or two servings
     	startActivity(new Intent(this, CustomEntryActivity.class));
@@ -224,6 +226,7 @@ public class h2droid extends Activity {
     /** Update the today's consumption TextView */
     private void updateConsumptionTextView() {
     	// TODO really need to load total from db here
+    	
     	double percentGoal = (mConsumption / 64.0) * 100.0;
     	double delta = mConsumption - 64.0;
 

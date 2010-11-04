@@ -24,7 +24,9 @@
         		  android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity android:name=".CustomEntryActivity"
-        		  android:label="@string/custom_entry_title" >
+        		  android:label="@string/custom_entry_title"
+        		  android:theme="@style/Theme.Hydrate"
+        		  android:screenOrientation="portrait" >
         </activity>
 		<provider android:name=".WaterProvider"
 				  android:authorities="com.frankcalise.provider.h2droid" />

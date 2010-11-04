@@ -226,18 +226,32 @@ public class h2droid extends Activity {
     /** Update the today's consumption TextView */
     private void updateConsumptionTextView() {
     	// TODO really need to load total from db here
-    	
-    	double percentGoal = (mConsumption / 64.0) * 100.0;
-    	double delta = mConsumption - 64.0;
+    	double prefsGoal = Settings.getAmount(getApplicationContext());
+    	Log.d("GOAL", "read from prefs = " + prefsGoal);
+    	double percentGoal = (mConsumption / prefsGoal) * 100.0;
+    	double delta = mConsumption - prefsGoal;
 
     	if (percentGoal > 100.0) {
     		percentGoal = 100.0;
     	}
     	
-    	TextView tv = (TextView)findViewById(R.id.consumption_textview);
-    	String dailyTotal = String.format("Today's water consumption: %.1f fl oz\n" +
-    									   "Goal percent complete: %.1f%% (%+.1f fl oz)",
-    									   mConsumption, percentGoal, delta);
-    	tv.setText(dailyTotal);
+    	final TextView amountTextView = (TextView)findViewById(R.id.consumption_textview);
+    	String dailyTotal = String.format("%.1f fl oz\n", mConsumption);
+    	amountTextView.setText(dailyTotal);
+    	
+    	final TextView overUnderTextView = (TextView)findViewById(R.id.over_under_textview);
+    	String overUnder = String.format("%+.1f fl oz (%.1f%%)", delta, percentGoal);
+    	overUnderTextView.setText(overUnder);
+    	
+    	if (delta >= 0) {
+    		overUnderTextView.setTextColor(getResources().getColor(R.color.positive_delta));
+    	} else {
+    		overUnderTextView.setTextColor(getResources().getColor(R.color.negative_delta));
+    	}
+    	
+    	final TextView goalTextView = (TextView)findViewById(R.id.goal_textview);
+    	String goalText = String.format("Daily goal: %.1f fl oz", prefsGoal);
+    	goalTextView.setText(goalText);
+    	
     }
 }

@@ -7,7 +7,8 @@
 						android:summary="@string/settings_goal_summary"
 						android:defaultValue="64"
 						android:inputType="number|numberDecimal" />
-		<ListPreference 
+		<!-- below are enhancements later -->
+		<!-- <ListPreference 
 						android:key="SETTING_UNITS"
 					    android:title="@string/settings_units_label"
 					    android:entries="@array/settings_units_options"
@@ -18,7 +19,9 @@
 						android:key="SETTING_ENABLE_NOTIFICATIONS"
 						android:title="@string/settings_notifications_label"
 						android:defaultValue="true" />
+						-->
 	</PreferenceCategory>
+	<!-- 
 	<PreferenceCategory android:title="Notification settings">
 		<ListPreference
 						android:key="SETTING_NOTIFICATION_INTERVAL"
@@ -28,4 +31,5 @@
 						android:dialogTitle="@string/settings_notification_interval"
 						android:dependency="SETTING_ENABLE_NOTIFICATIONS" />
 	</PreferenceCategory>
+	 -->
 </PreferenceScreen>

@@ -28,10 +28,11 @@
     <string name="about_title">About H2drOid</string>
     <string name="about_text">Version: 1.0\n\n
     	Developed by Frank Calise\n
-    	fcalise@gmail.com\n
-    	http://frankcalise.com\n
-    	http://twitter.com/frankcalise
+		fcalise@gmail.com\n
+		http://frankcalise.com\n
+		http://twitter.com/frankcalise
     </string>
+    <string name="about_close_label">Close</string>
     
     <!-- add custom entry activity -->
     <string name="custom_entry_title">Add new entry</string>

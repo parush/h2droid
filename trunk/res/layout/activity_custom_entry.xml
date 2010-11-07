@@ -21,7 +21,7 @@
 			android:id="@+id/amount_edittext"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:inputType="number|numberDecimal"
+			android:inputType="numberDecimal"
 			android:hint="Amount" />
 		<TextView
 			android:layout_width="fill_parent"

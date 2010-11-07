@@ -6,7 +6,7 @@
 						android:title="@string/settings_goal_label"
 						android:summary="@string/settings_goal_summary"
 						android:defaultValue="64"
-						android:inputType="number|numberDecimal" />
+						android:inputType="numberDecimal" />
 		<!-- below are enhancements later -->
 		<!-- <ListPreference 
 						android:key="SETTING_UNITS"

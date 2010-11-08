@@ -28,6 +28,10 @@
         		  android:theme="@style/Theme.Hydrate"
         		  android:screenOrientation="portrait" >
         </activity>
+        <activity android:name=".HistoryActivity"
+        		  android:theme="@style/Theme.Hydrate"
+        		  android:screenOrientation="portrait" >
+        </activity>
 		<provider android:name=".WaterProvider"
 				  android:authorities="com.frankcalise.provider.h2droid" />
     </application>

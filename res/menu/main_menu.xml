@@ -4,6 +4,10 @@
 		  android:title="@string/menu_add_label"
 		  android:alphabeticShortcut="@string/menu_add_shortcut"
 		  android:icon="@android:drawable/ic_menu_add" />
+	<item android:id="@+id/menu_history"
+		  android:title="@string/menu_history_label"
+		  android:alphabeticShortcut="@string/menu_history_shortcut"
+		  android:icon="@android:drawable/ic_menu_recent_history" />
 	<item android:id="@+id/menu_reset"
 		  android:title="@string/menu_reset_label"
 		  android:alphabeticShortcut="@string/menu_reset_shortcut"

@@ -67,6 +67,9 @@ public class h2droid extends Activity {
     		case R.id.menu_add:
     			startActivity(new Intent(this, CustomEntryActivity.class));
     			return true;
+    		case R.id.menu_history:
+    			startActivity(new Intent(this, HistoryActivity.class));
+    			return true;
     		default: break;
     	}
     	

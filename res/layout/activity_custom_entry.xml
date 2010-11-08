@@ -36,19 +36,20 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="@string/custom_entry_metric_label"
-				android:checked="true"
 				android:onClick="onRadioClick" />
 			<RadioButton
 				android:id="@+id/radio_non_metric"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:checked="true"
 				android:text="@string/custom_entry_non_metric_label"
 				android:onClick="onRadioClick" />	
 		</RadioGroup>
 		<TextView
 			android:id="@+id/conversion_textview"
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" />
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/text_size" />
 		<TableLayout
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"

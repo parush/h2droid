@@ -9,8 +9,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-//import android.view.KeyEvent;
-//import android.view.View.OnKeyListener;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -107,10 +105,6 @@ public class CustomEntryActivity extends Activity {
     
     public void onRadioClick(View v) {
     	updateConversionTextView();
-    }
-    
-    public void onNonMetricClick(View v) {
-    	
     }
     
     private void addNewEntry(Entry _entry) {

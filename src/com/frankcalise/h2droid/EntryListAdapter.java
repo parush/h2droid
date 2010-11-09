@@ -7,27 +7,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class EntryListAdapter extends BaseAdapter {
 	
-	private List<Entry> entryList;
-	private Context context;
+	private List<Entry> mEntryList;
+	private final LayoutInflater mInflater;
 	
 	public EntryListAdapter(List<Entry> _entryList, Context _context) {
-		this.entryList = _entryList;
-		this.context = _context;
+		this.mEntryList = _entryList;
+		
+		mInflater = LayoutInflater.from(_context); 
 	}
 
 	@Override
 	public int getCount() {
-		return entryList.size();
+		return mEntryList.size();
 	}
 
 	@Override
 	public Entry getItem(int position) {
-		return entryList.get(position);
+		return mEntryList.get(position);
 	}
 
 	@Override
@@ -37,18 +37,21 @@ public class EntryListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// need to add list item reuse
-		Entry e = entryList.get(position);
+		Entry e = mEntryList.get(position);
 		
-		LinearLayout itemLayout = (LinearLayout)LayoutInflater.from(context).inflate(R.layout.entry_list_item, parent, false);
+		// Check to see if convertView contains a usable item
+		// If null, inflate a new row item
+		if (convertView == null) {
+			convertView = mInflater.inflate(R.layout.entry_list_item, parent, false);
+		}
+
+		// Set date
+		((TextView)convertView.findViewById(R.id.entry_date_textview)).setText(e.getDate());
 		
-		TextView dateTextView = (TextView)itemLayout.findViewById(R.id.entry_date_textview);
-		dateTextView.setText(e.getDate());
+		// Set amount
+		((TextView)convertView.findViewById(R.id.entry_amount_textview)).setText(String.format("%.1f", e.getNonMetricAmount()));
 		
-		TextView amountTextView = (TextView)itemLayout.findViewById(R.id.entry_amount_textview);
-		amountTextView.setText(String.format("%.1f", e.getNonMetricAmount()));
-		
-		return itemLayout;
+		return convertView;
 	}
 
 }

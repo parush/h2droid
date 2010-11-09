@@ -3,18 +3,27 @@ package com.frankcalise.h2droid;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CustomEntryActivity extends Activity {
+public class CustomEntryActivity extends Activity implements OnGestureListener {
+	
+	private EditText mAmountEditText;
+	private GestureDetector mGestureScanner;
+	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,9 +36,9 @@ public class CustomEntryActivity extends Activity {
         //final RadioButton unitsRadioButton = (RadioButton)findViewById(R.id.radio_metric);
         
         // Set up TextWatcher for the amount EditText
-        final EditText amountEditText = (EditText)findViewById(R.id.amount_edittext);
+        mAmountEditText = (EditText)findViewById(R.id.amount_edittext);
         
-        amountEditText.addTextChangedListener(new TextWatcher() {
+        mAmountEditText.addTextChangedListener(new TextWatcher() {
         	@Override
         	public void onTextChanged(CharSequence s, int start, int before,
         			int count) {
@@ -48,14 +57,15 @@ public class CustomEntryActivity extends Activity {
 				
 			}
         });
+        
+        mGestureScanner = new GestureDetector(this);
     }
     
     private void updateConversionTextView() {
     	final TextView tv = (TextView)findViewById(R.id.conversion_textview);
     	
     	try {
-    		final EditText amountEditText = (EditText)findViewById(R.id.amount_edittext);
-    		double amount = Double.valueOf(amountEditText.getText().toString()).doubleValue();
+    		double amount = Double.valueOf(mAmountEditText.getText().toString()).doubleValue();
     	
     		final RadioButton radioNonMetric = (RadioButton)findViewById(R.id.radio_non_metric);
 
@@ -76,8 +86,7 @@ public class CustomEntryActivity extends Activity {
     	Log.d("ADD", "add new entry here");
     	
     	try {
-    		final EditText amountEditText = (EditText)findViewById(R.id.amount_edittext);
-    		double amount = Double.valueOf(amountEditText.getText().toString()).doubleValue();
+    		double amount = Double.valueOf(mAmountEditText.getText().toString()).doubleValue();
     		
     		final RadioButton radioNonMetric = (RadioButton)findViewById(R.id.radio_non_metric);
     		boolean isNonMetric;
@@ -126,4 +135,48 @@ public class CustomEntryActivity extends Activity {
     	toast.setGravity(Gravity.BOTTOM, 0, 0);
     	toast.show();
     }
+
+	@Override
+	public boolean onDown(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+	
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+		
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		// Dismiss the soft keyboard when
+		// user taps main view
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(mAmountEditText.getWindowToken(), 0);
+		
+		return true;
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent ev) {
+		return mGestureScanner.onTouchEvent(ev);
+	}
 }

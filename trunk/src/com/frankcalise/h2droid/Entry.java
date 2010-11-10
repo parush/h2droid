@@ -1,7 +1,6 @@
 package com.frankcalise.h2droid;
 
 import java.util.Date;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
 public class Entry {

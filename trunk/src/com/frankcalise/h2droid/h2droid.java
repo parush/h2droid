@@ -4,8 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -84,10 +87,22 @@ public class h2droid extends Activity {
     }
     
     /** Handle "add two servings" action */
-    public void onTwoServingsClick(View v) {
-		Log.d("ADD", "Two servings");
-		Entry twoServings = new Entry(16, true);
-		addNewEntry(twoServings);
+    public void onFavServingsClick(View v) {
+    	String[] itemsArr = getFavoriteAmounts();//{"A", "B", "C", "D", "E"};
+		Log.d("ADD", "Favorite amount");
+		new AlertDialog.Builder(this)
+			.setTitle("Add favorite amount")
+			.setItems(itemsArr, 
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						double favAmount = Settings.getFavoriteAmountDouble(which, getApplicationContext());
+						Log.d("FAVORITES", "option = " + which + " settings amount = " + favAmount);
+						Entry favServing = new Entry(favAmount, true);
+						addNewEntry(favServing);
+					}
+				})
+		.show();
     }
     
     /** Handle "add custom serving" action */
@@ -101,7 +116,7 @@ public class h2droid extends Activity {
     /** Handle "undo last serving" action */
     public void onUndoClick(View v) {
     	Log.d("UNDO", "Last serving");
-		// TODO remove last entry from today
+		// remove last entry from today
 		undoTodaysLastEntry();
     }
     
@@ -238,10 +253,12 @@ public class h2droid extends Activity {
     		percentGoal = 100.0;
     	}
     	
+    	// Show consumption amount
     	final TextView amountTextView = (TextView)findViewById(R.id.consumption_textview);
     	String dailyTotal = String.format("%.1f fl oz\n", mConsumption);
     	amountTextView.setText(dailyTotal);
     	
+    	// Show delta from goal
     	final TextView overUnderTextView = (TextView)findViewById(R.id.over_under_textview);
     	String overUnder = String.format("%+.1f fl oz (%.1f%%)", delta, percentGoal);
     	overUnderTextView.setText(overUnder);
@@ -251,10 +268,22 @@ public class h2droid extends Activity {
     	} else {
     		overUnderTextView.setTextColor(getResources().getColor(R.color.negative_delta));
     	}
-    	
+ 
+    	// Show current goal setting
     	final TextView goalTextView = (TextView)findViewById(R.id.goal_textview);
     	String goalText = String.format("Daily goal: %.1f fl oz", prefsGoal);
-    	goalTextView.setText(goalText);
+    	goalTextView.setText(goalText);	
+    }
+    
+    private String[] getFavoriteAmounts() {
+    	String[] favAmounts = new String[5];
+    	final int max = 5;
+    	Context context = getApplicationContext();
     	
+    	for (int i = 0; i < max; i++) {
+    		favAmounts[i] = Settings.getFavoriteAmountString(i, context);
+    	}
+    	
+    	return favAmounts;
     }
 }

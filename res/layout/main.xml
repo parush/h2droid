@@ -46,7 +46,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/two_serving_button_label"
-					android:onClick="onTwoServingsClick" />
+					android:onClick="onFavServingsClick" />
 				<Button
 					android:id="@+id/add_custom_serving_button"
 					android:layout_width="wrap_content"

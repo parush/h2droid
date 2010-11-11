@@ -21,6 +21,33 @@
 						android:defaultValue="true" />
 						-->
 	</PreferenceCategory>
+	<PreferenceCategory android:title="Favorite amount settings">
+		<EditTextPreference
+					 	android:key="FAV_AMOUNT_ONE"
+						android:title="@string/settings_fav_one"
+						android:defaultValue="8"
+						android:inputType="numberDecimal" />
+		<EditTextPreference
+					 	android:key="FAV_AMOUNT_TWO"
+						android:title="@string/settings_fav_two"
+						android:defaultValue="16"
+						android:inputType="numberDecimal" />
+		<EditTextPreference
+					 	android:key="FAV_AMOUNT_THREE"
+						android:title="@string/settings_fav_three"
+						android:defaultValue="16.9"
+						android:inputType="numberDecimal" />
+		<EditTextPreference
+					 	android:key="FAV_AMOUNT_FOUR"
+						android:title="@string/settings_fav_four"
+						android:defaultValue="20"
+						android:inputType="numberDecimal" />
+		<EditTextPreference
+					 	android:key="FAV_AMOUNT_FIVE"
+						android:title="@string/settings_fav_five"
+						android:defaultValue="33.8"
+						android:inputType="numberDecimal" />
+	</PreferenceCategory>
 	<!-- 
 	<PreferenceCategory android:title="Notification settings">
 		<ListPreference

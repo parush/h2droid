@@ -1,6 +1,7 @@
 package com.frankcalise.h2droid;
 
 import java.util.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class Entry {
@@ -10,7 +11,24 @@ public class Entry {
 	
 	public static final double ouncePerMililiter = 0.0338140227;
 	
-	public String getDate() { return date; }
+	// String Date getter with passed in format
+	public String getDateWithFormat(String _format) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String formattedDate = null;
+		
+		try {
+			Date date = sdf.parse(this.date);
+			sdf = new SimpleDateFormat(_format);
+			formattedDate = sdf.format(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return formattedDate;
+	}
+	
+	public String getDate() { return getDateWithFormat("yyyy-MM-dd HH:mm:ss"); }
 	public double getNonMetricAmount() { return nonMetricAmount; }
 	public double getMetricAmount() { return metricAmount; }
 	

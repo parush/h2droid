@@ -1,8 +1,12 @@
 package com.frankcalise.h2droid;
 
+import java.text.ParseException;
+//import java.text.SimpleDateFormat;
+//import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +17,13 @@ public class EntryListAdapter extends BaseAdapter {
 	
 	private List<Entry> mEntryList;
 	private final LayoutInflater mInflater;
+	//private static SimpleDateFormat mSdf;
 	
 	public EntryListAdapter(List<Entry> _entryList, Context _context) {
 		this.mEntryList = _entryList;
 		
-		mInflater = LayoutInflater.from(_context); 
+		mInflater = LayoutInflater.from(_context);
+		//mSdf = new SimpleDateFormat("E, MMM dd, yyyy");
 	}
 
 	@Override
@@ -46,10 +52,17 @@ public class EntryListAdapter extends BaseAdapter {
 		}
 
 		// Set date
-		((TextView)convertView.findViewById(R.id.entry_date_textview)).setText(e.getDate());
+/*		Date entryDate = new Date();
+		try {
+			entryDate = mSdf.parse(e.getDate());
+		} catch (ParseException pe) {
+			Log.d("ENTRY_ADAPTER", "Error parsing date!");
+		}
+		Log.d("DATEEEEE", mSdf.format(mSdf.format(entryDate)));*/
+		((TextView)convertView.findViewById(R.id.entry_date_textview)).setText(e.getDateWithFormat("EEEE, MMMM dd, yyyy"));
 		
 		// Set amount
-		((TextView)convertView.findViewById(R.id.entry_amount_textview)).setText(String.format("%.1f", e.getNonMetricAmount()));
+		//((TextView)convertView.findViewById(R.id.entry_amount_textview)).setText(String.format("%.1f", e.getNonMetricAmount()));
 		
 		return convertView;
 	}

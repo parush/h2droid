@@ -41,6 +41,7 @@ public class WaterProvider extends ContentProvider {
 	// the different URI requests
 	private static final int ENTRIES = 1;
 	private static final int ENTRY_ID = 2;
+	private static final int ENTRIES_GROUP_DATE = 3;
 	
 	private static final UriMatcher uriMatcher;
 	
@@ -51,6 +52,7 @@ public class WaterProvider extends ContentProvider {
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI("com.frankcalise.provider.h2droid", "entries", ENTRIES);
 		uriMatcher.addURI("com.frankcalise.provider.h2droid", "entries/#", ENTRY_ID);
+		uriMatcher.addURI("com.frankcalise.provider.h2droid", "entries/group_date", ENTRIES_GROUP_DATE);
 	}
 	
 	/** Helper class for opening, creating, and managing
@@ -115,6 +117,8 @@ public class WaterProvider extends ContentProvider {
 				return "vnd.android.cursor.dir/vnd.frankcalise.h2droid";
 			case ENTRY_ID:
 				return "vnd.android.cursor.item/vnd.frankcalise.h2droid";
+			case ENTRIES_GROUP_DATE:
+				return "vnd.android.cursor.dir.date/vnd.frankcalise.h2droid";
 			default:
 				throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
@@ -148,10 +152,12 @@ public class WaterProvider extends ContentProvider {
 		waterDB = dbHelper.getWritableDatabase();
 		return (waterDB == null) ? false : true;
 	}
-
+	
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
+		
+		String groupBy = null;
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		
 		qb.setTables(ENTRIES_TABLE);
@@ -161,6 +167,9 @@ public class WaterProvider extends ContentProvider {
 		switch (uriMatcher.match(uri)) {
 			case ENTRY_ID:
 				qb.appendWhere(KEY_ID + "=" + uri.getPathSegments().get(1));
+				break;
+			case ENTRIES_GROUP_DATE:
+				groupBy = "date(" + KEY_DATE + ")";
 				break;
 			default: break;
 		}
@@ -173,11 +182,13 @@ public class WaterProvider extends ContentProvider {
 			orderBy = sortOrder;
 		}
 		
+		Log.d("CONTENTPROVIDER", qb.toString());
+		
 		// Apply the query to the underlying database
 		Cursor c = qb.query(waterDB,
 							projection,
 							selection, selectionArgs,
-							null, null,
+							groupBy, null,
 							orderBy);
 		
 		// Register the contexts ContentResolver to be 

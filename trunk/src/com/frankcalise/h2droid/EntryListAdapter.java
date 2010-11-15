@@ -52,13 +52,6 @@ public class EntryListAdapter extends BaseAdapter {
 		}
 
 		// Set date
-/*		Date entryDate = new Date();
-		try {
-			entryDate = mSdf.parse(e.getDate());
-		} catch (ParseException pe) {
-			Log.d("ENTRY_ADAPTER", "Error parsing date!");
-		}
-		Log.d("DATEEEEE", mSdf.format(mSdf.format(entryDate)));*/
 		((TextView)convertView.findViewById(R.id.entry_date_textview)).setText(e.getDateWithFormat("EEEE, MMMM dd, yyyy"));
 		
 		// Set amount

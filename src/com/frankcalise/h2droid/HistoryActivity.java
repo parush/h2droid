@@ -8,8 +8,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class HistoryActivity extends ListActivity {
 	
@@ -28,6 +32,17 @@ public class HistoryActivity extends ListActivity {
         	final ListView listView = getListView();
         	ListAdapter adapter = new EntryListAdapter(entryList, this);
         	listView.setAdapter(adapter);
+        	
+        	// set on item click listener for the ListView
+        	listView.setOnItemClickListener(new OnItemClickListener() {
+        		public void onItemClick(AdapterView<?> parent, View view,
+        				int position, long id) {
+        			// When clicked, go to new activity to display
+        			// selected day's entries
+        			TextView text = (TextView)view.findViewById(R.id.entry_date_textview);
+        			Log.d("ITEM_CLICK", String.format("item id = %d, %s", position, text.getText()));
+        		}
+        	});
         } catch (NullPointerException npe) {
         	Log.e("HISTORY", "null pointer exception, could not getEntries()");
         }

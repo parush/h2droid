@@ -1,12 +1,8 @@
 package com.frankcalise.h2droid;
 
-import java.text.ParseException;
-//import java.text.SimpleDateFormat;
-//import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +13,6 @@ public class EntryListAdapter extends BaseAdapter {
 	
 	private List<Entry> mEntryList;
 	private final LayoutInflater mInflater;
-	//private static SimpleDateFormat mSdf;
 	
 	public EntryListAdapter(List<Entry> _entryList, Context _context) {
 		this.mEntryList = _entryList;

@@ -23,7 +23,6 @@ public class EntryListAdapter extends BaseAdapter {
 		this.mEntryList = _entryList;
 		
 		mInflater = LayoutInflater.from(_context);
-		//mSdf = new SimpleDateFormat("E, MMM dd, yyyy");
 	}
 
 	@Override

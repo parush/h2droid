@@ -1,9 +1,13 @@
 package com.frankcalise.h2droid;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import android.app.ListActivity;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,26 +29,49 @@ public class HistoryActivity extends ListActivity {
         // Set up main layout
         setContentView(R.layout.activity_history);
         
+        Bundle extras = getIntent().getExtras();
+        String selectedDate = null;
         try {
-        	List<Entry> entryList = getEntries();
-        
-        
-        	final ListView listView = getListView();
-        	ListAdapter adapter = new EntryListAdapter(entryList, this);
-        	listView.setAdapter(adapter);
-        	
-        	// set on item click listener for the ListView
-        	listView.setOnItemClickListener(new OnItemClickListener() {
-        		public void onItemClick(AdapterView<?> parent, View view,
-        				int position, long id) {
-        			// When clicked, go to new activity to display
-        			// selected day's entries
-        			TextView text = (TextView)view.findViewById(R.id.entry_date_textview);
-        			Log.d("ITEM_CLICK", String.format("item id = %d, %s", position, text.getText()));
-        		}
-        	});
+        	selectedDate = extras.getString("date");
         } catch (NullPointerException npe) {
-        	Log.e("HISTORY", "null pointer exception, could not getEntries()");
+        	Log.d("HISTORY", "no date chosen, show all dates with entries");
+        }
+        
+        if (selectedDate == null) {
+        	try {
+            	List<Entry> entryList = getEntries();
+            
+            
+            	final ListView listView = getListView();
+            	ListAdapter adapter = new EntryListAdapter(entryList, this, false);
+            	listView.setAdapter(adapter);
+            	
+            	final Intent i = new Intent(this, HistoryActivity.class);
+            	
+            	// set on item click listener for the ListView
+            	listView.setOnItemClickListener(new OnItemClickListener() {
+            		public void onItemClick(AdapterView<?> parent, View view,
+            				int position, long id) {
+            			// When clicked, go to new activity to display
+            			// selected day's entries
+            			TextView text = (TextView)view.findViewById(R.id.entry_date_textview);
+            			Log.d("ITEM_CLICK", String.format("item id = %d, %s", position, text.getText()));
+            			i.putExtra("date", text.getText());
+            			startActivity(i);
+            		}
+            	});
+            } catch (NullPointerException npe) {
+            	Log.e("HISTORY", "null pointer exception, could not getEntries()");
+            }	
+        } else {
+        	// show entries related to user's selected date
+        	Log.d("HISTORY", "user chose a specific date, " + selectedDate);
+            List<Entry> entryList = getEntriesFromDate(selectedDate);
+            Log.d("HISTORY", "List size = " + entryList.size());
+            
+            final ListView listView = getListView();
+        	ListAdapter adapter = new EntryListAdapter(entryList, this, true);
+        	listView.setAdapter(adapter);
         }
     }
     
@@ -58,6 +85,47 @@ public class HistoryActivity extends ListActivity {
     	Cursor c = cr.query(Uri.withAppendedPath(WaterProvider.CONTENT_URI, "group_date"),
     						null, null, null, sortOrder);
     	
+    	
+    	if (c.moveToFirst()) {
+    		do {
+    			String date = c.getString(WaterProvider.DATE_COLUMN);
+    			double metricAmount = c.getDouble(WaterProvider.AMOUNT_COLUMN);
+    			boolean isNonMetric = false;    			
+    			
+    			Entry e = new Entry(date, metricAmount, isNonMetric);
+    			entries.add(e);
+    			
+    		} while (c.moveToNext());
+    	}
+    	
+    	c.close();
+    	
+    	return entries;
+    }
+    
+    private List<Entry> getEntriesFromDate(String _date) {
+    	List<Entry> entries = new ArrayList<Entry>();
+    	
+    	String sortOrder = WaterProvider.KEY_DATE + " DESC"; // Date descending
+    	ContentResolver cr = getContentResolver();
+    	
+    	// Convert date to format as stored in ContentProvider
+    	// to provide proper parameter for WHERE
+    	SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMMM dd, yyyy");
+    	String formattedDate = null;
+    	try {
+			Date date = sdf.parse(_date);
+			sdf = new SimpleDateFormat("yyyy-MM-dd");
+			formattedDate = sdf.format(date);
+			Log.d("HISTORY", "formattedDate = " + formattedDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    	String selection = "date(" + WaterProvider.KEY_DATE + ") = '" + formattedDate + "'";
+    	
+    	// Return all saved entries, grouped by date
+    	Cursor c = cr.query(WaterProvider.CONTENT_URI,
+    						null, selection, null, sortOrder);
     	
     	if (c.moveToFirst()) {
     		do {

@@ -56,10 +56,10 @@ public class EntryListAdapter extends BaseAdapter {
 			((TextView)convertView.findViewById(R.id.entry_date_textview)).setText(e.getDateWithFormat("EEEE, MMMM dd, yyyy"));
 		} else {
 			// Set date
-			((TextView)convertView.findViewById(R.id.entry_date_textview)).setText(e.getDateWithFormat("HH:mm:ss"));
+			((TextView)convertView.findViewById(R.id.entry_date_textview)).setText(e.getDateWithFormat("hh:m:s a"));
 			
 			// Set amount
-			((TextView)convertView.findViewById(R.id.entry_amount_textview)).setText(String.format("%.1f fl oz", e.getNonMetricAmount()));
+			((TextView)convertView.findViewById(R.id.entry_amount_textview)).setText(String.format("  %.1f fl oz", e.getNonMetricAmount()));
 		}
 		
 		return convertView;

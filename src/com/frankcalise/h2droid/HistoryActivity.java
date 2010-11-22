@@ -7,11 +7,13 @@ import java.util.Date;
 import java.util.List;
 import android.app.ListActivity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
@@ -70,6 +72,20 @@ public class HistoryActivity extends ListActivity {
             Log.d("HISTORY", "List size = " + entryList.size());
             
             final ListView listView = getListView();
+            
+            // add the header view for this detail list
+        	// sums up the total amount
+            double totalAmount = getTotalAmount(entryList);
+            
+            TextView tvAmount = new TextView(this);
+        	tvAmount.setText(String.format("%s\nTotal: %.1f fl oz", selectedDate, totalAmount));
+        	tvAmount.setTextSize(getResources().getDimension(R.dimen.listview_header_text_size));
+        	int layoutPadding = getResources().getDimensionPixelSize(R.dimen.layout_padding);
+        	tvAmount.setPadding(layoutPadding, layoutPadding, layoutPadding, layoutPadding);
+        	
+        	listView.addHeaderView(tvAmount);
+            
+        	// set up the list adapter
         	ListAdapter adapter = new EntryListAdapter(entryList, this, true);
         	listView.setAdapter(adapter);
         }
@@ -84,7 +100,6 @@ public class HistoryActivity extends ListActivity {
     	// Return all saved entries, grouped by date
     	Cursor c = cr.query(Uri.withAppendedPath(WaterProvider.CONTENT_URI, "group_date"),
     						null, null, null, sortOrder);
-    	
     	
     	if (c.moveToFirst()) {
     		do {
@@ -117,10 +132,10 @@ public class HistoryActivity extends ListActivity {
 			Date date = sdf.parse(_date);
 			sdf = new SimpleDateFormat("yyyy-MM-dd");
 			formattedDate = sdf.format(date);
-			Log.d("HISTORY", "formattedDate = " + formattedDate);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			Log.e("HISTORY", "could not parse date!");
 		}
+		
     	String selection = "date(" + WaterProvider.KEY_DATE + ") = '" + formattedDate + "'";
     	
     	// Return all saved entries, grouped by date
@@ -142,5 +157,17 @@ public class HistoryActivity extends ListActivity {
     	c.close();
     	
     	return entries;
+    }
+    
+    // Sum up the list of entries to get a total amount
+    private double getTotalAmount(List<Entry> _entriesList) {
+    	int listSize = _entriesList.size();
+    	double total = 0.0;
+    	
+    	for (int i = 0; i < listSize; i++) {
+    		total += _entriesList.get(i).getNonMetricAmount();
+    	}
+    	
+    	return total;
     }
 }

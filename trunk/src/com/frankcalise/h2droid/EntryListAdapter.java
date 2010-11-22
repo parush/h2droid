@@ -13,9 +13,11 @@ public class EntryListAdapter extends BaseAdapter {
 	
 	private List<Entry> mEntryList;
 	private final LayoutInflater mInflater;
+	private boolean mIsDetail;
 	
-	public EntryListAdapter(List<Entry> _entryList, Context _context) {
+	public EntryListAdapter(List<Entry> _entryList, Context _context, boolean _isDetail) {
 		this.mEntryList = _entryList;
+		this.mIsDetail = _isDetail;
 		
 		mInflater = LayoutInflater.from(_context);
 	}
@@ -42,14 +44,23 @@ public class EntryListAdapter extends BaseAdapter {
 		// Check to see if convertView contains a usable item
 		// If null, inflate a new row item
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.entry_list_item, parent, false);
+			if (mIsDetail == false) {
+				convertView = mInflater.inflate(R.layout.entry_list_item, parent, false);
+			} else {
+				convertView = mInflater.inflate(R.layout.entry_detail_list_item, parent, false);
+			}
 		}
 
-		// Set date
-		((TextView)convertView.findViewById(R.id.entry_date_textview)).setText(e.getDateWithFormat("EEEE, MMMM dd, yyyy"));
-		
-		// Set amount
-		//((TextView)convertView.findViewById(R.id.entry_amount_textview)).setText(String.format("%.1f", e.getNonMetricAmount()));
+		if (mIsDetail == false) {
+			// Set date
+			((TextView)convertView.findViewById(R.id.entry_date_textview)).setText(e.getDateWithFormat("EEEE, MMMM dd, yyyy"));
+		} else {
+			// Set date
+			((TextView)convertView.findViewById(R.id.entry_date_textview)).setText(e.getDateWithFormat("HH:mm:ss"));
+			
+			// Set amount
+			((TextView)convertView.findViewById(R.id.entry_amount_textview)).setText(String.format("%.1f fl oz", e.getNonMetricAmount()));
+		}
 		
 		return convertView;
 	}

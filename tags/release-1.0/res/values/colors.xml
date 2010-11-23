@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<color name="title_background">#91c7fa</color>
+	<color name="title_separator">#40004e75</color>
+	<color name="title_strip_color">#004e75</color>
+	
+	<color name="amount_color">#004e75</color>
+	<color name="positive_delta">#02a621</color>
+	<color name="negative_delta">#ff0000</color>
+</resources>

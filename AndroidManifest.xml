@@ -35,6 +35,7 @@
 		<provider android:name=".WaterProvider"
 				  android:authorities="com.frankcalise.provider.h2droid" />
     </application>
-    <uses-sdk android:minSdkVersion="7" />
+    <uses-sdk android:minSdkVersion="4"
+    		  android:targetSdkVersion="7" />
 
 </manifest> 

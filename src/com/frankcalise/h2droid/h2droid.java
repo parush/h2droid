@@ -243,7 +243,6 @@ public class h2droid extends Activity {
     
     /** Update the today's consumption TextView */
     private void updateConsumptionTextView() {
-    	// TODO really need to load total from db here
     	double prefsGoal = Settings.getAmount(getApplicationContext());
     	Log.d("GOAL", "read from prefs = " + prefsGoal);
     	double percentGoal = (mConsumption / prefsGoal) * 100.0;
@@ -273,6 +272,9 @@ public class h2droid extends Activity {
     	final TextView goalTextView = (TextView)findViewById(R.id.goal_textview);
     	String goalText = String.format("Daily goal: %.1f fl oz", prefsGoal);
     	goalTextView.setText(goalText);	
+    	
+    	// Broadcast an Intent to update Widget
+    	this.sendBroadcast(new Intent(AppWidget.FORCE_WIDGET_UPDATE));
     }
     
     private String[] getFavoriteAmounts() {

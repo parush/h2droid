@@ -10,4 +10,11 @@
 	<dimen name="listview_header_text_size">12sp</dimen>
 	<dimen name="text_size">18sp</dimen>
 	<dimen name="amount_size">64sp</dimen>
+	
+	<!--  app widget sizes -->
+	<!--  determined by: 
+		  size in dp = cell count * 74dp - 2dp -->
+	<dimen name="one_cell_widget">72dp</dimen>
+	<dimen name="two_cell_widget">146dp</dimen>
+	<dimen name="widget_half_cell">36dp</dimen>
 </resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hydrate</string>
+    
+    <!-- main_menu strings -->
+    <string name="menu_add_label">Add Entry</string>
+    <string name="menu_add_shortcut">a</string>
+    <string name="menu_about_label">About</string>
+    <string name="menu_about_shortcut">b</string>
+    <string name="menu_history_label">History</string>
+    <string name="menu_history_shortcut">h</string>
+    <string name="menu_reset_label">Reset Today\'s Data</string>
+    <string name="menu_reset_shortcut">r</string>
+    <string name="menu_settings_label">Settings</string>
+    <string name="menu_settings_shortcut">s</string>
+    <string name="settings_units_label">Unit system</string>
+    <!-- <string name="settings_notifications_label">Notifications</string>
+    <string name="settings_notification_interval">Notification interval</string> -->
+    <string name="settings_goal_label">Daily Goal</string>
+    <string name="settings_goal_summary">Amount of water needed to reach your goal</string>
+    <string name="settings_fav_one">Favorite Amount 1</string>
+    <string name="settings_fav_two">Favorite Amount 2</string>
+    <string name="settings_fav_three">Favorite Amount 3</string>
+    <string name="settings_fav_four">Favorite Amount 4</string>
+    <string name="settings_fav_five">Favorite Amount 5</string>
+    
+    <!-- main layout strings -->
+    <string name="one_serving_button_label">+8 oz</string>
+    <string name="two_serving_button_label">+Fav</string>
+    <string name="custom_serving_button_label">+N oz</string>
+    <string name="undo_serving_button_label">Undo</string>
+    <string name="consumption_label">Today\'s water consumption: 0 oz</string>
+    
+    <!-- about activity -->
+    <string name="about_title">About Hydrate</string>
+    <string name="about_text">Version: 1.1\n\n
+    	Developed by Frank Calise\n
+		fcalise@gmail.com\n
+		http://frankcalise.com\n
+		http://twitter.com/frankcalise
+    </string>
+    <string name="about_close_label">Close</string>
+    
+    <!-- add custom entry activity -->
+    <string name="custom_entry_title">Add new entry</string>
+    <string name="custom_entry_metric_label">Metric</string>
+    <string name="custom_entry_non_metric_label">Non-Metric</string>
+    <string name="custom_entry_save_label">Save</string>
+    <string name="custom_entry_cancel_label">Cancel</string>
+    <string name="custom_entry_type_of_units_label">Type of units:</string>
+    
+    <!-- history activity -->
+    <string name="history_activity_title">History</string>
+    
+    <!-- app widget titles -->
+    <string name="one_cell_widget_label">Hydrate (1 Cell)</string>
+    <string name="two_cell_widget_label">Hydrate (2 Cells)</string>
+</resources>

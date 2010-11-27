@@ -88,7 +88,7 @@ public class h2droid extends Activity {
     
     /** Handle "add two servings" action */
     public void onFavServingsClick(View v) {
-    	String[] itemsArr = getFavoriteAmounts();//{"A", "B", "C", "D", "E"};
+    	String[] itemsArr = getFavoriteAmounts();
 		Log.d("ADD", "Favorite amount");
 		new AlertDialog.Builder(this)
 			.setTitle("Add favorite amount")
@@ -274,7 +274,12 @@ public class h2droid extends Activity {
     	goalTextView.setText(goalText);	
     	
     	// Broadcast an Intent to update Widget
-    	this.sendBroadcast(new Intent(AppWidget.FORCE_WIDGET_UPDATE));
+    	// Use putExtra so AppWidget class does not need
+    	// to do ContentProvider pull
+    	Intent widgetIntent = new Intent(AppWidget.FORCE_WIDGET_UPDATE);
+    	widgetIntent.putExtra("AMOUNT", mConsumption);
+    	widgetIntent.putExtra("PERCENT", percentGoal);
+    	this.sendBroadcast(widgetIntent);
     }
     
     private String[] getFavoriteAmounts() {

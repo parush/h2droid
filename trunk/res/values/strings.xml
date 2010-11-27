@@ -51,4 +51,8 @@
     
     <!-- history activity -->
     <string name="history_activity_title">History</string>
+    
+    <!-- app widget titles -->
+    <string name="one_cell_widget_label">Hydrate (1 Cell)</string>
+    <string name="two_cell_widget_label">Hydrate (2 Cells)</string>
 </resources>

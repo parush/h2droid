@@ -34,8 +34,18 @@
         </activity>
 		<provider android:name=".WaterProvider"
 				  android:authorities="com.frankcalise.provider.h2droid" />
+		<receiver android:name=".AppWidget" android:label="@string/one_cell_widget_label">
+	   		<intent-filter>
+	   			<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+	   		</intent-filter>
+	   		<intent-filter>
+	   			<action android:name="com.frankcalise.h2droid.FORCE_WIDGET_UPDATE" />
+	   		</intent-filter>
+	   		<meta-data
+	   			android:name="android.appwidget.provider"
+	   			android:resource="@xml/one_cell_widget_settings" />
+   		</receiver>
     </application>
     <uses-sdk android:minSdkVersion="4"
     		  android:targetSdkVersion="7" />
-
 </manifest> 

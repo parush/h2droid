@@ -51,6 +51,7 @@
     
     <!-- history activity -->
     <string name="history_activity_title">History</string>
+    <string name="menu_delete_day_label">Delete this day\'s entries</string>
     
     <!-- app widget titles -->
     <string name="one_cell_widget_label">Hydrate (1 Cell)</string>

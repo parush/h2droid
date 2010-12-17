@@ -12,11 +12,16 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class HistoryActivity extends ListActivity {
@@ -45,6 +50,10 @@ public class HistoryActivity extends ListActivity {
             	final ListView listView = getListView();
             	ListAdapter adapter = new EntryListAdapter(entryList, this, false);
             	listView.setAdapter(adapter);
+            	
+            	// Set up context menu to delete a day's worth
+            	// of entries on long press
+            	registerForContextMenu(listView);
             	
             	final Intent i = new Intent(this, HistoryActivity.class);
             	
@@ -168,4 +177,33 @@ public class HistoryActivity extends ListActivity {
     	
     	return total;
     }
+    
+    // Inflate context menu for long press
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+    								ContextMenuInfo menuInfo) {
+    	super.onCreateContextMenu(menu, v, menuInfo);
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.history_menu, menu);
+    }
+    
+    // Handle long press click
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+    	AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
+    	switch (item.getItemId()) {
+    		case R.id.menu_delete_day:
+    			deleteAllEntriesFromRow(info.id);
+    			return true;
+    		default:
+    			return super.onContextItemSelected(item);
+    	}
+    	
+    }
+    
+    public void deleteAllEntriesFromRow(long id) {
+    	Log.d("HISTORY", "row = " + id);
+    }
+    
+    
 }

@@ -169,8 +169,7 @@ public class WaterProvider extends ContentProvider {
 				qb.appendWhere(KEY_ID + "=" + uri.getPathSegments().get(1));
 				break;
 			case ENTRIES_GROUP_DATE:
-				groupBy = "date(" + KEY_DATE + ")";
-				break;
+				return waterDB.rawQuery("SELECT _id, date, SUM(amount) as amount FROM entries GROUP BY date(date)", null);
 			default: break;
 		}
 		

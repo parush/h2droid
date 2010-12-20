@@ -53,7 +53,7 @@ public class HistoryActivity extends ListActivity {
             	
             	// Set up context menu to delete a day's worth
             	// of entries on long press
-            	registerForContextMenu(listView);
+            	//registerForContextMenu(listView);
             	
             	final Intent i = new Intent(this, HistoryActivity.class);
             	
@@ -112,6 +112,7 @@ public class HistoryActivity extends ListActivity {
     		do {
     			String date = c.getString(WaterProvider.DATE_COLUMN);
     			double metricAmount = c.getDouble(WaterProvider.AMOUNT_COLUMN);
+    			Log.d("HISTORY", "Amount from day: " + metricAmount);
     			boolean isNonMetric = false;    			
     			
     			Entry e = new Entry(date, metricAmount, isNonMetric);

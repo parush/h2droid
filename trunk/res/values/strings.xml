@@ -40,6 +40,9 @@
 		http://twitter.com/frankcalise
     </string>
     <string name="about_close_label">Close</string>
+    <string name="about_version">Version 1.2</string>
+    <string name="about_dev_name">Frank Calise</string>
+    <string name="about_dev_contact">e: fcalise@gmail.com\nt: @frankcalise\nu: frankcalise.com</string>
     
     <!-- add custom entry activity -->
     <string name="custom_entry_title">Add new entry</string>

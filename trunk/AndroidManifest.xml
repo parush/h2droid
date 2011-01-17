@@ -46,6 +46,19 @@
 	   			android:name="android.appwidget.provider"
 	   			android:resource="@xml/one_cell_widget_settings" />
    		</receiver>
+   		<!-- 
+   		<receiver android:name=".TwoCellAppWidget" android:label="@string/two_cell_widget_label">
+   			<intent-filter>
+   				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   			</intent-filter>
+   			<intent-filter>
+   				<action android:name="com.frankcalise.h2droid.FORCE_WIDGET_UPDATE2" />
+   			</intent-filter>
+   			<meta-data
+   				android:name="android.appwidget.provider"
+   				android:resource="@xml/two_cell_widget_settings" />
+   		</receiver>
+   		 -->
     </application>
     <uses-sdk android:minSdkVersion="4"
     		  android:targetSdkVersion="8" />

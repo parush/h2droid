@@ -59,4 +59,11 @@
 						android:dependency="SETTING_ENABLE_NOTIFICATIONS" />
 	</PreferenceCategory>
 	 -->
+	<PreferenceCategory android:title="@string/about_title">
+		<Preference
+			android:title="Version 1.1" />
+		<Preference
+			android:title="Frank Calise"
+			android:summary="e: fcalise@gmail.com\nt: @frankcalise\nu: frankcalise.com" />
+	</PreferenceCategory>
 </PreferenceScreen>

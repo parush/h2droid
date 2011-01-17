@@ -61,9 +61,9 @@
 	 -->
 	<PreferenceCategory android:title="@string/about_title">
 		<Preference
-			android:title="Version 1.1" />
+			android:title="@string/about_version" />
 		<Preference
-			android:title="Frank Calise"
-			android:summary="e: fcalise@gmail.com\nt: @frankcalise\nu: frankcalise.com" />
+			android:title="@string/about_dev_name"
+			android:summary="@string/about_dev_contact" />
 	</PreferenceCategory>
 </PreferenceScreen>

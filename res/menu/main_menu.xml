@@ -12,10 +12,10 @@
 		  android:title="@string/menu_reset_label"
 		  android:alphabeticShortcut="@string/menu_reset_shortcut"
 		  android:icon="@android:drawable/ic_menu_close_clear_cancel" />
-	<item android:id="@+id/menu_about"
-		  android:title="@string/menu_about_label"
-		  android:alphabeticShortcut="@string/menu_about_shortcut"
-		  android:icon="@android:drawable/ic_menu_info_details" />
+	 <item android:id="@+id/menu_facts"
+		  android:title="@string/menu_facts_label"
+		  android:alphabeticShortcut="@string/menu_facts_shortcut"
+		  android:icon="@android:drawable/ic_menu_info_details" /> -->
 	<item android:id="@+id/menu_settings"
 		  android:title="@string/menu_settings_label"
 		  android:alphabeticShortcut="@string/menu_settings_shortcut"

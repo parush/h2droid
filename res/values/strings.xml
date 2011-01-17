@@ -5,8 +5,8 @@
     <!-- main_menu strings -->
     <string name="menu_add_label">Add Entry</string>
     <string name="menu_add_shortcut">a</string>
-    <string name="menu_about_label">About</string>
-    <string name="menu_about_shortcut">b</string>
+    <string name="menu_facts_label">Hydration Facts</string>
+    <string name="menu_facts_shortcut">f</string>
     <string name="menu_history_label">History</string>
     <string name="menu_history_shortcut">h</string>
     <string name="menu_reset_label">Reset Today\'s Data</string>
@@ -58,4 +58,9 @@
     <string name="two_cell_widget_label">Hydrate (2 Cells)</string>
     <string name="default_widget_amount">0.0 fl oz</string>
     <string name="default_widget_percent">0.0%</string>
+    
+    <!--  water facts activity -->
+    <string name="facts_title">Hydration Facts</string>
+    <string name="facts_disclaimer">* Any water consumption tips are recommendations only. If you have any medical conditions or are unsure of how much water to drink, make certain to consult your physician.</string>
+    <string name="facts_source">(Facts provided by WebMD.com) </string>
 </resources>

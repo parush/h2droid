@@ -16,12 +16,12 @@
   		android:id="@+id/widget_amount_text"
   		android:layout_width="wrap_content"
   		android:layout_height="wrap_content"
-  		android:text="0.0 fl oz"
+  		android:text="@string/default_widget_amount"
   		android:textSize="12sp"
   		android:textColor="@color/amount_color" />
   	 <TextView
   	 	android:id="@+id/widget_percent_text"
   		android:layout_width="wrap_content"
   		android:layout_height="wrap_content"
-  		android:text="0.0%" />
+  		android:text="@string/default_widget_percent" />
 </LinearLayout>

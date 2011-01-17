@@ -53,7 +53,9 @@
     <string name="history_activity_title">History</string>
     <string name="menu_delete_day_label">Delete this day\'s entries</string>
     
-    <!-- app widget titles -->
+    <!-- widget strings -->
     <string name="one_cell_widget_label">Hydrate (1 Cell)</string>
     <string name="two_cell_widget_label">Hydrate (2 Cells)</string>
+    <string name="default_widget_amount">0.0 fl oz</string>
+    <string name="default_widget_percent">0.0%</string>
 </resources>

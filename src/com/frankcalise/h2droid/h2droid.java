@@ -65,10 +65,10 @@ public class h2droid extends Activity {
     		case R.id.menu_facts:
     			startActivity(new Intent(this, FactsActivity.class));
     			return true;
-    		case R.id.menu_reset:
+    		/*case R.id.menu_reset:
     			Log.d("RESET", "reset all of today's data - launch asynctask with delete uri");
     			resetTodaysEntries();
-    			return true;
+    			return true;*/
     		case R.id.menu_add:
     			startActivity(new Intent(this, CustomEntryActivity.class));
     			return true;

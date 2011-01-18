@@ -10,6 +10,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 public class h2droid extends Activity {
 	private double mConsumption = 0;
+	private static final String LOCAL_DATA = "hydrate_data";
 	
     /** Called when the activity is first created. */
     @Override
@@ -253,13 +255,24 @@ public class h2droid extends Activity {
     	}
     	
     	// Show consumption amount
+    	int unitsPref = Settings.getUnitSystem(getApplicationContext());
+    	double displayAmount = mConsumption;
+    	String displayUnits = "fl oz";
+    	if (unitsPref == Settings.UNITS_METRIC) {
+    		displayAmount = mConsumption / Entry.ouncePerMililiter;
+    		displayUnits = "ml";
+    	} 
     	final TextView amountTextView = (TextView)findViewById(R.id.consumption_textview);
-    	String dailyTotal = String.format("%.1f fl oz\n", mConsumption);
+    	String dailyTotal = String.format("%.1f %s\n", displayAmount, displayUnits);
     	amountTextView.setText(dailyTotal);
     	
     	// Show delta from goal
     	final TextView overUnderTextView = (TextView)findViewById(R.id.over_under_textview);
-    	String overUnder = String.format("%+.1f fl oz (%.1f%%)", delta, percentGoal);
+    	double displayDelta = delta;
+    	if (unitsPref == Settings.UNITS_METRIC) {
+    		displayDelta /= Entry.ouncePerMililiter;
+    	}
+    	String overUnder = String.format("%+.1f %s (%.1f%%)", displayDelta, displayUnits, percentGoal);
     	overUnderTextView.setText(overUnder);
     	
     	if (delta >= 0) {
@@ -270,7 +283,11 @@ public class h2droid extends Activity {
  
     	// Show current goal setting
     	final TextView goalTextView = (TextView)findViewById(R.id.goal_textview);
-    	String goalText = String.format("Daily goal: %.1f fl oz", prefsGoal);
+    	double displayPrefsGoal = prefsGoal;
+    	if (unitsPref == Settings.UNITS_METRIC) {
+    		displayPrefsGoal /= Entry.ouncePerMililiter;
+    	}
+    	String goalText = String.format("Daily goal: %.1f %s", displayPrefsGoal, displayUnits);
     	goalTextView.setText(goalText);	
     	
     	// Broadcast an Intent to update Widget
@@ -279,7 +296,19 @@ public class h2droid extends Activity {
     	Intent widgetIntent = new Intent(AppWidget.FORCE_WIDGET_UPDATE);
     	widgetIntent.putExtra("AMOUNT", mConsumption);
     	widgetIntent.putExtra("PERCENT", percentGoal);
+    	widgetIntent.putExtra("UNITS", unitsPref);
     	this.sendBroadcast(widgetIntent);
+    	
+    	// Save off current amount, needed if user 
+    	// changes unit system settings to update
+    	// widget later on
+    	SharedPreferences localData = getSharedPreferences(LOCAL_DATA, 0);
+    	SharedPreferences.Editor editor = localData.edit();
+    	editor.putString("amount", String.valueOf(mConsumption));
+    	editor.putString("percent", String.valueOf(percentGoal));
+    	
+    	// Commit changes
+    	editor.commit();
     }
     
     private String[] getFavoriteAmounts() {

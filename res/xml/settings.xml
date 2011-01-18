@@ -7,14 +7,14 @@
 						android:summary="@string/settings_goal_summary"
 						android:defaultValue="64"
 						android:inputType="numberDecimal" />
-		<!-- below are enhancements later -->
-		<!-- <ListPreference 
+		<ListPreference 
 						android:key="SETTING_UNITS"
 					    android:title="@string/settings_units_label"
 					    android:entries="@array/settings_units_options"
 					    android:entryValues="@array/settings_units_values"
 					    android:dialogTitle="@string/settings_units_label"
-					    android:defaultValue="0" />
+					    android:defaultValue="1" />
+		<!-- 
 		<CheckBoxPreference
 						android:key="SETTING_ENABLE_NOTIFICATIONS"
 						android:title="@string/settings_notifications_label"

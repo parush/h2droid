@@ -33,7 +33,19 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
         setContentView(R.layout.activity_custom_entry);
         
         // Enable default metric or non-metric via Settings
-        //final RadioButton unitsRadioButton = (RadioButton)findViewById(R.id.radio_metric);
+        final RadioButton metricRadioButton = (RadioButton)findViewById(R.id.radio_metric);
+        final RadioButton imperialRadioButton = (RadioButton)findViewById(R.id.radio_non_metric);
+        int unitsPref = Settings.getUnitSystem(getApplicationContext());
+        
+        // Toggle the correct radio button according to user's prefs
+        if (unitsPref == Settings.UNITS_METRIC) {
+        	metricRadioButton.setChecked(true);
+        	imperialRadioButton.setChecked(false);
+        } else {
+        	metricRadioButton.setChecked(false);
+        	imperialRadioButton.setChecked(true);
+        }
+
         
         // Set up TextWatcher for the amount EditText
         mAmountEditText = (EditText)findViewById(R.id.amount_edittext);

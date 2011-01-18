@@ -145,7 +145,14 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     	cr.insert(WaterProvider.CONTENT_URI, values);
     	
     	// Make a toast displaying add complete
-    	String toastMsg = String.format("Added %.1f fl oz", _entry.getNonMetricAmount());
+    	int unitsPref = Settings.getUnitSystem(this);
+    	double displayAmount = _entry.getNonMetricAmount();
+    	String displayUnits = "fl oz";
+    	if (unitsPref == Settings.UNITS_METRIC) {
+    		displayUnits = "ml";
+    		displayAmount = _entry.getMetricAmount();
+    	}
+    	String toastMsg = String.format("Added %.1f %s", displayAmount, displayUnits);
     	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
     	toast.setGravity(Gravity.BOTTOM, 0, 0);
     	if (showToasts)

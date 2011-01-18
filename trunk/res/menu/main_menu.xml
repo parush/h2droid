@@ -8,10 +8,10 @@
 		  android:title="@string/menu_history_label"
 		  android:alphabeticShortcut="@string/menu_history_shortcut"
 		  android:icon="@android:drawable/ic_menu_recent_history" />
-	<item android:id="@+id/menu_reset"
+	<!-- <item android:id="@+id/menu_reset"
 		  android:title="@string/menu_reset_label"
 		  android:alphabeticShortcut="@string/menu_reset_shortcut"
-		  android:icon="@android:drawable/ic_menu_close_clear_cancel" />
+		  android:icon="@android:drawable/ic_menu_close_clear_cancel" /> -->
 	 <item android:id="@+id/menu_facts"
 		  android:title="@string/menu_facts_label"
 		  android:alphabeticShortcut="@string/menu_facts_shortcut"

@@ -18,6 +18,7 @@ public class AppWidget extends AppWidgetProvider {
 	
 	private double mAmount;
 	private double mPercentGoal;
+	private int mUnitSystem;
 	
 	// Intent to listen for to update Widget UI
 	public static String FORCE_WIDGET_UPDATE = 
@@ -40,6 +41,7 @@ public class AppWidget extends AppWidgetProvider {
 			// Get the passed in values to display
 			mAmount = intent.getExtras().getDouble("AMOUNT");
 			mPercentGoal = intent.getExtras().getDouble("PERCENT");
+			mUnitSystem = intent.getExtras().getInt("UNITS");
 			
 			// Update the UI
 			updateAmount(context);
@@ -51,6 +53,13 @@ public class AppWidget extends AppWidgetProvider {
 	public void updateAmount(Context context,
 							 AppWidgetManager appWidgetManager,
 							 int[] appWidgetIds) {
+		
+		// Setup units string
+		String displayUnits = "fl oz";
+		if (mUnitSystem == Settings.UNITS_METRIC) {
+			displayUnits = "ml";
+		}
+		
 		// Grab the data from today's entries
 		// if the widget was just added
 		if (mAmount < 0) {
@@ -95,6 +104,11 @@ public class AppWidget extends AppWidgetProvider {
     	
     	Intent launchAppIntent = new Intent(context, h2droid.class);
     	
+    	double displayAmount = mAmount;
+    	if (mUnitSystem == Settings.UNITS_METRIC) {
+    		displayAmount /= Entry.ouncePerMililiter;
+    	}
+    	
     	// Create new RemoteViews to set the text displayed
     	// by the widget's TextView
     	final int N = appWidgetIds.length;
@@ -103,7 +117,7 @@ public class AppWidget extends AppWidgetProvider {
     		RemoteViews views = new RemoteViews(context.getPackageName(),
     											R.layout.one_cell_widget);
     		// Set text for TextViews
-    		views.setTextViewText(R.id.widget_amount_text, String.format("%.1f fl oz", mAmount));
+    		views.setTextViewText(R.id.widget_amount_text, String.format("%.1f %s", displayAmount, displayUnits));
     		views.setTextColor(R.id.widget_percent_text, goalColor);
     		views.setTextViewText(R.id.widget_percent_text, String.format("%.1f%%", mPercentGoal));
     		

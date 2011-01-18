@@ -48,17 +48,23 @@
 						android:defaultValue="33.8"
 						android:inputType="numberDecimal" />
 	</PreferenceCategory>
-	<!-- 
+	
 	<PreferenceCategory android:title="Notification settings">
+		<CheckBoxPreference
+						android:key="SETTING_TOASTS"
+						android:title="@string/settings_toasts"
+						android:summary="@string/settings_toasts_summary"
+						android:defaultValue="true" />
+	<!-- 
 		<ListPreference
 						android:key="SETTING_NOTIFICATION_INTERVAL"
 						android:title="@string/settings_notification_interval"
 						android:entries="@array/settings_interval_options"
 						android:entryValues="@array/settings_interval_values"
 						android:dialogTitle="@string/settings_notification_interval"
-						android:dependency="SETTING_ENABLE_NOTIFICATIONS" />
+						android:dependency="SETTING_ENABLE_NOTIFICATIONS" /> -->
 	</PreferenceCategory>
-	 -->
+	
 	<PreferenceCategory android:title="@string/about_title">
 		<Preference
 			android:title="@string/about_version" />

@@ -15,6 +15,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	
 	private static final String OPT_AMOUNT = "SETTING_GOAL";
 	private static final String OPT_UNITS = "SETTING_UNITS";
+	private static final String OPT_TOASTS = "SETTING_TOASTS";
 	private static final String OPT_AMOUNT_DEF = "64";
 	private static final String OPT_UNITS_DEF = "1"; // imperial system
 	private static final String[] OPT_FAV_AMOUNT_DEF = {"8", "16", "16.9", "20", "33.8"};
@@ -99,7 +100,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	
 	public static String getFavoriteAmountString(int favIndex, Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
-		.getString(OPT_FAV_AMOUNT[favIndex], OPT_FAV_AMOUNT_DEF[favIndex]);
+			.getString(OPT_FAV_AMOUNT[favIndex], OPT_FAV_AMOUNT_DEF[favIndex]);
 	}
 	
 	public static int getUnitSystem(Context context) {
@@ -126,6 +127,11 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		} catch (NumberFormatException nfe) {
 			return DEFAULT_FAV_AMOUNT;
 		}
+	}
+	
+	public static boolean getToastsSetting(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context)
+			.getBoolean(OPT_TOASTS, true);
 	}
 
 	@Override

@@ -131,6 +131,9 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     private void addNewEntry(Entry _entry) {
     	Log.d("CONTENT", "in addNewEntry");
     	    	
+    	// Check to see if user wants Toast message
+    	boolean showToasts = Settings.getToastsSetting(getApplicationContext());
+    	
     	ContentResolver cr = getContentResolver();
     	
     	// Insert the new entry into the provider
@@ -145,7 +148,8 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     	String toastMsg = String.format("Added %.1f fl oz", _entry.getNonMetricAmount());
     	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
     	toast.setGravity(Gravity.BOTTOM, 0, 0);
-    	toast.show();
+    	if (showToasts)
+    		toast.show();
     }
 
 	@Override

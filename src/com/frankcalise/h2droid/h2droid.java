@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 public class h2droid extends Activity {
 	private double mConsumption = 0;
+	private boolean mShowToasts;
 	private static final String LOCAL_DATA = "hydrate_data";
 	
     /** Called when the activity is first created. */
@@ -40,6 +41,8 @@ public class h2droid extends Activity {
     @Override
     protected void onResume() {
     	super.onResume();
+    	
+    	mShowToasts = Settings.getToastsSetting(getApplicationContext());
     	
     	loadTodaysEntriesFromProvider();
     }
@@ -141,7 +144,8 @@ public class h2droid extends Activity {
     	String toastMsg = String.format("Added %.1f fl oz", _entry.getNonMetricAmount());
     	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
     	toast.setGravity(Gravity.BOTTOM, 0, 0);
-    	toast.show();
+    	if (mShowToasts)
+    		toast.show();
     	
     	// Update the amount of consumption on UI
     	updateConsumptionTextView();
@@ -180,7 +184,8 @@ public class h2droid extends Activity {
     	
     	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
     	toast.setGravity(Gravity.BOTTOM, 0, 0);
-    	toast.show();
+    	if (mShowToasts)
+    		toast.show();
     }
     
     private void resetTodaysEntries() {
@@ -204,7 +209,8 @@ public class h2droid extends Activity {
     	
     	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
     	toast.setGravity(Gravity.BOTTOM, 0, 0);
-    	toast.show();
+    	if (mShowToasts)
+    		toast.show();
     	
     	mConsumption = 0;
     	updateConsumptionTextView();

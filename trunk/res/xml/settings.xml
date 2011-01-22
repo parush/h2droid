@@ -14,6 +14,11 @@
 					    android:entryValues="@array/settings_units_values"
 					    android:dialogTitle="@string/settings_units_label"
 					    android:defaultValue="1" />
+		<CheckBoxPreference
+						android:key="SETTING_LARGE_UNITS"
+						android:title="@string/settings_convert_large"
+						android:summary="@string/settings_convert_large_summary"
+						android:defaultValue="false" />
 		<!-- 
 		<CheckBoxPreference
 						android:key="SETTING_ENABLE_NOTIFICATIONS"

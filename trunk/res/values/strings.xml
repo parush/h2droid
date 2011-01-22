@@ -25,9 +25,11 @@
     <string name="settings_fav_five">Favorite Amount 5</string>
     <string name="settings_toasts">Enable Toasts</string>
     <string name="settings_toasts_summary">Show message confirming add/undo of entries</string>
+    <string name="settings_convert_large">Convert to large units</string>
+    <string name="settings_convert_large_summary">Display totals in form of gallons or liters</string>
     
     <!-- main layout strings -->
-    <string name="one_serving_button_label">+8 oz</string>
+    <string name="one_serving_button_label">+1 srv</string>
     <string name="two_serving_button_label">+Fav</string>
     <string name="custom_serving_button_label">+N oz</string>
     <string name="undo_serving_button_label">Undo</string>

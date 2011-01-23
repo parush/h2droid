@@ -17,6 +17,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	private static final String OPT_UNITS = "SETTING_UNITS";
 	private static final String OPT_TOASTS = "SETTING_TOASTS";
 	private static final String OPT_LARGE_UNITS = "SETTING_LARGE_UNITS";
+	private static final String OPT_ENABLE_VOL_UP = "SETTING_ENABLE_VOL_UP";
+	private static final String OPT_ENABLE_VOL_DOWN = "SETTING_ENABLE_VOL_DOWN";
+	private static final String OPT_VOL_UP_AMOUNT = "SETTING_VOL_UP_AMOUNT";
 	private static final String OPT_AMOUNT_DEF = "64";
 	private static final String OPT_UNITS_DEF = "1"; // US system
 	private static final String[] OPT_FAV_AMOUNT_DEF = {"8", "16", "16.9", "20", "33.8"};
@@ -138,6 +141,29 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static boolean getLargeUnitsSetting(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
 			.getBoolean(OPT_LARGE_UNITS, false);
+	}
+	
+	public static boolean getOverrideVolumeUp(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context)
+		.getBoolean(OPT_ENABLE_VOL_UP, false);
+	}
+	
+	public static boolean getOverrideVolumeDown(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context)
+		.getBoolean(OPT_ENABLE_VOL_DOWN, false);
+	}
+	
+	public static double getVolumeUpAmount(Context context) {
+		try {
+			String prefString = PreferenceManager.getDefaultSharedPreferences(context)
+				.getString(OPT_VOL_UP_AMOUNT, OPT_FAV_AMOUNT_DEF[0]);
+			
+			double prefAmount = Double.valueOf(prefString).doubleValue();
+			
+			return prefAmount;
+		} catch (NumberFormatException nfe) {
+			return DEFAULT_FAV_AMOUNT;
+		}
 	}
 
 	@Override

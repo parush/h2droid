@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -347,5 +348,23 @@ public class h2droid extends Activity {
     	}
     	
     	return favAmounts;
+    }
+    
+    // Override volume keys if user desires
+    // depending on settings
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    	if (keyCode == KeyEvent.KEYCODE_VOLUME_UP && Settings.getOverrideVolumeUp(this)) {
+    		Log.d("OVERRIDEKEY", "volume up pressed");
+    		Entry e = new Entry(Settings.getVolumeUpAmount(this), true);
+    		addNewEntry(e);
+    		return true;
+    	} else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN && Settings.getOverrideVolumeDown(this)) {
+    		Log.d("OVERRIDEKEY", "volume down pressed");
+    		undoTodaysLastEntry();
+    		return true;
+    	} else {
+    		return super.onKeyDown(keyCode, event);
+    	}
     }
 }

@@ -26,7 +26,7 @@
     <string name="settings_toasts">Enable Toasts</string>
     <string name="settings_toasts_summary">Show message confirming add/undo of entries</string>
     <string name="settings_convert_large">Convert to large units</string>
-    <string name="settings_convert_large_summary">Display totals in form of gallons or liters</string>
+    <string name="settings_convert_large_summary">Display in form of fl oz/cp/pt/qt/gal or mL/L</string>
     
     <!-- main layout strings -->
     <string name="one_serving_button_label">+1 srv</string>

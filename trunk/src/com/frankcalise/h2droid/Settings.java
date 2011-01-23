@@ -16,8 +16,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	private static final String OPT_AMOUNT = "SETTING_GOAL";
 	private static final String OPT_UNITS = "SETTING_UNITS";
 	private static final String OPT_TOASTS = "SETTING_TOASTS";
+	private static final String OPT_LARGE_UNITS = "SETTING_LARGE_UNITS";
 	private static final String OPT_AMOUNT_DEF = "64";
-	private static final String OPT_UNITS_DEF = "1"; // imperial system
+	private static final String OPT_UNITS_DEF = "1"; // US system
 	private static final String[] OPT_FAV_AMOUNT_DEF = {"8", "16", "16.9", "20", "33.8"};
 	private static final double DEFAULT_AMOUNT = 64.0;
 	private static final double DEFAULT_FAV_AMOUNT = 8.0;
@@ -133,6 +134,11 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		return PreferenceManager.getDefaultSharedPreferences(context)
 			.getBoolean(OPT_TOASTS, true);
 	}
+	
+	public static boolean getLargeUnitsSetting(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context)
+			.getBoolean(OPT_LARGE_UNITS, false);
+	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
@@ -152,7 +158,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		} else if (key.equals(OPT_UNITS)) {
 			String unitsPref = sharedPreferences.getString(key, OPT_UNITS_DEF);
 			if (unitsPref.equals(String.valueOf(UNITS_IMPERIAL))) {
-				mUnitsPref.setSummary("Imperial");
+				mUnitsPref.setSummary("US");
 			} else {
 				mUnitsPref.setSummary("Metric");
 			}

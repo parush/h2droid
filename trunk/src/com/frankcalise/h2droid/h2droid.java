@@ -196,7 +196,7 @@ public class h2droid extends Activity {
     		toast.show();
     }
     
-    private void resetTodaysEntries() {
+    /*private void resetTodaysEntries() {
     	Date now = new Date();
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     	
@@ -222,7 +222,7 @@ public class h2droid extends Activity {
     	
     	mConsumption = 0;
     	updateConsumptionTextView();
-    }
+    }*/
     
     private void loadTodaysEntriesFromProvider() {
     	mConsumption = 0;
@@ -270,12 +270,24 @@ public class h2droid extends Activity {
     	
     	// Show consumption amount
     	int unitsPref = Settings.getUnitSystem(getApplicationContext());
+    	
+    	String originalUnits = "";
     	double displayAmount = mConsumption;
     	String displayUnits = "fl oz";
     	if (unitsPref == Settings.UNITS_METRIC) {
     		displayAmount = mConsumption / Entry.ouncePerMililiter;
-    		displayUnits = "ml";
+    		displayUnits = "mL";
     	} 
+    	
+    	originalUnits = displayUnits;
+    	
+    	if (Settings.getLargeUnitsSetting(getApplicationContext())) {
+    		Amount currentAmount = new Amount(mConsumption, unitsPref);
+    		Log.d("AMOUNT", "current amount upscaled = " + currentAmount.getAmount() + " " + currentAmount.getUnits());
+    		displayAmount = currentAmount.getAmount();
+    		displayUnits = currentAmount.getUnits();
+    	}
+    	
     	final TextView amountTextView = (TextView)findViewById(R.id.consumption_textview);
     	String dailyTotal = String.format("%.1f %s\n", displayAmount, displayUnits);
     	amountTextView.setText(dailyTotal);
@@ -286,7 +298,7 @@ public class h2droid extends Activity {
     	if (unitsPref == Settings.UNITS_METRIC) {
     		displayDelta /= Entry.ouncePerMililiter;
     	}
-    	String overUnder = String.format("%+.1f %s (%.1f%%)", displayDelta, displayUnits, percentGoal);
+    	String overUnder = String.format("%+.1f %s (%.1f%%)", displayDelta, originalUnits, percentGoal);
     	overUnderTextView.setText(overUnder);
     	
     	if (delta >= 0) {
@@ -301,7 +313,7 @@ public class h2droid extends Activity {
     	if (unitsPref == Settings.UNITS_METRIC) {
     		displayPrefsGoal /= Entry.ouncePerMililiter;
     	}
-    	String goalText = String.format("Daily goal: %.1f %s", displayPrefsGoal, displayUnits);
+    	String goalText = String.format("Daily goal: %.1f %s", displayPrefsGoal, originalUnits);
     	goalTextView.setText(goalText);	
     	
     	// Broadcast an Intent to update Widget

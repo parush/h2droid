@@ -1,10 +1,13 @@
 package com.frankcalise.h2droid;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,6 +30,7 @@ import android.widget.Toast;
 public class h2droid extends Activity {
 	private double mConsumption = 0;
 	private boolean mShowToasts;
+		
 	private static final String LOCAL_DATA = "hydrate_data";
 	
     /** Called when the activity is first created. */
@@ -158,6 +162,22 @@ public class h2droid extends Activity {
     	
     	// Update the amount of consumption on UI
     	updateConsumptionTextView();
+    	
+    	// If user wants a reminder when to drink next,
+    	// setup a notification X minutes away from this entry
+    	// where X is also a setting
+    	if (Settings.getReminderEnabled(this)) {
+			Calendar cal = Calendar.getInstance();
+			// add 5 minutes to the calendar object
+			cal.add(Calendar.MINUTE, Settings.getReminderInterval(this));
+			Intent intent = new Intent(this, AlarmReceiver.class);
+			// In reality, you would want to have a static variable for the request code instead of 192837
+			PendingIntent sender = PendingIntent.getBroadcast(this, 192837, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+	
+			// Get the AlarmManager service
+			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+			am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender); // also setRepeating and setInexactRepeating
+    	}
     }
     
     private void undoTodaysLastEntry() {

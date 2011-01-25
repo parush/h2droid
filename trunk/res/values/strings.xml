@@ -14,8 +14,14 @@
     <string name="menu_settings_label">Settings</string>
     <string name="menu_settings_shortcut">s</string>
     <string name="settings_units_label">Unit system</string>
-    <!-- <string name="settings_notifications_label">Notifications</string>
-    <string name="settings_notification_interval">Notification interval</string> -->
+    <string name="settings_reminder_label">Enable reminders</string>
+    <string name="settings_reminder_label_summary">Hydrate will remind you throughout the day to drink water</string>
+    <string name="settings_reminder_interval">Interval</string>
+    <string name="settings_reminder_interval_summary">Number of minutes after last entry to remind you to drink</string>
+    <string name="settings_reminder_light">Light</string>
+    <string name="settings_reminder_light_summary">Blink LED after interval expires</string>
+    <string name="settings_reminder_sound">Sound</string>
+    <string name="settings_reminder_vibrate">Vibrate</string>
     <string name="settings_goal_label">Daily Goal</string>
     <string name="settings_goal_summary">Amount of water needed to reach your goal</string>
     <string name="settings_fav_one">Favorite Amount 1</string>

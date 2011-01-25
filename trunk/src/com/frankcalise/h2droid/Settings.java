@@ -1,9 +1,12 @@
 package com.frankcalise.h2droid;
 
+import java.util.Calendar;
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -20,11 +23,18 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	private static final String OPT_ENABLE_VOL_UP = "SETTING_ENABLE_VOL_UP";
 	private static final String OPT_ENABLE_VOL_DOWN = "SETTING_ENABLE_VOL_DOWN";
 	private static final String OPT_VOL_UP_AMOUNT = "SETTING_VOL_UP_AMOUNT";
+	private static final String OPT_ENABLE_REMINDERS = "SETTING_ENABLE_REMINDERS";
+	private static final String OPT_REMINDER_INTERVAL = "SETTING_REMINDER_INTERVAL";
+	private static final String OPT_REMINDER_LED = "SETTING_REMINDER_LIGHT";
+	private static final String OPT_REMINDER_SOUND = "SETTING_REMINDER_SOUND";
+	private static final String OPT_REMINDER_VIB = "SETTING_REMINDER_VIB";
 	private static final String OPT_AMOUNT_DEF = "64";
 	private static final String OPT_UNITS_DEF = "1"; // US system
+	private static final String OPT_REMINDER_INT_DEF = "60";
 	private static final String[] OPT_FAV_AMOUNT_DEF = {"8", "16", "16.9", "20", "33.8"};
 	private static final double DEFAULT_AMOUNT = 64.0;
 	private static final double DEFAULT_FAV_AMOUNT = 8.0;
+	private static final int DEFAULT_REMINDER_INT = 60;
 	public static final int UNITS_METRIC = 0;
 	public static final int UNITS_IMPERIAL = 1;
 	private static final String[] OPT_FAV_AMOUNT = {"FAV_AMOUNT_ONE", 
@@ -145,12 +155,89 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	
 	public static boolean getOverrideVolumeUp(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
-		.getBoolean(OPT_ENABLE_VOL_UP, false);
+			.getBoolean(OPT_ENABLE_VOL_UP, false);
 	}
 	
 	public static boolean getOverrideVolumeDown(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
-		.getBoolean(OPT_ENABLE_VOL_DOWN, false);
+			.getBoolean(OPT_ENABLE_VOL_DOWN, false);
+	}
+	
+	public static boolean getReminderEnabled(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context)
+			.getBoolean(OPT_ENABLE_REMINDERS, false);
+	}
+	
+	public static int getReminderInterval(Context context) {
+		int reminderInterval = 0;
+		try {
+			String prefString = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_INTERVAL, OPT_REMINDER_INT_DEF);
+			
+			reminderInterval = Integer.parseInt(prefString);
+		} catch (NumberFormatException nfe) {
+			reminderInterval = DEFAULT_REMINDER_INT;
+		}
+		
+		return reminderInterval;
+	}
+	
+	public static Notification getReminderNotification(Context context) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		boolean remindersEnabled = prefs.getBoolean(OPT_ENABLE_REMINDERS, false);
+		
+		if (remindersEnabled) {
+			// Reminders are enabled
+
+			// Get light, sound, and vibrate settings
+			boolean showLight = prefs.getBoolean(OPT_REMINDER_LED, false);
+			String soundPref = prefs.getString(OPT_REMINDER_SOUND, "silent");
+			boolean vibrate = prefs.getBoolean(OPT_REMINDER_VIB, false);
+			
+			// Get the reminder interval user has chosen
+			// Default is 60 minutes after last entry
+			int reminderInterval = 0;
+			try {
+				String prefString = prefs.getString(OPT_REMINDER_INTERVAL, OPT_REMINDER_INT_DEF);
+				
+				reminderInterval = Integer.parseInt(prefString);
+				Log.d("REMINDER_INTERVAL", "Interval = " + reminderInterval);
+			} catch (NumberFormatException nfe) {
+				reminderInterval = DEFAULT_REMINDER_INT;
+			}
+			
+			// Create the calendar object for the notification
+			// adjusted for user's interval preference
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.MINUTE, reminderInterval);
+			
+			// Setup notification object
+			String reminderMsg = String.format("Hydrate - %d minutes since last entry", reminderInterval);
+			Notification reminder = new Notification(R.drawable.icon,
+													 reminderMsg,
+													 cal.getTimeInMillis());
+			reminder.flags |= Notification.FLAG_AUTO_CANCEL;
+			
+			// Setup the blinking LED if necessary
+			if (showLight) {
+				reminder.ledARGB = 0xff0000ff; // Blue LED for water if possible
+				reminder.flags |= Notification.FLAG_SHOW_LIGHTS;
+			}
+			
+			// Setup the sound if necessary
+			if (!soundPref.equals("silent")) {
+				reminder.sound = Uri.parse(soundPref); 
+			}
+			
+			// Setup vibrate if necessary
+			if (vibrate) {
+				reminder.defaults |= Notification.DEFAULT_VIBRATE;
+			}
+			
+			return reminder;
+		} else {
+			return null;	
+		}
+		
 	}
 	
 	public static double getVolumeUpAmount(Context context) {

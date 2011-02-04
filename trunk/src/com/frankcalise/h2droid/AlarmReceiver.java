@@ -17,7 +17,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     	if (reminder != null) {
     		Intent reminderIntent = new Intent(context, h2droid.class);
     		reminder.setLatestEventInfo(context,
-    				"Hydrate","Reminder to drink more water!",
+    				"Hydrate", "Reminder to drink more water!",
     				PendingIntent.getActivity(context, 0, reminderIntent,
     				PendingIntent.FLAG_CANCEL_CURRENT));
     		nm.notify(0, reminder);

@@ -168,11 +168,10 @@ public class h2droid extends Activity {
     	// where X is also a setting
     	if (Settings.getReminderEnabled(this)) {
 			Calendar cal = Calendar.getInstance();
-			// add 5 minutes to the calendar object
+			// add X minutes to the calendar object
 			cal.add(Calendar.MINUTE, Settings.getReminderInterval(this));
 			Intent intent = new Intent(this, AlarmReceiver.class);
-			// In reality, you would want to have a static variable for the request code instead of 192837
-			PendingIntent sender = PendingIntent.getBroadcast(this, 192837, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 	
 			// Get the AlarmManager service
 			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);

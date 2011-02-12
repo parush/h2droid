@@ -19,6 +19,7 @@ public class AppWidget extends AppWidgetProvider {
 	private double mAmount;
 	private double mPercentGoal;
 	private int mUnitSystem;
+	private boolean mLargeUnits;
 	
 	// Intent to listen for to update Widget UI
 	public static String FORCE_WIDGET_UPDATE = 
@@ -28,6 +29,7 @@ public class AppWidget extends AppWidgetProvider {
 	public void onUpdate(Context context,
 						 AppWidgetManager appWidgetManager,
 						 int[] appWidgetIds) {
+		Log.d("WIDGET_UPDATE", "onUpdate");
 		mAmount = mPercentGoal = -1;
 		updateAmount(context, appWidgetManager, appWidgetIds);
 	}
@@ -35,7 +37,7 @@ public class AppWidget extends AppWidgetProvider {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
-		
+		Log.d("WIDGET_UPDATE", "onReceive");
 		// Check if Intent received matches widget update string
 		if (FORCE_WIDGET_UPDATE.equals(intent.getAction())) {
 			// Get the passed in values to display
@@ -53,11 +55,14 @@ public class AppWidget extends AppWidgetProvider {
 	public void updateAmount(Context context,
 							 AppWidgetManager appWidgetManager,
 							 int[] appWidgetIds) {
+		Log.d("WIDGET_UPDATE", "updateAmount");
+		mUnitSystem = Settings.getUnitSystem(context);
+		mLargeUnits = Settings.getLargeUnitsSetting(context);
 		
 		// Setup units string
 		String displayUnits = "fl oz";
 		if (mUnitSystem == Settings.UNITS_METRIC) {
-			displayUnits = "ml";
+			displayUnits = "mL";
 		}
 		
 		// Grab the data from today's entries
@@ -109,6 +114,12 @@ public class AppWidget extends AppWidgetProvider {
     		displayAmount /= Entry.ouncePerMililiter;
     	}
     	
+    	if (mLargeUnits) {
+			Amount currentAmount = new Amount(mAmount, mUnitSystem);
+    		displayAmount = currentAmount.getAmount();
+    		displayUnits = currentAmount.getUnits();
+		}
+    	
     	// Create new RemoteViews to set the text displayed
     	// by the widget's TextView
     	final int N = appWidgetIds.length;
@@ -136,6 +147,7 @@ public class AppWidget extends AppWidgetProvider {
 	// and use it to find widget IDs of active Hydrate widgets.
 	// Then pass to updateAmount(Context, AppWidgetManager, int[])
 	public void updateAmount(Context context) {
+		Log.d("WIDGET_UPDATE", "updateAmount context");
 		ComponentName thisWidget = new ComponentName(context, AppWidget.class);
 		
 		AppWidgetManager appWidgetManager = 

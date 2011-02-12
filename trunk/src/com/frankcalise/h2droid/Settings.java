@@ -80,7 +80,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		String unitsPref = getPreferenceScreen().getSharedPreferences().getString(OPT_UNITS, OPT_UNITS_DEF);
 		Log.d("SETTINGS", "UNITS PREF = " + unitsPref);
 		if (unitsPref.equals(String.valueOf(UNITS_IMPERIAL))) {
-			mUnitsPref.setSummary("Imperial");
+			mUnitsPref.setSummary("US");
 		} else {
 			mUnitsPref.setSummary("Metric");
 		}

@@ -1,9 +1,14 @@
 package com.frankcalise.h2droid;
 
+import java.util.Calendar;
+
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -157,6 +162,30 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     	toast.setGravity(Gravity.BOTTOM, 0, 0);
     	if (showToasts)
     		toast.show();
+    	
+    	// If user wants a reminder when to drink next,
+    	// setup a notification X minutes away from this entry
+    	// where X is also a setting
+    	if (Settings.getReminderEnabled(this)) {
+    		// Get the AlarmManager service
+			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+			
+			// create the calendar object
+			Calendar cal = Calendar.getInstance();
+			// add X minutes to the calendar object
+			cal.add(Calendar.MINUTE, Settings.getReminderInterval(this));
+			
+			// cancel existing alarm if any, this way latest
+			// alarm will be the only one to notify user
+			Intent cancelIntent = new Intent(this, AlarmReceiver.class);
+			PendingIntent cancelSender = PendingIntent.getBroadcast(this, 0, cancelIntent, 0);
+			am.cancel(cancelSender);
+			
+			// set up the new alarm
+			Intent intent = new Intent(this, AlarmReceiver.class);
+			PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
+    	}
     }
 
 	@Override

@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,9 +78,9 @@ public class h2droid extends Activity {
     			Log.d("RESET", "reset all of today's data - launch asynctask with delete uri");
     			resetTodaysEntries();
     			return true;*/
-    		case R.id.menu_add:
+    		/*case R.id.menu_add:
     			startActivity(new Intent(this, CustomEntryActivity.class));
-    			return true;
+    			return true;*/
     		case R.id.menu_history:
     			startActivity(new Intent(this, HistoryActivity.class));
     			return true;
@@ -167,15 +168,24 @@ public class h2droid extends Activity {
     	// setup a notification X minutes away from this entry
     	// where X is also a setting
     	if (Settings.getReminderEnabled(this)) {
+    		// Get the AlarmManager service
+			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+			
+			// create the calendar object
 			Calendar cal = Calendar.getInstance();
 			// add X minutes to the calendar object
 			cal.add(Calendar.MINUTE, Settings.getReminderInterval(this));
+			
+			// cancel existing alarm if any, this way latest
+			// alarm will be the only one to notify user
+			Intent cancelIntent = new Intent(this, AlarmReceiver.class);
+			PendingIntent cancelSender = PendingIntent.getBroadcast(this, 0, cancelIntent, 0);
+			am.cancel(cancelSender);
+			
+			// set up the new alarm
 			Intent intent = new Intent(this, AlarmReceiver.class);
 			PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-	
-			// Get the AlarmManager service
-			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender); // also setRepeating and setInexactRepeating
+			am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
     	}
     }
     
@@ -291,13 +301,20 @@ public class h2droid extends Activity {
     	// Show consumption amount
     	int unitsPref = Settings.getUnitSystem(getApplicationContext());
     	
+    	// update the +N add button text according to the unit system
+    	final Button nButton = (Button)findViewById(R.id.add_custom_serving_button);
+    	
+    	
     	String originalUnits = "";
     	double displayAmount = mConsumption;
     	String displayUnits = "fl oz";
     	if (unitsPref == Settings.UNITS_METRIC) {
     		displayAmount = mConsumption / Entry.ouncePerMililiter;
     		displayUnits = "mL";
-    	} 
+    		nButton.setText("+N mL");
+    	} else {
+    		nButton.setText("+N oz");
+    	}
     	
     	originalUnits = displayUnits;
     	

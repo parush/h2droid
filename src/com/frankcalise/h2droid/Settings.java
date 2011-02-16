@@ -220,6 +220,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			// Setup the blinking LED if necessary
 			if (showLight) {
 				reminder.ledARGB = 0xff0000ff; // Blue LED for water if possible
+				reminder.ledOffMS = 3000;
+				reminder.ledOnMS = 1000;
 				reminder.flags |= Notification.FLAG_SHOW_LIGHTS;
 			}
 			

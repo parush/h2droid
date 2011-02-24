@@ -1,11 +1,19 @@
 package com.frankcalise.h2droid;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
+import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -211,7 +219,11 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			cal.add(Calendar.MINUTE, reminderInterval);
 			
 			// Setup notification object
-			String reminderMsg = String.format("Hydrate - %d minutes since last entry", reminderInterval);
+			String wordMinutes = "minute";
+			if (reminderInterval != 1) {
+				wordMinutes += "s";
+			}
+			String reminderMsg = String.format("Hydrate - %d %s since last entry", reminderInterval, wordMinutes);
 			Notification reminder = new Notification(R.drawable.icon,
 													 reminderMsg,
 													 cal.getTimeInMillis());
@@ -285,6 +297,58 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	    	widgetIntent.putExtra("PERCENT", Double.valueOf(localData.getString("percent", "0")));
 	    	widgetIntent.putExtra("UNITS", Integer.valueOf(unitsPref));
 	    	this.sendBroadcast(widgetIntent);
+		} else if (key.equals(OPT_ENABLE_REMINDERS)) {
+			boolean useReminders = sharedPreferences.getBoolean(OPT_ENABLE_REMINDERS, false);
+			
+			// Get the AlarmManager service
+			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+			
+			if (useReminders) {
+				ContentResolver cr = getContentResolver();
+		    	
+		    	// Return all saved entries, grouped by date
+		    	Cursor c = cr.query(Uri.withAppendedPath(WaterProvider.CONTENT_URI, "latest"),
+		    						null, null, null, null);
+		    	
+		    	if (c.moveToFirst()) {
+	    			String strDate = c.getString(WaterProvider.DATE_COLUMN);
+	    			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    			
+	    			try {
+	    				Log.d("SETTINGS_REMINDER", "here1");
+	    				// make date object from string result
+	    				Date date = sdf.parse(strDate);
+		    		
+	    				Log.d("SETTINGS_REMINDER", "here2");
+	    				// create the calendar object
+		    			Calendar cal = Calendar.getInstance();
+		    			Log.d("SETTINGS_REMINDER", "here3");
+		    			cal.setTime(date);
+		    			Log.d("SETTINGS_REMINDER", "here4");
+		    			
+		    			// add X minutes to the calendar object
+		    			int addMinutes = Settings.getReminderInterval(this);
+		    			Log.d("SETTINGS_REMINDER", "addMinutes = " + addMinutes);
+		    			Log.d("SETTINGS_REMINDER", "here5");
+		    			cal.add(Calendar.MINUTE, addMinutes);
+		    			Log.d("SETTINGS_REMINDER", "here6");
+		    			// set up the new alarm
+		    			Intent intent = new Intent(this, AlarmReceiver.class);
+		    			PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		    			am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
+	    			} catch (ParseException e) {
+	    				e.printStackTrace();
+	    			}
+		    	}
+		    	
+		    	c.close();
+			} else {
+				// disabling reminders, remove any pending intent
+				// so an already registered alarm does not go off
+				Intent cancelIntent = new Intent(this, AlarmReceiver.class);
+				PendingIntent cancelSender = PendingIntent.getBroadcast(this, 0, cancelIntent, 0);
+				am.cancel(cancelSender);
+			}
 		}
 	}
 }

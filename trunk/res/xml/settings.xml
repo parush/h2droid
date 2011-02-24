@@ -83,6 +83,12 @@
 						android:title="@string/settings_reminder_vibrate"
 						android:defaultValue="false"
 						android:dependency="SETTING_ENABLE_REMINDERS" />
+		<!-- <CheckBoxPreference
+						android:key="SETTING_REMINDER_DISABLE_ON_GOAL"
+						android:title="@string/settings_disable_on_goal"
+						android:summary="@string/settings_disable_on_goal_summary"
+						android:dependency="SETTING_ENABLE_REMINDERS"
+						android:defaultValue="false" /> -->
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/settings_quick_action">
 		<CheckBoxPreference

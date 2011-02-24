@@ -22,14 +22,16 @@
     <string name="settings_reminder_light_summary">Blink LED after interval expires</string>
     <string name="settings_reminder_sound">Sound</string>
     <string name="settings_reminder_vibrate">Vibrate</string>
-    <string name="settings_goal_label">Daily Goal</string>
+    <string name="settings_disable_on_goal">Disable when goal met</string>
+    <string name="settings_disable_on_goal_summary">Reminders will be disabled if your daily goal has been reached</string>
+    <string name="settings_goal_label">Daily goal</string>
     <string name="settings_goal_summary">Amount of water needed to reach your goal</string>
-    <string name="settings_fav_one">Favorite Amount 1</string>
-    <string name="settings_fav_two">Favorite Amount 2</string>
-    <string name="settings_fav_three">Favorite Amount 3</string>
-    <string name="settings_fav_four">Favorite Amount 4</string>
-    <string name="settings_fav_five">Favorite Amount 5</string>
-    <string name="settings_toasts">Enable Toasts</string>
+    <string name="settings_fav_one">Favorite amount 1</string>
+    <string name="settings_fav_two">Favorite amount 2</string>
+    <string name="settings_fav_three">Favorite amount 3</string>
+    <string name="settings_fav_four">Favorite amount 4</string>
+    <string name="settings_fav_five">Favorite amount 5</string>
+    <string name="settings_toasts">Enable toasts</string>
     <string name="settings_toasts_summary">Show message confirming add/undo of entries</string>
     <string name="settings_convert_large">Convert to large units</string>
     <string name="settings_convert_large_summary">Display in form of fl oz/cp/pt/qt/gal or mL/L</string>
@@ -64,7 +66,7 @@
     <!-- add custom entry activity -->
     <string name="custom_entry_title">Add new entry</string>
     <string name="custom_entry_metric_label">Metric</string>
-    <string name="custom_entry_non_metric_label">Non-Metric</string>
+    <string name="custom_entry_non_metric_label">US</string>
     <string name="custom_entry_save_label">Save</string>
     <string name="custom_entry_cancel_label">Cancel</string>
     <string name="custom_entry_type_of_units_label">Type of units:</string>

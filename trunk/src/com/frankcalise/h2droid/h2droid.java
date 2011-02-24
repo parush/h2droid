@@ -132,7 +132,7 @@ public class h2droid extends Activity {
     }
     
     private void addNewEntry(Entry _entry) {
-    	Log.d("CONTENT", "in addNewEntry");
+    	//Log.d("CONTENT", "in addNewEntry");
     	    	
     	ContentResolver cr = getContentResolver();
     	
@@ -257,7 +257,7 @@ public class h2droid extends Activity {
     private void loadTodaysEntriesFromProvider() {
     	mConsumption = 0;
     	
-    	Log.d("CONTENT", "in loadTodaysEntriesFromProvider()");
+    	//Log.d("CONTENT", "in loadTodaysEntriesFromProvider()");
     	
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     	Date now = new Date();
@@ -278,7 +278,7 @@ public class h2droid extends Activity {
     			
     			mConsumption += e.getNonMetricAmount();
     			
-    			Log.d("CONTENT", e.toString());
+    			//Log.d("CONTENT", e.toString());
     		} while (c.moveToNext());
     	}
     	

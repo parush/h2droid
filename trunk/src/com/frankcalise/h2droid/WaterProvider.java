@@ -42,6 +42,7 @@ public class WaterProvider extends ContentProvider {
 	private static final int ENTRIES = 1;
 	private static final int ENTRY_ID = 2;
 	private static final int ENTRIES_GROUP_DATE = 3;
+	private static final int ENTRIES_LATEST = 4;
 	
 	private static final UriMatcher uriMatcher;
 	
@@ -53,6 +54,7 @@ public class WaterProvider extends ContentProvider {
 		uriMatcher.addURI("com.frankcalise.provider.h2droid", "entries", ENTRIES);
 		uriMatcher.addURI("com.frankcalise.provider.h2droid", "entries/#", ENTRY_ID);
 		uriMatcher.addURI("com.frankcalise.provider.h2droid", "entries/group_date", ENTRIES_GROUP_DATE);
+		uriMatcher.addURI("com.frankcalise.provider.h2droid", "entries/latest", ENTRIES_LATEST);
 	}
 	
 	/** Helper class for opening, creating, and managing
@@ -119,6 +121,8 @@ public class WaterProvider extends ContentProvider {
 				return "vnd.android.cursor.item/vnd.frankcalise.h2droid";
 			case ENTRIES_GROUP_DATE:
 				return "vnd.android.cursor.dir.date/vnd.frankcalise.h2droid";
+			case ENTRIES_LATEST:
+				return "vnd.android.cursor.item.latest/vnd.frankcalise.h2droid";
 			default:
 				throw new IllegalArgumentException("Unsupported URI: " + uri);
 		}
@@ -170,6 +174,8 @@ public class WaterProvider extends ContentProvider {
 				break;
 			case ENTRIES_GROUP_DATE:
 				return waterDB.rawQuery("SELECT _id, date, SUM(amount) as amount FROM entries GROUP BY date(date) ORDER BY date DESC", null);
+			case ENTRIES_LATEST:
+				return waterDB.rawQuery("SELECT _id, date FROM entries ORDER BY date DESC LIMIT 1", null);
 			default: break;
 		}
 		

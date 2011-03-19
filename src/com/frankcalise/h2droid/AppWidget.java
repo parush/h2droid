@@ -134,9 +134,10 @@ public class AppWidget extends AppWidgetProvider {
     		
     		// Set onClick so user can launch the app
     		// by touching the widget
-    		views.setOnClickPendingIntent(R.id.widget_title_text, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
-    		views.setOnClickPendingIntent(R.id.widget_amount_text, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
-    		views.setOnClickPendingIntent(R.id.widget_percent_text, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
+    		views.setOnClickPendingIntent(R.id.widget_background, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
+    		//views.setOnClickPendingIntent(R.id.widget_title_text, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
+    		//views.setOnClickPendingIntent(R.id.widget_amount_text, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
+    		//views.setOnClickPendingIntent(R.id.widget_percent_text, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
     		
     		
     		appWidgetManager.updateAppWidget(appWidgetId, views);

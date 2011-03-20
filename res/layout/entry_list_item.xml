@@ -14,6 +14,9 @@
 			<TextView
 				android:id="@+id/entry_amount_textview"
 				android:gravity="right" />
+			<TextView
+				android:text="@string/disclosure_indicator"
+				android:gravity="right" />
 		</TableRow>
 	</TableLayout>	
 </LinearLayout>

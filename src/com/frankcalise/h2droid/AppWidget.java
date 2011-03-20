@@ -29,7 +29,7 @@ public class AppWidget extends AppWidgetProvider {
 	public void onUpdate(Context context,
 						 AppWidgetManager appWidgetManager,
 						 int[] appWidgetIds) {
-		Log.d("WIDGET_UPDATE", "onUpdate");
+
 		mAmount = mPercentGoal = -1;
 		updateAmount(context, appWidgetManager, appWidgetIds);
 	}
@@ -37,7 +37,7 @@ public class AppWidget extends AppWidgetProvider {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
-		Log.d("WIDGET_UPDATE", "onReceive");
+		
 		// Check if Intent received matches widget update string
 		if (FORCE_WIDGET_UPDATE.equals(intent.getAction())) {
 			// Get the passed in values to display
@@ -55,7 +55,7 @@ public class AppWidget extends AppWidgetProvider {
 	public void updateAmount(Context context,
 							 AppWidgetManager appWidgetManager,
 							 int[] appWidgetIds) {
-		Log.d("WIDGET_UPDATE", "updateAmount");
+
 		mUnitSystem = Settings.getUnitSystem(context);
 		mLargeUnits = Settings.getLargeUnitsSetting(context);
 		
@@ -135,10 +135,6 @@ public class AppWidget extends AppWidgetProvider {
     		// Set onClick so user can launch the app
     		// by touching the widget
     		views.setOnClickPendingIntent(R.id.widget_background, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
-    		//views.setOnClickPendingIntent(R.id.widget_title_text, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
-    		//views.setOnClickPendingIntent(R.id.widget_amount_text, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
-    		//views.setOnClickPendingIntent(R.id.widget_percent_text, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
-    		
     		
     		appWidgetManager.updateAppWidget(appWidgetId, views);
     	}
@@ -148,7 +144,6 @@ public class AppWidget extends AppWidgetProvider {
 	// and use it to find widget IDs of active Hydrate widgets.
 	// Then pass to updateAmount(Context, AppWidgetManager, int[])
 	public void updateAmount(Context context) {
-		Log.d("WIDGET_UPDATE", "updateAmount context");
 		ComponentName thisWidget = new ComponentName(context, AppWidget.class);
 		
 		AppWidgetManager appWidgetManager = 

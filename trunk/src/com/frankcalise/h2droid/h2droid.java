@@ -92,7 +92,6 @@ public class h2droid extends Activity {
     
     /** Handle "add one serving" action */
     public void onOneServingClick(View v) {
-		Log.d("ADD", "One serving");
 		Entry oneServing = new Entry(8, true);
 		addNewEntry(oneServing);
     }
@@ -100,7 +99,6 @@ public class h2droid extends Activity {
     /** Handle "add two servings" action */
     public void onFavServingsClick(View v) {
     	String[] itemsArr = getFavoriteAmounts();
-		Log.d("ADD", "Favorite amount");
 		new AlertDialog.Builder(this)
 			.setTitle("Add favorite amount")
 			.setItems(itemsArr, 
@@ -118,7 +116,6 @@ public class h2droid extends Activity {
     
     /** Handle "add custom serving" action */
     public void onCustomServingClick(View v) {
-    	Log.d("ADD", "Custom serving");
     	// adding some amount of water other than
     	// one or two servings
     	startActivity(new Intent(this, CustomEntryActivity.class));
@@ -126,14 +123,11 @@ public class h2droid extends Activity {
     
     /** Handle "undo last serving" action */
     public void onUndoClick(View v) {
-    	Log.d("UNDO", "Last serving");
 		// remove last entry from today
 		undoTodaysLastEntry();
     }
     
     private void addNewEntry(Entry _entry) {
-    	//Log.d("CONTENT", "in addNewEntry");
-    	    	
     	ContentResolver cr = getContentResolver();
     	
     	// Insert the new entry into the provider
@@ -190,7 +184,6 @@ public class h2droid extends Activity {
     }
     
     private void undoTodaysLastEntry() {
-    	Log.d("UNDO", "in undo");
     	Date now = new Date();
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     	
@@ -290,7 +283,6 @@ public class h2droid extends Activity {
     /** Update the today's consumption TextView */
     private void updateConsumptionTextView() {
     	double prefsGoal = Settings.getAmount(getApplicationContext());
-    	Log.d("GOAL", "read from prefs = " + prefsGoal);
     	double percentGoal = (mConsumption / prefsGoal) * 100.0;
     	double delta = mConsumption - prefsGoal;
 
@@ -320,7 +312,6 @@ public class h2droid extends Activity {
     	
     	if (Settings.getLargeUnitsSetting(getApplicationContext())) {
     		Amount currentAmount = new Amount(mConsumption, unitsPref);
-    		Log.d("AMOUNT", "current amount upscaled = " + currentAmount.getAmount() + " " + currentAmount.getUnits());
     		displayAmount = currentAmount.getAmount();
     		displayUnits = currentAmount.getUnits();
     	}
@@ -391,12 +382,10 @@ public class h2droid extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
     	if (keyCode == KeyEvent.KEYCODE_VOLUME_UP && Settings.getOverrideVolumeUp(this)) {
-    		Log.d("OVERRIDEKEY", "volume up pressed");
     		Entry e = new Entry(Settings.getVolumeUpAmount(this), true);
     		addNewEntry(e);
     		return true;
     	} else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN && Settings.getOverrideVolumeDown(this)) {
-    		Log.d("OVERRIDEKEY", "volume down pressed");
     		undoTodaysLastEntry();
     		return true;
     	} else {

@@ -21,7 +21,6 @@ public class Entry {
 			sdf = new SimpleDateFormat(_format);
 			formattedDate = sdf.format(date);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

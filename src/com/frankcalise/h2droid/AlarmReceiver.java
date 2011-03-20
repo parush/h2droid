@@ -14,7 +14,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Setup NotificationManager
 		NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		Notification reminder = Settings.getReminderNotification(context);
-    	if (reminder != null) {
+    	if (reminder != null && !Settings.isDuringSleepHours(context)) {
     		Intent reminderIntent = new Intent(context, h2droid.class);
     		reminder.setLatestEventInfo(context,
     				"Hydrate", "Reminder to drink more water!",

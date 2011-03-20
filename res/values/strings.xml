@@ -22,6 +22,8 @@
     <string name="settings_reminder_light_summary">Blink LED after interval expires</string>
     <string name="settings_reminder_sound">Sound</string>
     <string name="settings_reminder_vibrate">Vibrate</string>
+    <string name="settings_reminder_sleep_time">Sleep Time</string>
+    <string name="settings_reminder_wake_time">Wake Time</string>
     <string name="settings_disable_on_goal">Disable when goal met</string>
     <string name="settings_disable_on_goal_summary">Reminders will be disabled if your daily goal has been reached</string>
     <string name="settings_goal_label">Daily goal</string>

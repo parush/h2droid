@@ -39,6 +39,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	private static final String OPT_AMOUNT_DEF = "64";
 	private static final String OPT_UNITS_DEF = "1"; // US system
 	private static final String OPT_REMINDER_INT_DEF = "60";
+	private static final String OPT_REMINDER_SLEEP = "SETTING_REMINDER_SLEEP_TIME";
+	private static final String OPT_REMINDER_WAKE = "SETTING_REMINDER_WAKE_TIME";
 	private static final String[] OPT_FAV_AMOUNT_DEF = {"8", "16", "16.9", "20", "33.8"};
 	private static final double DEFAULT_AMOUNT = 64.0;
 	private static final double DEFAULT_FAV_AMOUNT = 8.0;
@@ -265,6 +267,63 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		} catch (NumberFormatException nfe) {
 			return DEFAULT_FAV_AMOUNT;
 		}
+	}
+	
+	public static boolean isDuringSleepHours(Context context) {
+		boolean result = false;
+
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-d-y HH:mm");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("MM-d-y");
+		Date nowDate = new Date();
+		Date startDate = new Date();
+		Date endDate = new Date();
+		
+		//Calendar cal = Calendar.getInstance();
+		//Calendar sleepCalStart = cal;
+		//Calendar sleepCalEnd = cal;
+		
+		String sleepTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_SLEEP, "-1");
+		String wakeTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_WAKE, "-1");
+		
+		try {
+			//Log.d("SLEEP_HOURS", "the date = " + startDate.getMonth() + "/" + startDate.getDay() + "/" +  startDate.getYear());
+			String today = sdf2.format(nowDate);
+			//Log.d("SLEEP_HOURS", "the date = " + today);
+			startDate = sdf.parse(today + " " + sleepTime);
+			endDate = sdf.parse(today + " " + wakeTime);
+		} catch (ParseException pe) {
+			pe.printStackTrace();
+		}
+		
+		try {
+			int sleep = Integer.parseInt(sleepTime.replace(":", ""));
+			int wake = Integer.parseInt(wakeTime.replace(":", ""));
+			//Log.d("SLEEP_HOURS", "now = " + nowDate + " sleep = " + startDate + ", wake = " + endDate);
+			
+			if (wake < sleep) {
+				// need to add a day to the calendar object
+				//sleepCalEnd.add(Calendar.DAY_OF_MONTH, 1);
+				endDate.setDate(endDate.getDate()+1);
+				//Log.d("SLEEP_HOURS", "new date +1 day = " +endDate);
+			}
+			
+			//Log.d("SLEEP_HOURS", "sleepCalStart = " + sleepCalStart + " , sleepCalEnd = " + sleepCalEnd);
+			
+			// check current time is between the limits set by user
+			//if (cal.after(sleepCalStart) && cal.before(sleepCalEnd)) {
+			if (nowDate.after(startDate) && nowDate.before(endDate)) {
+				result = true;
+			}
+			
+		} catch (NumberFormatException nfe) {
+			Log.d("SETTINGS", "NumberFormatException: " + nfe.getMessage());
+		}
+		
+		//Log.d("SETTINGS", "sleepTime = " + sleepTime);
+		//Log.d("SETTINGS", "wakeTime = " + wakeTime);
+		
+		Log.d("SLEEP_HOURS", "return ?= " + result);
+		return result;
 	}
 
 	@Override

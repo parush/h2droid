@@ -12,8 +12,8 @@ import android.widget.TimePicker;
 /**
  * A preference type that allows a user to choose a time
  */
-public class TimePickerPreference extends DialogPreference implements
-		TimePicker.OnTimeChangedListener {
+public class TimePickerPreference extends DialogPreference {
+	private TimePicker tp; //to get this dialog from other functions
 	
 	/**
 	 * The validation expression for this preference
@@ -60,8 +60,8 @@ public class TimePickerPreference extends DialogPreference implements
 	@Override
 	protected View onCreateDialogView() {
  
-		TimePicker tp = new TimePicker(getContext());
-		tp.setOnTimeChangedListener(this);
+		/*TimePicker */tp = new TimePicker(getContext());
+		//tp.setOnTimeChangedListener(this);
  
 		int h = getHour();
 		int m = getMinute();
@@ -80,12 +80,12 @@ public class TimePickerPreference extends DialogPreference implements
 	 * android.widget.TimePicker.OnTimeChangedListener#onTimeChanged(android
 	 * .widget.TimePicker, int, int)
 	 */
-	@Override
+	/*@Override
 	public void onTimeChanged(TimePicker view, int hour, int minute) {
  
 		//persistString(hour + ":" + minute);
 		persistString(String.format("%02d:%02d", hour, minute));
-	}
+	}*/
  
 	/*
 	 * (non-Javadoc)
@@ -135,5 +135,17 @@ public class TimePickerPreference extends DialogPreference implements
 		}
  
 		return Integer.valueOf(time.split(":")[1]);
+	}
+
+	@Override
+	protected void onDialogClosed (boolean positiveResult) {
+		if (positiveResult) {
+			tp.clearFocus();
+			int hour = tp.getCurrentHour();
+			int minute = tp.getCurrentMinute();
+			String result = String.format("%02d:%02d", hour, minute);//hour + ":" + minute;
+			persistString(result);
+			callChangeListener(result);
+		}
 	}
 }

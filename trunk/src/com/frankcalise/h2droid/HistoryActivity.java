@@ -26,6 +26,9 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class HistoryActivity extends ListActivity {
 	
+	private int mUnitSystem;
+	private boolean mLargeUnits;
+	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,9 @@ public class HistoryActivity extends ListActivity {
         
         // Set up main layout
         setContentView(R.layout.activity_history);
+        
+		this.mUnitSystem = Settings.getUnitSystem(this);
+		this.mLargeUnits = Settings.getLargeUnitsSetting(this);
         
         Bundle extras = getIntent().getExtras();
         String selectedDate = null;
@@ -64,7 +70,7 @@ public class HistoryActivity extends ListActivity {
             			// When clicked, go to new activity to display
             			// selected day's entries
             			TextView text = (TextView)view.findViewById(R.id.entry_date_textview);
-            			Log.d("ITEM_CLICK", String.format("item id = %d, %s", position, text.getText()));
+            			//Log.d("ITEM_CLICK", String.format("item id = %d, %s", position, text.getText()));
             			i.putExtra("date", text.getText());
             			startActivity(i);
             		}
@@ -74,18 +80,30 @@ public class HistoryActivity extends ListActivity {
             }	
         } else {
         	// show entries related to user's selected date
-        	Log.d("HISTORY", "user chose a specific date, " + selectedDate);
+        	//Log.d("HISTORY", "user chose a specific date, " + selectedDate);
             List<Entry> entryList = getEntriesFromDate(selectedDate);
-            Log.d("HISTORY", "List size = " + entryList.size());
+            //Log.d("HISTORY", "List size = " + entryList.size());
             
             final ListView listView = getListView();
             
             // add the header view for this detail list
         	// sums up the total amount
             double totalAmount = getTotalAmount(entryList);
+    		double displayAmount = totalAmount;
+    		String displayUnits = "fl oz";
+    		if (mUnitSystem == Settings.UNITS_METRIC) {
+    			displayAmount /= Entry.ouncePerMililiter;
+    			displayUnits = "mL";
+    		}
+    		
+    		if (mLargeUnits) {
+    			Amount currentAmount = new Amount(totalAmount, mUnitSystem);
+        		displayAmount = currentAmount.getAmount();
+        		displayUnits = currentAmount.getUnits();
+    		}
             
             TextView tvAmount = new TextView(this);
-        	tvAmount.setText(String.format("%s\nTotal: %.1f fl oz", selectedDate, totalAmount));
+        	tvAmount.setText(String.format("%s\nTotal: %.1f %s", selectedDate, displayAmount, displayUnits));
         	tvAmount.setTextSize(getResources().getDimension(R.dimen.listview_header_text_size));
         	int layoutPadding = getResources().getDimensionPixelSize(R.dimen.layout_padding);
         	tvAmount.setPadding(layoutPadding, layoutPadding, layoutPadding, layoutPadding);

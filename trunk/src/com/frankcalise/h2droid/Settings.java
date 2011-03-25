@@ -127,6 +127,23 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			.getString(OPT_FAV_AMOUNT[favIndex], OPT_FAV_AMOUNT_DEF[favIndex]);
 	}
 	
+	public static String[] getArrayOfFavoriteAmounts(Context context) {
+		String[] favAmounts = new String[5];
+    	
+    	favAmounts[0] = PreferenceManager.getDefaultSharedPreferences(context)
+    						.getString(OPT_FAV_AMOUNT[0], OPT_FAV_AMOUNT_DEF[0]);
+    	favAmounts[1] = PreferenceManager.getDefaultSharedPreferences(context)
+							.getString(OPT_FAV_AMOUNT[1], OPT_FAV_AMOUNT_DEF[1]);
+    	favAmounts[2] = PreferenceManager.getDefaultSharedPreferences(context)
+							.getString(OPT_FAV_AMOUNT[2], OPT_FAV_AMOUNT_DEF[2]);
+    	favAmounts[3] = PreferenceManager.getDefaultSharedPreferences(context)
+							.getString(OPT_FAV_AMOUNT[3], OPT_FAV_AMOUNT_DEF[3]);
+    	favAmounts[4] = PreferenceManager.getDefaultSharedPreferences(context)
+							.getString(OPT_FAV_AMOUNT[4], OPT_FAV_AMOUNT_DEF[4]);
+    
+    	return favAmounts;
+	}
+	
 	public static int getUnitSystem(Context context) {
 		try {
 			String prefString = PreferenceManager.getDefaultSharedPreferences(context)

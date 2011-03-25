@@ -58,6 +58,7 @@ public class h2droid extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
     	super.onCreateOptionsMenu(menu);
     	
+    	// Inflate the main menu
     	MenuInflater inflater = getMenuInflater();
     	inflater.inflate(R.menu.main_menu, menu);
     	
@@ -67,6 +68,7 @@ public class h2droid extends Activity {
     /** Handle menu selection */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+    	// Start activity depending on menu choice
     	switch (item.getItemId()) {
     		case R.id.menu_settings:
     			startActivity(new Intent(this, Settings.class));
@@ -74,13 +76,6 @@ public class h2droid extends Activity {
     		case R.id.menu_facts:
     			startActivity(new Intent(this, FactsActivity.class));
     			return true;
-    		/*case R.id.menu_reset:
-    			Log.d("RESET", "reset all of today's data - launch asynctask with delete uri");
-    			resetTodaysEntries();
-    			return true;*/
-    		/*case R.id.menu_add:
-    			startActivity(new Intent(this, CustomEntryActivity.class));
-    			return true;*/
     		case R.id.menu_history:
     			startActivity(new Intent(this, HistoryActivity.class));
     			return true;
@@ -98,7 +93,7 @@ public class h2droid extends Activity {
     
     /** Handle "add two servings" action */
     public void onFavServingsClick(View v) {
-    	String[] itemsArr = getFavoriteAmounts();
+    	String[] itemsArr = Settings.getArrayOfFavoriteAmounts(this);
 		new AlertDialog.Builder(this)
 			.setTitle("Add favorite amount")
 			.setItems(itemsArr, 
@@ -218,35 +213,7 @@ public class h2droid extends Activity {
     	if (mShowToasts)
     		toast.show();
     }
-    
-    /*private void resetTodaysEntries() {
-    	Date now = new Date();
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    	
-    	String where = "'" + sdf.format(now) + "' = date(" + WaterProvider.KEY_DATE + ")";
-    	
-    	ContentResolver cr = getContentResolver();
-    	
-    	int results = cr.delete(WaterProvider.CONTENT_URI, where, null);
-    	
-    	String toastMsg;
-    	if (results > 0) {
-    		Log.d("RESET", "deleted some rows");
-    		toastMsg = "Deleting today's entries...";
-    	} else {
-    		Log.d("RESET", "there were no entries for today");
-    		toastMsg = "No entries from today!";
-    	}
-    	
-    	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
-    	toast.setGravity(Gravity.BOTTOM, 0, 0);
-    	if (mShowToasts)
-    		toast.show();
-    	
-    	mConsumption = 0;
-    	updateConsumptionTextView();
-    }*/
-    
+
     private void loadTodaysEntriesFromProvider() {
     	mConsumption = 0;
     	
@@ -363,18 +330,6 @@ public class h2droid extends Activity {
     	
     	// Commit changes
     	editor.commit();
-    }
-    
-    private String[] getFavoriteAmounts() {
-    	String[] favAmounts = new String[5];
-    	final int max = 5;
-    	Context context = getApplicationContext();
-    	
-    	for (int i = 0; i < max; i++) {
-    		favAmounts[i] = Settings.getFavoriteAmountString(i, context);
-    	}
-    	
-    	return favAmounts;
     }
     
     // Override volume keys if user desires

@@ -31,7 +31,7 @@ import android.widget.Toast;
 public class h2droid extends Activity {
 	private double mConsumption = 0;
 	private boolean mShowToasts;
-		
+	private boolean mIsNonMetric = true;
 	private static final String LOCAL_DATA = "hydrate_data";
 	
     /** Called when the activity is first created. */
@@ -49,6 +49,12 @@ public class h2droid extends Activity {
     	super.onResume();
     	
     	mShowToasts = Settings.getToastsSetting(getApplicationContext());
+    	int unitsPref = Settings.getUnitSystem(getApplicationContext());
+    	if (unitsPref == Settings.UNITS_US) {
+    		mIsNonMetric = true;
+    	} else {
+    		mIsNonMetric = false;
+    	}
     	
     	loadTodaysEntriesFromProvider();
     }
@@ -102,7 +108,7 @@ public class h2droid extends Activity {
 					public void onClick(DialogInterface dialog, int which) {
 						double favAmount = Settings.getFavoriteAmountDouble(which, getApplicationContext());
 						Log.d("FAVORITES", "option = " + which + " settings amount = " + favAmount);
-						Entry favServing = new Entry(favAmount, true);
+						Entry favServing = new Entry(favAmount, mIsNonMetric);
 						addNewEntry(favServing);
 					}
 				})
@@ -123,6 +129,7 @@ public class h2droid extends Activity {
     }
     
     private void addNewEntry(Entry _entry) {
+    	
     	ContentResolver cr = getContentResolver();
     	
     	// Insert the new entry into the provider
@@ -191,11 +198,10 @@ public class h2droid extends Activity {
     	Cursor c = cr.query(WaterProvider.CONTENT_URI, projection, where, null, sortOrder);
     	int results = 0;
     	if (c.moveToFirst()) {
-    		Log.d("UNDO", "id = " + c.getInt(0));
     		final Uri uri = Uri.parse("content://com.frankcalise.provider.h2droid/entries/" + c.getInt(0));
     		results = cr.delete(uri, null, null);
     	} else {
-    		Log.d("UNDO", "no entries from today!");
+    		//Log.d("UNDO", "no entries from today!");
     	}
     	
     	c.close();
@@ -215,8 +221,8 @@ public class h2droid extends Activity {
     }
 
     private void loadTodaysEntriesFromProvider() {
+    	int unitsPref = Settings.getUnitSystem(getApplicationContext());
     	mConsumption = 0;
-    	
     	//Log.d("CONTENT", "in loadTodaysEntriesFromProvider()");
     	
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -233,10 +239,12 @@ public class h2droid extends Activity {
     		do {
     			String date = c.getString(WaterProvider.DATE_COLUMN);
     			double metricAmount = c.getDouble(WaterProvider.AMOUNT_COLUMN);
-    			boolean isNonMetric = false;
-    			Entry e = new Entry(date, metricAmount, isNonMetric);
-    			
-    			mConsumption += e.getNonMetricAmount();
+    			Entry e = new Entry(date, metricAmount, false);
+    			if (unitsPref == Settings.UNITS_US) {
+    				mConsumption += e.getNonMetricAmount();
+    			} else {
+    				mConsumption += e.getMetricAmount();
+    			}
     			
     			//Log.d("CONTENT", e.toString());
     		} while (c.moveToNext());
@@ -284,7 +292,7 @@ public class h2droid extends Activity {
     	}
     	
     	final TextView amountTextView = (TextView)findViewById(R.id.consumption_textview);
-    	String dailyTotal = String.format("%.1f %s\n", displayAmount, displayUnits);
+    	String dailyTotal = String.format("%.1f %s\n", mConsumption, displayUnits);
     	amountTextView.setText(dailyTotal);
     	
     	// Show delta from goal
@@ -293,7 +301,7 @@ public class h2droid extends Activity {
     	if (unitsPref == Settings.UNITS_METRIC) {
     		displayDelta /= Entry.ouncePerMililiter;
     	}
-    	String overUnder = String.format("%+.1f %s (%.1f%%)", displayDelta, originalUnits, percentGoal);
+    	String overUnder = String.format("%+.1f %s (%.1f%%)", delta, originalUnits, percentGoal);
     	overUnderTextView.setText(overUnder);
     	
     	if (delta >= 0) {
@@ -308,7 +316,7 @@ public class h2droid extends Activity {
     	if (unitsPref == Settings.UNITS_METRIC) {
     		displayPrefsGoal /= Entry.ouncePerMililiter;
     	}
-    	String goalText = String.format("Daily goal: %.1f %s", displayPrefsGoal, originalUnits);
+    	String goalText = String.format("Daily goal: %.1f %s", prefsGoal, originalUnits);
     	goalTextView.setText(goalText);	
     	
     	// Broadcast an Intent to update Widget

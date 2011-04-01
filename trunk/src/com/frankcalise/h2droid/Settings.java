@@ -46,7 +46,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	private static final double DEFAULT_FAV_AMOUNT = 8.0;
 	private static final int DEFAULT_REMINDER_INT = 60;
 	public static final int UNITS_METRIC = 0;
-	public static final int UNITS_IMPERIAL = 1;
+	public static final int UNITS_US = 1;
 	private static final String[] OPT_FAV_AMOUNT = {"FAV_AMOUNT_ONE", 
 													"FAV_AMOUNT_TWO",
 													"FAV_AMOUNT_THREE",
@@ -88,8 +88,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		mEditTextPref5.setSummary("Current amount is " + getPreferenceScreen().getSharedPreferences().getString(OPT_FAV_AMOUNT[4], OPT_FAV_AMOUNT_DEF[4]));
 		
 		String unitsPref = getPreferenceScreen().getSharedPreferences().getString(OPT_UNITS, OPT_UNITS_DEF);
-		Log.d("SETTINGS", "UNITS PREF = " + unitsPref);
-		if (unitsPref.equals(String.valueOf(UNITS_IMPERIAL))) {
+
+		if (unitsPref.equals(String.valueOf(UNITS_US))) {
 			mUnitsPref.setSummary("US");
 		} else {
 			mUnitsPref.setSummary("Metric");
@@ -153,7 +153,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			
 			return prefAmount;
 		} catch (NumberFormatException nfe) {
-			return UNITS_IMPERIAL;
+			return UNITS_US;
 		} 
 	}
 	
@@ -360,7 +360,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			mEditTextPref5.setSummary("Current amount is " + sharedPreferences.getString(key, OPT_FAV_AMOUNT_DEF[4]));
 		} else if (key.equals(OPT_UNITS)) {
 			String unitsPref = sharedPreferences.getString(key, OPT_UNITS_DEF);
-			if (unitsPref.equals(String.valueOf(UNITS_IMPERIAL))) {
+			if (unitsPref.equals(String.valueOf(UNITS_US))) {
 				mUnitsPref.setSummary("US");
 			} else {
 				mUnitsPref.setSummary("Metric");

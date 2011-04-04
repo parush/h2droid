@@ -17,7 +17,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -33,11 +32,17 @@ public class h2droid extends Activity {
 	private boolean mShowToasts;
 	private boolean mIsNonMetric = true;
 	private static final String LOCAL_DATA = "hydrate_data";
+	private Context mContext = null;
+	private int mUnitsPref;
+	private ContentResolver mContentResolver = null;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        mContentResolver = getContentResolver();
+        mContext = getApplicationContext();
         
         // Set up main layout
         setContentView(R.layout.main);
@@ -48,9 +53,9 @@ public class h2droid extends Activity {
     protected void onResume() {
     	super.onResume();
     	
-    	mShowToasts = Settings.getToastsSetting(getApplicationContext());
-    	int unitsPref = Settings.getUnitSystem(getApplicationContext());
-    	if (unitsPref == Settings.UNITS_US) {
+    	mShowToasts = Settings.getToastsSetting(mContext);
+    	mUnitsPref = Settings.getUnitSystem(mContext);
+    	if (mUnitsPref == Settings.UNITS_US) {
     		mIsNonMetric = true;
     	} else {
     		mIsNonMetric = false;
@@ -106,8 +111,7 @@ public class h2droid extends Activity {
 				new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						double favAmount = Settings.getFavoriteAmountDouble(which, getApplicationContext());
-						Log.d("FAVORITES", "option = " + which + " settings amount = " + favAmount);
+						double favAmount = Settings.getFavoriteAmountDouble(which, mContext);
 						Entry favServing = new Entry(favAmount, mIsNonMetric);
 						addNewEntry(favServing);
 					}
@@ -129,30 +133,30 @@ public class h2droid extends Activity {
     }
     
     private void addNewEntry(Entry _entry) {
-    	
-    	ContentResolver cr = getContentResolver();
-    	
     	// Insert the new entry into the provider
     	ContentValues values = new ContentValues();
     	
     	values.put(WaterProvider.KEY_DATE, _entry.getDate());
     	values.put(WaterProvider.KEY_AMOUNT, _entry.getMetricAmount());
     	
-    	cr.insert(WaterProvider.CONTENT_URI, values);
+    	mContentResolver.insert(WaterProvider.CONTENT_URI, values);
     	
-    	mConsumption += _entry.getNonMetricAmount();
+    	if (mUnitsPref == Settings.UNITS_US) {
+    		mConsumption += _entry.getNonMetricAmount();
+    	} else {
+    		mConsumption += _entry.getMetricAmount();
+    	}
     	
     	// Make a toast displaying add complete
-    	int unitsPref = Settings.getUnitSystem(this);
     	double displayAmount = _entry.getNonMetricAmount();
     	String displayUnits = "fl oz";
-    	if (unitsPref == Settings.UNITS_METRIC) {
+    	if (mUnitsPref == Settings.UNITS_METRIC) {
     		displayUnits = "ml";
     		displayAmount = _entry.getMetricAmount();
     	}
     	
     	String toastMsg = String.format("Added %.1f %s", displayAmount, displayUnits);
-    	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
+    	Toast toast = Toast.makeText(mContext, toastMsg, Toast.LENGTH_SHORT);
     	toast.setGravity(Gravity.BOTTOM, 0, 0);
     	if (mShowToasts)
     		toast.show();
@@ -193,13 +197,11 @@ public class h2droid extends Activity {
     	String[] projection = {WaterProvider.KEY_ID};
     	String where = "'" + sdf.format(now) + "' = date(" + WaterProvider.KEY_DATE + ")";
     	
-    	ContentResolver cr = getContentResolver();
-    	
-    	Cursor c = cr.query(WaterProvider.CONTENT_URI, projection, where, null, sortOrder);
+    	Cursor c = mContentResolver.query(WaterProvider.CONTENT_URI, projection, where, null, sortOrder);
     	int results = 0;
     	if (c.moveToFirst()) {
     		final Uri uri = Uri.parse("content://com.frankcalise.provider.h2droid/entries/" + c.getInt(0));
-    		results = cr.delete(uri, null, null);
+    		results = mContentResolver.delete(uri, null, null);
     	} else {
     		//Log.d("UNDO", "no entries from today!");
     	}
@@ -214,25 +216,21 @@ public class h2droid extends Activity {
     		toastMsg = "No entries from today!";
     	}
     	
-    	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
+    	Toast toast = Toast.makeText(mContext, toastMsg, Toast.LENGTH_SHORT);
     	toast.setGravity(Gravity.BOTTOM, 0, 0);
     	if (mShowToasts)
     		toast.show();
     }
 
     private void loadTodaysEntriesFromProvider() {
-    	int unitsPref = Settings.getUnitSystem(getApplicationContext());
     	mConsumption = 0;
-    	//Log.d("CONTENT", "in loadTodaysEntriesFromProvider()");
     	
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     	Date now = new Date();
     	String where = "'" + sdf.format(now) + "' = date(" + WaterProvider.KEY_DATE + ")";
     	
-    	ContentResolver cr = getContentResolver();
-    	
     	// Return all saved entries
-    	Cursor c = cr.query(WaterProvider.CONTENT_URI,
+    	Cursor c = mContentResolver.query(WaterProvider.CONTENT_URI,
     					    null, where, null, null);
     	
     	if (c.moveToFirst()) {
@@ -240,13 +238,11 @@ public class h2droid extends Activity {
     			String date = c.getString(WaterProvider.DATE_COLUMN);
     			double metricAmount = c.getDouble(WaterProvider.AMOUNT_COLUMN);
     			Entry e = new Entry(date, metricAmount, false);
-    			if (unitsPref == Settings.UNITS_US) {
+    			if (mUnitsPref == Settings.UNITS_US) {
     				mConsumption += e.getNonMetricAmount();
     			} else {
     				mConsumption += e.getMetricAmount();
     			}
-    			
-    			//Log.d("CONTENT", e.toString());
     		} while (c.moveToNext());
     	}
     	
@@ -257,26 +253,23 @@ public class h2droid extends Activity {
     
     /** Update the today's consumption TextView */
     private void updateConsumptionTextView() {
-    	double prefsGoal = Settings.getAmount(getApplicationContext());
+    	double prefsGoal = Settings.getAmount(mContext);
     	double percentGoal = (mConsumption / prefsGoal) * 100.0;
     	double delta = mConsumption - prefsGoal;
 
     	if (percentGoal > 100.0) {
     		percentGoal = 100.0;
     	}
-    	
-    	// Show consumption amount
-    	int unitsPref = Settings.getUnitSystem(getApplicationContext());
-    	
+
     	// update the +N add button text according to the unit system
     	final Button nButton = (Button)findViewById(R.id.add_custom_serving_button);
     	
-    	
+    	// Show consumption amount	
     	String originalUnits = "";
     	double displayAmount = mConsumption;
     	String displayUnits = "fl oz";
-    	if (unitsPref == Settings.UNITS_METRIC) {
-    		displayAmount = mConsumption / Entry.ouncePerMililiter;
+    	if (mUnitsPref == Settings.UNITS_METRIC) {
+    		//displayAmount = mConsumption / Entry.ouncePerMililiter;
     		displayUnits = "mL";
     		nButton.setText("+N mL");
     	} else {
@@ -285,20 +278,20 @@ public class h2droid extends Activity {
     	
     	originalUnits = displayUnits;
     	
-    	if (Settings.getLargeUnitsSetting(getApplicationContext())) {
-    		Amount currentAmount = new Amount(mConsumption, unitsPref);
+    	if (Settings.getLargeUnitsSetting(mContext)) {
+    		Amount currentAmount = new Amount(mConsumption, mUnitsPref);
     		displayAmount = currentAmount.getAmount();
     		displayUnits = currentAmount.getUnits();
     	}
     	
     	final TextView amountTextView = (TextView)findViewById(R.id.consumption_textview);
-    	String dailyTotal = String.format("%.1f %s\n", mConsumption, displayUnits);
+    	String dailyTotal = String.format("%.1f %s\n", displayAmount, displayUnits);
     	amountTextView.setText(dailyTotal);
     	
     	// Show delta from goal
     	final TextView overUnderTextView = (TextView)findViewById(R.id.over_under_textview);
     	double displayDelta = delta;
-    	if (unitsPref == Settings.UNITS_METRIC) {
+    	if (mUnitsPref == Settings.UNITS_METRIC) {
     		displayDelta /= Entry.ouncePerMililiter;
     	}
     	String overUnder = String.format("%+.1f %s (%.1f%%)", delta, originalUnits, percentGoal);
@@ -313,7 +306,7 @@ public class h2droid extends Activity {
     	// Show current goal setting
     	final TextView goalTextView = (TextView)findViewById(R.id.goal_textview);
     	double displayPrefsGoal = prefsGoal;
-    	if (unitsPref == Settings.UNITS_METRIC) {
+    	if (mUnitsPref == Settings.UNITS_METRIC) {
     		displayPrefsGoal /= Entry.ouncePerMililiter;
     	}
     	String goalText = String.format("Daily goal: %.1f %s", prefsGoal, originalUnits);
@@ -325,7 +318,7 @@ public class h2droid extends Activity {
     	Intent widgetIntent = new Intent(AppWidget.FORCE_WIDGET_UPDATE);
     	widgetIntent.putExtra("AMOUNT", mConsumption);
     	widgetIntent.putExtra("PERCENT", percentGoal);
-    	widgetIntent.putExtra("UNITS", unitsPref);
+    	widgetIntent.putExtra("UNITS", mUnitsPref);
     	this.sendBroadcast(widgetIntent);
     	
     	// Save off current amount, needed if user 

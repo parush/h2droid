@@ -18,9 +18,6 @@ public class Amount {
 		mUnitSystem = _unitSystem;
 		
 		double unitsAmount = _currentAmount;
-		if (_unitSystem == Settings.UNITS_METRIC) {
-			unitsAmount /= Entry.ouncePerMililiter;
-		}
 		mAmount = convertToLargerUnits(unitsAmount);
 	}
 	
@@ -39,6 +36,7 @@ public class Amount {
 				newAmount = _amount;
 			}
 		} else {
+			// us units conversion
 			if (_amount >= OUNCES_PER_GALLON) {
 				// convert to gallons
 				mUnits = "gal";

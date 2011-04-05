@@ -56,17 +56,16 @@ public class EntryListAdapter extends BaseAdapter {
 			}
 		}
 		
-		double originalAmount = e.getNonMetricAmount();
 		double displayAmount = e.getNonMetricAmount();
 		String displayUnits = "fl oz";
 		if (mUnitSystem == Settings.UNITS_METRIC) {
-			displayAmount /= Entry.ouncePerMililiter;
-			displayUnits = "mL";
+			displayAmount = e.getMetricAmount();
+			displayUnits = "ml";
 		}
 		
 		
 		if (mLargeUnits) {
-			Amount currentAmount = new Amount(originalAmount, mUnitSystem);
+			Amount currentAmount = new Amount(displayAmount, mUnitSystem);
     		displayAmount = currentAmount.getAmount();
     		displayUnits = currentAmount.getUnits();
 		}

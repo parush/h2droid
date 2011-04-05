@@ -270,8 +270,8 @@ public class h2droid extends Activity {
     	String displayUnits = "fl oz";
     	if (mUnitsPref == Settings.UNITS_METRIC) {
     		//displayAmount = mConsumption / Entry.ouncePerMililiter;
-    		displayUnits = "mL";
-    		nButton.setText("+N mL");
+    		displayUnits = "ml";
+    		nButton.setText("+N ml");
     	} else {
     		nButton.setText("+N oz");
     	}

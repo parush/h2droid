@@ -92,8 +92,8 @@ public class HistoryActivity extends ListActivity {
     		double displayAmount = totalAmount;
     		String displayUnits = "fl oz";
     		if (mUnitSystem == Settings.UNITS_METRIC) {
-    			displayAmount /= Entry.ouncePerMililiter;
-    			displayUnits = "mL";
+    			//displayAmount /= Entry.ouncePerMililiter;
+    			displayUnits = "ml";
     		}
     		
     		if (mLargeUnits) {
@@ -130,7 +130,6 @@ public class HistoryActivity extends ListActivity {
     		do {
     			String date = c.getString(WaterProvider.DATE_COLUMN);
     			double metricAmount = c.getDouble(WaterProvider.AMOUNT_COLUMN);
-    			Log.d("HISTORY", "Amount from day: " + metricAmount);
     			boolean isNonMetric = false;    			
     			
     			Entry e = new Entry(date, metricAmount, isNonMetric);
@@ -191,7 +190,11 @@ public class HistoryActivity extends ListActivity {
     	double total = 0.0;
     	
     	for (int i = 0; i < listSize; i++) {
-    		total += _entriesList.get(i).getNonMetricAmount();
+    		if (mUnitSystem == Settings.UNITS_US) {
+    			total += _entriesList.get(i).getNonMetricAmount();
+    		} else {
+    			total += _entriesList.get(i).getMetricAmount();
+    		}
     	}
     	
     	return total;

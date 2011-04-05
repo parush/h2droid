@@ -32,7 +32,7 @@ public class Amount {
 				newAmount = (_amount / MILILITERS_PER_LITER); 
 			} else {
 				// leave it as mililiters
-				mUnits = "mL";
+				mUnits = "ml";
 				newAmount = _amount;
 			}
 		} else {

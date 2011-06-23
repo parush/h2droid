@@ -40,6 +40,7 @@ public class WaterConsumption {
 	private void loadEntries() {
 		// Clear the entry list
 		mEntryList.clear();
+		mAmount = 0;
 		
 		// Set up the where clause for the content resolver
 		String where = "'" + mDate + "' = date(" + WaterProvider.KEY_DATE + ")";
@@ -55,6 +56,7 @@ public class WaterConsumption {
     								c.getDouble(WaterProvider.AMOUNT_COLUMN),
     								false);
     			mEntryList.add(e);
+    			mAmount += e.getNonMetricAmount();
     		} while (c.moveToNext());
     	}
     	

@@ -28,6 +28,8 @@ public class HistoryActivity extends ListActivity {
 	
 	private int mUnitSystem;
 	private boolean mLargeUnits;
+	private List<Entry> entryList;
+	private ContentResolver mContentResolver = null;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -36,6 +38,8 @@ public class HistoryActivity extends ListActivity {
         
         // Set up main layout
         setContentView(R.layout.activity_history);
+        
+        mContentResolver = getContentResolver();
         
 		this.mUnitSystem = Settings.getUnitSystem(this);
 		this.mLargeUnits = Settings.getLargeUnitsSetting(this);
@@ -50,7 +54,7 @@ public class HistoryActivity extends ListActivity {
         
         if (selectedDate == null) {
         	try {
-            	List<Entry> entryList = getEntries();
+            	entryList = getEntries();
             
             
             	final ListView listView = getListView();
@@ -59,7 +63,7 @@ public class HistoryActivity extends ListActivity {
             	
             	// Set up context menu to delete a day's worth
             	// of entries on long press
-            	//registerForContextMenu(listView);
+            	registerForContextMenu(listView);
             	
             	final Intent i = new Intent(this, HistoryActivity.class);
             	
@@ -81,7 +85,7 @@ public class HistoryActivity extends ListActivity {
         } else {
         	// show entries related to user's selected date
         	//Log.d("HISTORY", "user chose a specific date, " + selectedDate);
-            List<Entry> entryList = getEntriesFromDate(selectedDate);
+            entryList = getEntriesFromDate(selectedDate);
             //Log.d("HISTORY", "List size = " + entryList.size());
             
             final ListView listView = getListView();
@@ -215,7 +219,7 @@ public class HistoryActivity extends ListActivity {
     	AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
     	switch (item.getItemId()) {
     		case R.id.menu_delete_day:
-    			deleteAllEntriesFromRow(info.id);
+    			deleteAllEntriesFromRow(info.position);
     			return true;
     		default:
     			return super.onContextItemSelected(item);
@@ -223,8 +227,32 @@ public class HistoryActivity extends ListActivity {
     	
     }
     
-    public void deleteAllEntriesFromRow(long id) {
-    	Log.d("HISTORY", "row = " + id);
+    public void deleteAllEntriesFromRow(int position) {
+    	Log.d("HISTORY", "row = " + position);
+    	Entry e = entryList.get(position);
+    	Log.d("HISTORY", "entry = " + e.toString());
+    	
+    	
+    	//Date ed = new Date(e.getDate());
+    	//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    	
+    	//String sortOrder = WaterProvider.KEY_DATE + " DESC LIMIT 1";
+    	//String[] projection = {WaterProvider.KEY_ID};
+    	String where = "date('" + e.getDate() + "') = date(" + WaterProvider.KEY_DATE + ")";
+    	
+//    	Cursor c = mContentResolver.query(WaterProvider.CONTENT_URI, projection, where, null, sortOrder);
+    	int results = mContentResolver.delete(WaterProvider.CONTENT_URI, where, null);
+    	Log.d("HISTORY", String.format("Deleted %d results", results));
+//    	int results = 0;
+//    	if (c.moveToFirst()) {
+//    		final Uri uri = Uri.parse("content://com.frankcalise.provider.h2droid/entries/" + c.getInt(0));
+//    		results = mContentResolver.delete(uri, null, null);
+//    	} else {
+//    		//Log.d("UNDO", "no entries from today!");
+//    	}
+    	
+//    	c.close();
+    	
     }
     
     

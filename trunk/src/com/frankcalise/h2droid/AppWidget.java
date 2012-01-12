@@ -108,6 +108,8 @@ public class AppWidget extends AppWidgetProvider {
     	}
     	
     	Intent launchAppIntent = new Intent(context, h2droid.class);
+    	launchAppIntent.setAction(Intent.ACTION_MAIN);
+    	launchAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
     	
     	double displayAmount = mAmount;
     	if (mUnitSystem == Settings.UNITS_METRIC) {

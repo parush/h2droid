@@ -16,10 +16,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 		Notification reminder = Settings.getReminderNotification(context);
     	if (reminder != null && !Settings.isDuringSleepHours(context)) {
     		Intent reminderIntent = new Intent(context, h2droid.class);
+    		reminderIntent.setAction(Intent.ACTION_MAIN);
+    		reminderIntent.addCategory(Intent.CATEGORY_LAUNCHER);
     		reminder.setLatestEventInfo(context,
     				"Hydrate", "Reminder to drink more water!",
     				PendingIntent.getActivity(context, 0, reminderIntent,
-    				PendingIntent.FLAG_CANCEL_CURRENT));
+    				PendingIntent.FLAG_UPDATE_CURRENT));
     		nm.notify(0, reminder);
     	}
 	}

@@ -28,8 +28,10 @@ public class HistoryActivity extends ListActivity {
 	
 	private int mUnitSystem;
 	private boolean mLargeUnits;
-	private List<Entry> entryList;
+	private List<Entry> mEntryList;
 	private ContentResolver mContentResolver = null;
+	private String mSelectedDate = null;
+	private EntryListAdapter mAdapter = null;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -43,28 +45,23 @@ public class HistoryActivity extends ListActivity {
         
 		this.mUnitSystem = Settings.getUnitSystem(this);
 		this.mLargeUnits = Settings.getLargeUnitsSetting(this);
-        
+		
+		final ListView listView = getListView();
+		
         Bundle extras = getIntent().getExtras();
-        String selectedDate = null;
         try {
-        	selectedDate = extras.getString("date");
+        	mSelectedDate = extras.getString("date");
         } catch (NullPointerException npe) {
         	Log.d("HISTORY", "no date chosen, show all dates with entries");
         }
         
-        if (selectedDate == null) {
+        if (mSelectedDate == null) {
         	try {
-            	entryList = getEntries();
+            	mEntryList = getEntries();
             
-            
-            	final ListView listView = getListView();
-            	ListAdapter adapter = new EntryListAdapter(entryList, this, false);
-            	listView.setAdapter(adapter);
-            	
-            	// Set up context menu to delete a day's worth
-            	// of entries on long press
-            	registerForContextMenu(listView);
-            	
+            	mAdapter = new EntryListAdapter(mEntryList, this, false);
+            	listView.setAdapter(mAdapter);
+            	            	
             	final Intent i = new Intent(this, HistoryActivity.class);
             	
             	// set on item click listener for the ListView
@@ -85,14 +82,12 @@ public class HistoryActivity extends ListActivity {
         } else {
         	// show entries related to user's selected date
         	//Log.d("HISTORY", "user chose a specific date, " + selectedDate);
-            entryList = getEntriesFromDate(selectedDate);
+            mEntryList = getEntriesFromDate(mSelectedDate);
             //Log.d("HISTORY", "List size = " + entryList.size());
-            
-            final ListView listView = getListView();
             
             // add the header view for this detail list
         	// sums up the total amount
-            double totalAmount = getTotalAmount(entryList);
+            double totalAmount = getTotalAmount(mEntryList);
     		double displayAmount = totalAmount;
     		String displayUnits = "fl oz";
     		if (mUnitSystem == Settings.UNITS_METRIC) {
@@ -107,17 +102,22 @@ public class HistoryActivity extends ListActivity {
     		}
             
             TextView tvAmount = new TextView(this);
-        	tvAmount.setText(String.format("%s\nTotal: %.1f %s", selectedDate, displayAmount, displayUnits));
+        	tvAmount.setText(String.format("%s\nTotal: %.1f %s", mSelectedDate, displayAmount, displayUnits));
         	tvAmount.setTextSize(getResources().getDimension(R.dimen.listview_header_text_size));
         	int layoutPadding = getResources().getDimensionPixelSize(R.dimen.layout_padding);
         	tvAmount.setPadding(layoutPadding, layoutPadding, layoutPadding, layoutPadding);
         	
         	listView.addHeaderView(tvAmount);
-            
+           
         	// set up the list adapter
-        	ListAdapter adapter = new EntryListAdapter(entryList, this, true);
-        	listView.setAdapter(adapter);
+        	mAdapter = new EntryListAdapter(mEntryList, this, true);
+        	listView.setAdapter(mAdapter);
         }
+        
+    	// Set up context menu to delete a day's worth
+    	// of entries on long press
+    	registerForContextMenu(listView);
+    	
     }
     
     private List<Entry> getEntries() {
@@ -132,11 +132,12 @@ public class HistoryActivity extends ListActivity {
     	
     	if (c.moveToFirst()) {
     		do {
+    			int id = c.getInt(WaterProvider.ID_COLUMN);
     			String date = c.getString(WaterProvider.DATE_COLUMN);
     			double metricAmount = c.getDouble(WaterProvider.AMOUNT_COLUMN);
     			boolean isNonMetric = false;    			
     			
-    			Entry e = new Entry(date, metricAmount, isNonMetric);
+    			Entry e = new Entry(id, date, metricAmount, isNonMetric);
     			entries.add(e);
     			
     		} while (c.moveToNext());
@@ -173,11 +174,12 @@ public class HistoryActivity extends ListActivity {
     	
     	if (c.moveToFirst()) {
     		do {
+    			int id = c.getInt(WaterProvider.ID_COLUMN);
     			String date = c.getString(WaterProvider.DATE_COLUMN);
     			double metricAmount = c.getDouble(WaterProvider.AMOUNT_COLUMN);
     			boolean isNonMetric = false;    			
     			
-    			Entry e = new Entry(date, metricAmount, isNonMetric);
+    			Entry e = new Entry(id, date, metricAmount, isNonMetric);
     			entries.add(e);
     			
     		} while (c.moveToNext());
@@ -210,7 +212,11 @@ public class HistoryActivity extends ListActivity {
     								ContextMenuInfo menuInfo) {
     	super.onCreateContextMenu(menu, v, menuInfo);
     	MenuInflater inflater = getMenuInflater();
-    	inflater.inflate(R.menu.history_menu, menu);
+    	if (mSelectedDate == null) {
+    		inflater.inflate(R.menu.history_menu, menu);
+    	} else {
+    		inflater.inflate(R.menu.detail_history_menu, menu);
+    	}
     }
     
     // Handle long press click
@@ -221,6 +227,9 @@ public class HistoryActivity extends ListActivity {
     		case R.id.menu_delete_day:
     			deleteAllEntriesFromRow(info.position);
     			return true;
+    		case R.id.menu_delete_single:
+    			deleteSingleEntryFromRow(info.position);
+    			return true;
     		default:
     			return super.onContextItemSelected(item);
     	}
@@ -229,7 +238,7 @@ public class HistoryActivity extends ListActivity {
     
     public void deleteAllEntriesFromRow(int position) {
     	Log.d("HISTORY", "row = " + position);
-    	Entry e = entryList.get(position);
+    	Entry e = mEntryList.get(position);
     	Log.d("HISTORY", "entry = " + e.toString());
     	
     	
@@ -254,6 +263,16 @@ public class HistoryActivity extends ListActivity {
 //    	c.close();
     	
     }
+    
+    public void deleteSingleEntryFromRow(int position) {
+    	Log.d("HISTORY", "row = " + (position-1));
+    	Entry e = mEntryList.get(position-1);
+    	Log.d("HISTORY", "entry = " + e.toString());
+    	String where = e.getId() + " = " + WaterProvider.KEY_ID;
+    	int results = mContentResolver.delete(WaterProvider.CONTENT_URI, where, null);
+    	Log.d("HISTORY", String.format("Deleted %d results", results));
+    }
+    
     
     
 }

@@ -76,6 +76,7 @@
     <!-- history activity -->
     <string name="history_activity_title">History</string>
     <string name="menu_delete_day_label">Delete this day\'s entries</string>
+    <string name="menu_delete_single_label">Delete single entry</string>
     <string name="disclosure_indicator">&#160;&#160;&#160;&gt;</string>
     
     <!-- widget strings -->

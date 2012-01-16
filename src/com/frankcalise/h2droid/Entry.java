@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class Entry {
+	private int id = 0;
 	private String date;
 	private double nonMetricAmount;
 	private double metricAmount;
@@ -27,6 +28,7 @@ public class Entry {
 		return formattedDate;
 	}
 	
+	public int getId() { return id; }
 	public String getDate() { return getDateWithFormat("yyyy-MM-dd HH:mm:ss"); }
 	public double getNonMetricAmount() { return nonMetricAmount; }
 	public double getMetricAmount() { return metricAmount; }
@@ -68,6 +70,11 @@ public class Entry {
 		this(null, _amount, _isNonMetric);
 	}
 	
+	public Entry(int _id, String _date, double _amount, boolean _isNonMetric) {
+		this(_date, _amount, _isNonMetric);
+		id = _id;
+	}
+	
 	/** Received amount in non-Metric units, convert to Metric */
 	private double convertToMetric(double _amount) {
 		return _amount / ouncePerMililiter;
@@ -81,7 +88,7 @@ public class Entry {
 	/** Entry toString */
 	@Override
 	public String toString() {
-		return (date + "- metric: " + metricAmount + " ml - nonmetric: "
+		return ("(" + id + ") " + date + "- metric: " + metricAmount + " ml - nonmetric: "
 			   + nonMetricAmount + " fl oz"); 
 	}
 }

@@ -86,5 +86,4 @@ public class EntryListAdapter extends BaseAdapter {
 		
 		return convertView;
 	}
-
 }

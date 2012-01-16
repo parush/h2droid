@@ -33,6 +33,7 @@ public class WaterProvider extends ContentProvider {
 	public static final String KEY_UNITS = "units";
 	
 	// Column indexes
+	public static final int ID_COLUMN = 0;
 	public static final int DATE_COLUMN = 1;
 	public static final int AMOUNT_COLUMN = 2;
 	public static final int UNITS_COLUMN = 3;

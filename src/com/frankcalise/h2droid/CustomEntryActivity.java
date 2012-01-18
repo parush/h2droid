@@ -14,20 +14,29 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class CustomEntryActivity extends Activity implements OnGestureListener {
 	
 	private EditText mAmountEditText;
 	private GestureDetector mGestureScanner;
+	private DatePicker mDatePicker;
+	private TimePicker mTimePicker;
+	private CheckBox mHistoricalCheck;
+	private boolean mIsHistorical = false;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -41,6 +50,27 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
         final RadioButton metricRadioButton = (RadioButton)findViewById(R.id.radio_metric);
         final RadioButton imperialRadioButton = (RadioButton)findViewById(R.id.radio_non_metric);
         int unitsPref = Settings.getUnitSystem(getApplicationContext());
+        
+        
+        mTimePicker = (TimePicker)findViewById(R.id.add_time_picker);
+        mDatePicker = (DatePicker)findViewById(R.id.add_date_picker);
+        
+        mHistoricalCheck = (CheckBox)findViewById(R.id.add_historical_check);
+        mHistoricalCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				if (isChecked == true) {
+					mTimePicker.setVisibility(View.VISIBLE);
+					mDatePicker.setVisibility(View.VISIBLE);
+					mIsHistorical = true;
+				} else {
+					mTimePicker.setVisibility(View.GONE);
+					mDatePicker.setVisibility(View.GONE);
+					mIsHistorical = false;
+				}
+			}
+        });
         
         // Toggle the correct radio button according to user's prefs
         if (unitsPref == Settings.UNITS_METRIC) {
@@ -114,8 +144,15 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     			isNonMetric = false;
     		}
     		
-    		
-    		Entry e = new Entry(amount, isNonMetric);
+    		//Log.d("ADD", "pickers: " + mTimePicker.getCurrentHour() + ":" + mTimePicker.getCurrentMinute());
+    		//Log.d("ADD", "pickers: " + mDatePicker.getMonth() + "/" + mDatePicker.getDayOfMonth() + "/" + mDatePicker.getYear());
+    		Entry e = null;
+    		if (mIsHistorical == true) {
+    			String date = String.format("%d-%d-%d %d:%d:00", mDatePicker.getYear(), mDatePicker.getMonth()+1, mDatePicker.getDayOfMonth(), mTimePicker.getCurrentHour(), mTimePicker.getCurrentMinute());
+    			e = new Entry(date, amount, isNonMetric);
+    		} else {
+    			e = new Entry(amount, isNonMetric);
+    		}
     		addNewEntry(e);
     	} catch (NumberFormatException nfe) {
     		// show some error toast here?
@@ -166,7 +203,7 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     	// If user wants a reminder when to drink next,
     	// setup a notification X minutes away from this entry
     	// where X is also a setting
-    	if (Settings.getReminderEnabled(this)) {
+    	if (Settings.getReminderEnabled(this) && mIsHistorical == false) {
     		// Get the AlarmManager service
 			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
 			

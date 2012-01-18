@@ -72,12 +72,14 @@
     <string name="custom_entry_save_label">Save</string>
     <string name="custom_entry_cancel_label">Cancel</string>
     <string name="custom_entry_type_of_units_label">Type of units:</string>
+    <string name="custom_historical_entry">Insert as historical entry</string>
     
     <!-- history activity -->
     <string name="history_activity_title">History</string>
     <string name="menu_delete_day_label">Delete this day\'s entries</string>
     <string name="menu_delete_single_label">Delete single entry</string>
     <string name="disclosure_indicator">&#160;&#160;&#160;&gt;</string>
+    <string name="menu_delete_cancel">Cancel</string>
     
     <!-- widget strings -->
     <string name="one_cell_widget_label">Hydrate (1 Cell)</string>

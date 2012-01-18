@@ -72,7 +72,8 @@
     <string name="custom_entry_save_label">Save</string>
     <string name="custom_entry_cancel_label">Cancel</string>
     <string name="custom_entry_type_of_units_label">Type of units:</string>
-    <string name="custom_historical_entry">Insert as historical entry</string>
+    <string name="custom_entry_historical_entry">Insert as historical entry</string>
+    <string name="custom_entry_amount_hint">Amount</string>
     
     <!-- history activity -->
     <string name="history_activity_title">History</string>

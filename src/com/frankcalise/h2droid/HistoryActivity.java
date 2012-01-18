@@ -230,6 +230,8 @@ public class HistoryActivity extends ListActivity {
     		case R.id.menu_delete_single:
     			deleteSingleEntryFromRow(info.position);
     			return true;
+    		case R.id.menu_delete_cancel:
+    			return true;
     		default:
     			return super.onContextItemSelected(item);
     	}

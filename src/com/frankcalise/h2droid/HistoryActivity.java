@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -32,6 +31,7 @@ public class HistoryActivity extends ListActivity {
 	private ContentResolver mContentResolver = null;
 	private String mSelectedDate = null;
 	private EntryListAdapter mAdapter = null;
+	private ListView mListView;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -42,11 +42,22 @@ public class HistoryActivity extends ListActivity {
         setContentView(R.layout.activity_history);
         
         mContentResolver = getContentResolver();
-        
-		this.mUnitSystem = Settings.getUnitSystem(this);
+        mListView = getListView();
+        	        
+    	// Set up context menu to delete a day's worth
+    	// of entries on long press
+    	registerForContextMenu(mListView);
+    	
+    }
+    
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	
+    	this.mUnitSystem = Settings.getUnitSystem(this);
 		this.mLargeUnits = Settings.getLargeUnitsSetting(this);
 		
-		final ListView listView = getListView();
+		
 		
         Bundle extras = getIntent().getExtras();
         try {
@@ -60,12 +71,12 @@ public class HistoryActivity extends ListActivity {
             	mEntryList = getEntries();
             
             	mAdapter = new EntryListAdapter(mEntryList, this, false);
-            	listView.setAdapter(mAdapter);
+            	mListView.setAdapter(mAdapter);
             	            	
             	final Intent i = new Intent(this, HistoryActivity.class);
             	
             	// set on item click listener for the ListView
-            	listView.setOnItemClickListener(new OnItemClickListener() {
+            	mListView.setOnItemClickListener(new OnItemClickListener() {
             		public void onItemClick(AdapterView<?> parent, View view,
             				int position, long id) {
             			// When clicked, go to new activity to display
@@ -107,16 +118,12 @@ public class HistoryActivity extends ListActivity {
         	int layoutPadding = getResources().getDimensionPixelSize(R.dimen.layout_padding);
         	tvAmount.setPadding(layoutPadding, layoutPadding, layoutPadding, layoutPadding);
         	
-        	listView.addHeaderView(tvAmount);
+        	mListView.addHeaderView(tvAmount);
            
         	// set up the list adapter
         	mAdapter = new EntryListAdapter(mEntryList, this, true);
-        	listView.setAdapter(mAdapter);
+        	mListView.setAdapter(mAdapter);
         }
-        
-    	// Set up context menu to delete a day's worth
-    	// of entries on long press
-    	registerForContextMenu(listView);
     	
     }
     
@@ -263,7 +270,10 @@ public class HistoryActivity extends ListActivity {
 //    	}
     	
 //    	c.close();
-    	
+    	if (results > 0 ) {
+    		mEntryList.remove(position);
+    		mAdapter.notifyDataSetChanged();
+    	}
     }
     
     public void deleteSingleEntryFromRow(int position) {
@@ -273,6 +283,12 @@ public class HistoryActivity extends ListActivity {
     	String where = e.getId() + " = " + WaterProvider.KEY_ID;
     	int results = mContentResolver.delete(WaterProvider.CONTENT_URI, where, null);
     	Log.d("HISTORY", String.format("Deleted %d results", results));
+    	if (results > 0 ) {
+    		mEntryList.remove(position-1);
+    		mAdapter.notifyDataSetChanged();
+    	}
+    	
+    	/// NEED TO UPDATE HEADER VIEW HERE!!
     }
     
     

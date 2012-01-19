@@ -252,6 +252,9 @@ public class HistoryActivity extends ListActivity {
     public boolean onContextItemSelected(MenuItem item) {
     	AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
     	switch (item.getItemId()) {
+    		case R.id.menu_add_historical_entry:
+    			addHistorical(info.position);
+    			return true;
     		case R.id.menu_delete_day:
     			deleteAllEntriesFromRow(info.position);
     			return true;
@@ -264,6 +267,12 @@ public class HistoryActivity extends ListActivity {
     			return super.onContextItemSelected(item);
     	}
     	
+    }
+    
+    private void addHistorical(int pos) {
+    	Intent i = new Intent(this, CustomEntryActivity.class);
+    	i.putExtra("historical_date", mEntryList.get(pos).getDate());
+    	startActivity(i);
     }
     
     public void deleteAllEntriesFromRow(int position) {

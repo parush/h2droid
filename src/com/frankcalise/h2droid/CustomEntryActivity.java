@@ -72,6 +72,16 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
 			}
         });
         
+        // Check if passed date from History activity
+        String histDate = getIntent().getStringExtra("historical_date");
+        if (histDate != null) {
+        	mHistoricalCheck.setChecked(true);
+        	int spacePos = histDate.indexOf(" ");
+        	String[] dateArr = histDate.substring(0, spacePos).split("-");
+        	Log.d("CUSTOM", dateArr[0] + " " + dateArr[1] +  " " + dateArr[2] + " ");
+        	mDatePicker.init(Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1])-1, Integer.parseInt(dateArr[2]), null);
+        }
+        
         // Toggle the correct radio button according to user's prefs
         if (unitsPref == Settings.UNITS_METRIC) {
         	metricRadioButton.setChecked(true);

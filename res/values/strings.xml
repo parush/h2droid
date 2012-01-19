@@ -81,6 +81,7 @@
     <string name="menu_delete_single_label">Delete single entry</string>
     <string name="disclosure_indicator">&#160;&#160;&#160;&gt;</string>
     <string name="menu_delete_cancel">Cancel</string>
+    <string name="menu_add_to_day">Add historical entry</string>
     
     <!-- widget strings -->
     <string name="one_cell_widget_label">Hydrate (1 Cell)</string>

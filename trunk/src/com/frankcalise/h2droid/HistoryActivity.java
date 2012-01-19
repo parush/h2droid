@@ -82,7 +82,6 @@ public class HistoryActivity extends ListActivity {
             			// When clicked, go to new activity to display
             			// selected day's entries
             			TextView text = (TextView)view.findViewById(R.id.entry_date_textview);
-            			//Log.d("ITEM_CLICK", String.format("item id = %d, %s", position, text.getText()));
             			i.putExtra("date", text.getText());
             			startActivity(i);
             		}
@@ -92,39 +91,61 @@ public class HistoryActivity extends ListActivity {
             }	
         } else {
         	// show entries related to user's selected date
-        	//Log.d("HISTORY", "user chose a specific date, " + selectedDate);
             mEntryList = getEntriesFromDate(mSelectedDate);
-            //Log.d("HISTORY", "List size = " + entryList.size());
             
-            // add the header view for this detail list
-        	// sums up the total amount
-            double totalAmount = getTotalAmount(mEntryList);
-    		double displayAmount = totalAmount;
-    		String displayUnits = "fl oz";
-    		if (mUnitSystem == Settings.UNITS_METRIC) {
-    			//displayAmount /= Entry.ouncePerMililiter;
-    			displayUnits = "ml";
-    		}
-    		
-    		if (mLargeUnits) {
-    			Amount currentAmount = new Amount(totalAmount, mUnitSystem);
-        		displayAmount = currentAmount.getAmount();
-        		displayUnits = currentAmount.getUnits();
-    		}
-            
-            TextView tvAmount = new TextView(this);
-        	tvAmount.setText(String.format("%s\nTotal: %.1f %s", mSelectedDate, displayAmount, displayUnits));
-        	tvAmount.setTextSize(getResources().getDimension(R.dimen.listview_header_text_size));
-        	int layoutPadding = getResources().getDimensionPixelSize(R.dimen.layout_padding);
-        	tvAmount.setPadding(layoutPadding, layoutPadding, layoutPadding, layoutPadding);
-        	
-        	mListView.addHeaderView(tvAmount);
+            addHeaderView();
            
         	// set up the list adapter
         	mAdapter = new EntryListAdapter(mEntryList, this, true);
         	mListView.setAdapter(mAdapter);
         }
     	
+    }
+    
+    private void addHeaderView() {
+    	// add the header view for this detail list
+    	// sums up the total amount
+        double totalAmount = getTotalAmount(mEntryList);
+		double displayAmount = totalAmount;
+		String displayUnits = "fl oz";
+		if (mUnitSystem == Settings.UNITS_METRIC) {
+			//displayAmount /= Entry.ouncePerMililiter;
+			displayUnits = "ml";
+		}
+		
+		if (mLargeUnits) {
+			Amount currentAmount = new Amount(totalAmount, mUnitSystem);
+    		displayAmount = currentAmount.getAmount();
+    		displayUnits = currentAmount.getUnits();
+		}
+        
+        TextView tvAmount = new TextView(this);
+        tvAmount.setId(R.id.headerAmountTextView);
+    	tvAmount.setText(String.format("%s\nTotal: %.1f %s", mSelectedDate, displayAmount, displayUnits));
+    	tvAmount.setTextSize(getResources().getDimension(R.dimen.listview_header_text_size));
+    	int layoutPadding = getResources().getDimensionPixelSize(R.dimen.layout_padding);
+    	tvAmount.setPadding(layoutPadding, layoutPadding, layoutPadding, layoutPadding);
+    	
+    	mListView.addHeaderView(tvAmount);
+    }
+    
+    private void updateHeaderView() {
+    	double totalAmount = getTotalAmount(mEntryList);
+		double displayAmount = totalAmount;
+		String displayUnits = "fl oz";
+		if (mUnitSystem == Settings.UNITS_METRIC) {
+			//displayAmount /= Entry.ouncePerMililiter;
+			displayUnits = "ml";
+		}
+		
+		if (mLargeUnits) {
+			Amount currentAmount = new Amount(totalAmount, mUnitSystem);
+    		displayAmount = currentAmount.getAmount();
+    		displayUnits = currentAmount.getUnits();
+		}
+		
+    	TextView tvAmount = (TextView)findViewById(R.id.headerAmountTextView);
+    	tvAmount.setText(String.format("%s\nTotal: %.1f %s", mSelectedDate, displayAmount, displayUnits));
     }
     
     private List<Entry> getEntries() {
@@ -246,30 +267,10 @@ public class HistoryActivity extends ListActivity {
     }
     
     public void deleteAllEntriesFromRow(int position) {
-    	Log.d("HISTORY", "row = " + position);
     	Entry e = mEntryList.get(position);
-    	Log.d("HISTORY", "entry = " + e.toString());
-    	
-    	
-    	//Date ed = new Date(e.getDate());
-    	//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    	
-    	//String sortOrder = WaterProvider.KEY_DATE + " DESC LIMIT 1";
-    	//String[] projection = {WaterProvider.KEY_ID};
     	String where = "date('" + e.getDate() + "') = date(" + WaterProvider.KEY_DATE + ")";
-    	
-//    	Cursor c = mContentResolver.query(WaterProvider.CONTENT_URI, projection, where, null, sortOrder);
     	int results = mContentResolver.delete(WaterProvider.CONTENT_URI, where, null);
-    	Log.d("HISTORY", String.format("Deleted %d results", results));
-//    	int results = 0;
-//    	if (c.moveToFirst()) {
-//    		final Uri uri = Uri.parse("content://com.frankcalise.provider.h2droid/entries/" + c.getInt(0));
-//    		results = mContentResolver.delete(uri, null, null);
-//    	} else {
-//    		//Log.d("UNDO", "no entries from today!");
-//    	}
     	
-//    	c.close();
     	if (results > 0 ) {
     		mEntryList.remove(position);
     		mAdapter.notifyDataSetChanged();
@@ -277,20 +278,14 @@ public class HistoryActivity extends ListActivity {
     }
     
     public void deleteSingleEntryFromRow(int position) {
-    	Log.d("HISTORY", "row = " + (position-1));
     	Entry e = mEntryList.get(position-1);
-    	Log.d("HISTORY", "entry = " + e.toString());
     	String where = e.getId() + " = " + WaterProvider.KEY_ID;
     	int results = mContentResolver.delete(WaterProvider.CONTENT_URI, where, null);
-    	Log.d("HISTORY", String.format("Deleted %d results", results));
+
     	if (results > 0 ) {
     		mEntryList.remove(position-1);
+    		updateHeaderView();
     		mAdapter.notifyDataSetChanged();
     	}
-    	
-    	/// NEED TO UPDATE HEADER VIEW HERE!!
     }
-    
-    
-    
 }

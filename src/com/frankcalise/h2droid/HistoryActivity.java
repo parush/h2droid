@@ -245,6 +245,8 @@ public class HistoryActivity extends ListActivity {
     	} else {
     		inflater.inflate(R.menu.detail_history_menu, menu);
     	}
+    	
+    	menu.setHeaderTitle("History");
     }
     
     // Handle long press click
@@ -287,6 +289,9 @@ public class HistoryActivity extends ListActivity {
     }
     
     public void deleteSingleEntryFromRow(int position) {
+    	if (position == 0)
+    		return;
+    	
     	Entry e = mEntryList.get(position-1);
     	String where = e.getId() + " = " + WaterProvider.KEY_ID;
     	int results = mContentResolver.delete(WaterProvider.CONTENT_URI, where, null);

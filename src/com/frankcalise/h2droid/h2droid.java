@@ -290,10 +290,6 @@ public class h2droid extends Activity {
     	
     	// Show delta from goal
     	final TextView overUnderTextView = (TextView)findViewById(R.id.over_under_textview);
-    	double displayDelta = delta;
-    	if (mUnitsPref == Settings.UNITS_METRIC) {
-    		displayDelta /= Entry.ouncePerMililiter;
-    	}
     	String overUnder = String.format("%+.1f %s (%.1f%%)", delta, originalUnits, percentGoal);
     	overUnderTextView.setText(overUnder);
     	
@@ -305,10 +301,6 @@ public class h2droid extends Activity {
  
     	// Show current goal setting
     	final TextView goalTextView = (TextView)findViewById(R.id.goal_textview);
-    	double displayPrefsGoal = prefsGoal;
-    	if (mUnitsPref == Settings.UNITS_METRIC) {
-    		displayPrefsGoal /= Entry.ouncePerMililiter;
-    	}
     	String goalText = String.format("Daily goal: %.1f %s", prefsGoal, originalUnits);
     	goalTextView.setText(goalText);	
     	

@@ -88,6 +88,7 @@
     <string name="two_cell_widget_label">Hydrate (2 Cells)</string>
     <string name="default_widget_amount">0.0 fl oz</string>
     <string name="default_widget_percent">0.0%</string>
+    <string name="two_cell_widget_add">Add</string>
     
     <!--  water facts activity -->
     <string name="facts_title">Hydration Facts</string>

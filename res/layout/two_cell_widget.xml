@@ -32,7 +32,7 @@
 	<Button
 		android:id="@+id/widget_add_button"
 		android:layout_centerVertical="true"
-		android:text="add"
+		android:text="@string/two_cell_widget_add"
 		android:layout_toRightOf="@id/widget_text_layout"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" />

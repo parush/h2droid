@@ -286,6 +286,34 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		}
 	}
 	
+	public static Date getWakeTime(Context context) {
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-d-y HH:mm");
+		String wakeTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_WAKE, "-1");
+		Date wakeDate;
+		try {
+			wakeDate = sdf.parse(wakeTime);
+			return wakeDate;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public static Date getSleepTime(Context context) {
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-d-y HH:mm");
+		String sleepTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_SLEEP, "-1");
+		Date sleepDate;
+		try {
+			sleepDate = sdf.parse(sleepTime);
+			return sleepDate;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	public static boolean isDuringSleepHours(Context context) {
 		boolean result = false;
 
@@ -321,7 +349,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 				// need to add a day to the calendar object
 				//sleepCalEnd.add(Calendar.DAY_OF_MONTH, 1);
 				endDate.setDate(endDate.getDate()+1);
-				//Log.d("SLEEP_HOURS", "new date +1 day = " +endDate);
+				Log.d("SLEEP_HOURS", "start date      = " + startDate);
+				Log.d("SLEEP_HOURS", "new date +1 day = " + endDate);
 			}
 			
 			//Log.d("SLEEP_HOURS", "sleepCalStart = " + sleepCalStart + " , sleepCalEnd = " + sleepCalEnd);

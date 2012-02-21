@@ -185,7 +185,6 @@ public class h2droid extends Activity {
 			// set up the new alarm
 			Intent intent = new Intent(this, AlarmReceiver.class);
 			intent.putExtra("entryDate", _entry.getDate());
-			intent.putExtra("wakeTime", Settings.getWakeTime(this));
 			PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
     	}

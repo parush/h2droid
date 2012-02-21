@@ -227,7 +227,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 				String prefString = prefs.getString(OPT_REMINDER_INTERVAL, OPT_REMINDER_INT_DEF);
 				
 				reminderInterval = Integer.parseInt(prefString);
-				Log.d("REMINDER_INTERVAL", "Interval = " + reminderInterval);
 			} catch (NumberFormatException nfe) {
 				reminderInterval = DEFAULT_REMINDER_INT;
 			}
@@ -314,61 +313,45 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		return null;
 	}
 	
-	public static boolean isDuringSleepHours(Context context) {
+	public static boolean isDuringSleepHours(Context context, String entryDateStr) {
 		boolean result = false;
 
-		SimpleDateFormat sdf = new SimpleDateFormat("MM-d-y HH:mm");
-		SimpleDateFormat sdf2 = new SimpleDateFormat("MM-d-y");
-		Date nowDate = new Date();
-		Date startDate = new Date();
-		Date endDate = new Date();
-		
-		//Calendar cal = Calendar.getInstance();
-		//Calendar sleepCalStart = cal;
-		//Calendar sleepCalEnd = cal;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date entryDate = new Date();
+		Date sleepDate = new Date();
+		Date wakeDate = new Date();
 		
 		String sleepTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_SLEEP, "-1");
+		String sleepDateStr = entryDateStr.substring(0, 11) + sleepTime + ":00";
 		String wakeTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_WAKE, "-1");
+		String wakeDateStr = entryDateStr.substring(0, 11) + wakeTime + ":00";
 		
 		try {
-			//Log.d("SLEEP_HOURS", "the date = " + startDate.getMonth() + "/" + startDate.getDay() + "/" +  startDate.getYear());
-			String today = sdf2.format(nowDate);
-			//Log.d("SLEEP_HOURS", "the date = " + today);
-			startDate = sdf.parse(today + " " + sleepTime);
-			endDate = sdf.parse(today + " " + wakeTime);
+			sleepDate = sdf.parse(sleepDateStr);
+			wakeDate = sdf.parse(wakeDateStr);
 		} catch (ParseException pe) {
-			pe.printStackTrace();
+			Log.d("SLEEP_HOURS", "catch sdf " + pe.getMessage());
+			return false;
 		}
 		
 		try {
 			int sleep = Integer.parseInt(sleepTime.replace(":", ""));
 			int wake = Integer.parseInt(wakeTime.replace(":", ""));
-			//Log.d("SLEEP_HOURS", "now = " + nowDate + " sleep = " + startDate + ", wake = " + endDate);
 			
 			if (wake < sleep) {
-				// need to add a day to the calendar object
-				//sleepCalEnd.add(Calendar.DAY_OF_MONTH, 1);
-				endDate.setDate(endDate.getDate()+1);
-				Log.d("SLEEP_HOURS", "start date      = " + startDate);
-				Log.d("SLEEP_HOURS", "new date +1 day = " + endDate);
+				// need to add a day to the date
+				wakeDate.setDate(wakeDate.getDate()+1);
 			}
 			
-			//Log.d("SLEEP_HOURS", "sleepCalStart = " + sleepCalStart + " , sleepCalEnd = " + sleepCalEnd);
-			
 			// check current time is between the limits set by user
-			//if (cal.after(sleepCalStart) && cal.before(sleepCalEnd)) {
-			if (nowDate.after(startDate) && nowDate.before(endDate)) {
+			if (entryDate.after(sleepDate) && entryDate.before(wakeDate)) {
 				result = true;
 			}
 			
 		} catch (NumberFormatException nfe) {
-			Log.d("SETTINGS", "NumberFormatException: " + nfe.getMessage());
+			return false;
 		}
 		
-		//Log.d("SETTINGS", "sleepTime = " + sleepTime);
-		//Log.d("SETTINGS", "wakeTime = " + wakeTime);
-		
-		Log.d("SLEEP_HOURS", "return ?= " + result);
 		return result;
 	}
 
@@ -420,23 +403,16 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	    			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    			
 	    			try {
-	    				Log.d("SETTINGS_REMINDER", "here1");
 	    				// make date object from string result
 	    				Date date = sdf.parse(strDate);
 		    		
-	    				Log.d("SETTINGS_REMINDER", "here2");
 	    				// create the calendar object
 		    			Calendar cal = Calendar.getInstance();
-		    			Log.d("SETTINGS_REMINDER", "here3");
 		    			cal.setTime(date);
-		    			Log.d("SETTINGS_REMINDER", "here4");
 		    			
 		    			// add X minutes to the calendar object
 		    			int addMinutes = Settings.getReminderInterval(this);
-		    			Log.d("SETTINGS_REMINDER", "addMinutes = " + addMinutes);
-		    			Log.d("SETTINGS_REMINDER", "here5");
 		    			cal.add(Calendar.MINUTE, addMinutes);
-		    			Log.d("SETTINGS_REMINDER", "here6");
 		    			// set up the new alarm
 		    			Intent intent = new Intent(this, AlarmReceiver.class);
 		    			PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

@@ -214,7 +214,7 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     	// setup a notification X minutes away from this entry
     	// where X is also a setting
     	if (Settings.getReminderEnabled(this) && mIsHistorical == false) {
-    		// Get the AlarmManager service
+    		// Get the AlarmManager services
 			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
 			
 			// create the calendar object
@@ -230,6 +230,7 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
 			
 			// set up the new alarm
 			Intent intent = new Intent(this, AlarmReceiver.class);
+			intent.putExtra("entryDate", _entry.getDate());
 			PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
     	}

@@ -14,7 +14,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Setup NotificationManager
 		NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		Notification reminder = Settings.getReminderNotification(context);
-    	if (reminder != null && !Settings.isDuringSleepHours(context)) {
+    	if (reminder != null && !Settings.isDuringSleepHours(context, intent.getStringExtra("entryDate"))) {
     		Intent reminderIntent = new Intent(context, h2droid.class);
     		reminderIntent.setAction(Intent.ACTION_MAIN);
     		reminderIntent.addCategory(Intent.CATEGORY_LAUNCHER);

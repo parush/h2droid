@@ -29,19 +29,19 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:padding="@dimen/layout_padding" >
+    	<Button
+			android:id="@+id/add_one_serving_button"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/one_serving_button_label"
+			android:onClick="onOneServingClick" />
 		<TableLayout
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
 			android:layout_gravity="center"
 			android:stretchColumns="*" >
 			<TableRow>
-				<Button
-					android:id="@+id/add_one_serving_button"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/one_serving_button_label"
-					android:onClick="onOneServingClick" />
-				<Button
+			    <Button
 					android:id="@+id/add_two_servings_button"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
@@ -86,5 +86,13 @@
 			android:textSize="@dimen/text_size"
 			android:textStyle="bold"
 			android:gravity="center" />
+		<TextView
+			android:id="@+id/last_entry_textview"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:textSize="@dimen/text_size"
+			android:textStyle="bold"
+			android:gravity="center"
+			android:text="Last entry: 2012-03-09 xx:mm:ss" />
 	</LinearLayout>
 </LinearLayout>

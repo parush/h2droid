@@ -25,7 +25,12 @@
 						android:summary="@string/settings_toasts_summary"
 						android:defaultValue="true" />
 	</PreferenceCategory>
-	<PreferenceCategory android:title="Favorite amount settings">
+	<PreferenceCategory android:title="@string/settings_amount_category">
+	    <EditTextPreference 
+	        			android:key="ONE_SRV_AMOUNT"
+						android:title="@string/settings_one_srv"
+						android:defaultValue="8"
+						android:inputType="numberDecimal" />/>
 		<EditTextPreference
 					 	android:key="FAV_AMOUNT_ONE"
 						android:title="@string/settings_fav_one"

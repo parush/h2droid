@@ -52,12 +52,14 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 													"FAV_AMOUNT_THREE",
 													"FAV_AMOUNT_FOUR",
 													"FAV_AMOUNT_FIVE"};
+	private static final String ONE_SRV_AMOUNT = "ONE_SRV_AMOUNT";
 	
 	private EditTextPreference mEditTextPref1;
 	private EditTextPreference mEditTextPref2;
 	private EditTextPreference mEditTextPref3;
 	private EditTextPreference mEditTextPref4;
 	private EditTextPreference mEditTextPref5;
+	private EditTextPreference mEditTextPrefSrv;
 	private ListPreference mUnitsPref;
 	
 	@Override
@@ -73,6 +75,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		mEditTextPref3 = (EditTextPreference)getPreferenceScreen().findPreference(OPT_FAV_AMOUNT[2]);
 		mEditTextPref4 = (EditTextPreference)getPreferenceScreen().findPreference(OPT_FAV_AMOUNT[3]);
 		mEditTextPref5 = (EditTextPreference)getPreferenceScreen().findPreference(OPT_FAV_AMOUNT[4]);
+		mEditTextPrefSrv = (EditTextPreference)getPreferenceScreen().findPreference(ONE_SRV_AMOUNT);
 		mUnitsPref = (ListPreference)getPreferenceScreen().findPreference(OPT_UNITS);
 	}
 	
@@ -86,6 +89,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		mEditTextPref3.setSummary("Current amount is " + getPreferenceScreen().getSharedPreferences().getString(OPT_FAV_AMOUNT[2], OPT_FAV_AMOUNT_DEF[2]));
 		mEditTextPref4.setSummary("Current amount is " + getPreferenceScreen().getSharedPreferences().getString(OPT_FAV_AMOUNT[3], OPT_FAV_AMOUNT_DEF[3]));
 		mEditTextPref5.setSummary("Current amount is " + getPreferenceScreen().getSharedPreferences().getString(OPT_FAV_AMOUNT[4], OPT_FAV_AMOUNT_DEF[4]));
+		mEditTextPrefSrv.setSummary("Current amount is " + getPreferenceScreen().getSharedPreferences().getString(ONE_SRV_AMOUNT, String.format("%s", DEFAULT_FAV_AMOUNT)));
 		
 		String unitsPref = getPreferenceScreen().getSharedPreferences().getString(OPT_UNITS, OPT_UNITS_DEF);
 
@@ -125,6 +129,11 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static String getFavoriteAmountString(int favIndex, Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
 			.getString(OPT_FAV_AMOUNT[favIndex], OPT_FAV_AMOUNT_DEF[favIndex]);
+	}
+	
+	public static double getOneServingAmount(Context context) {
+		return Double.parseDouble(PreferenceManager.getDefaultSharedPreferences(context)
+				.getString(ONE_SRV_AMOUNT, String.format("%s", DEFAULT_FAV_AMOUNT)));
 	}
 	
 	public static String[] getArrayOfFavoriteAmounts(Context context) {
@@ -370,6 +379,8 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			mEditTextPref4.setSummary("Current amount is " + sharedPreferences.getString(key, OPT_FAV_AMOUNT_DEF[3]));
 		} else if (key.equals(OPT_FAV_AMOUNT[4])) {
 			mEditTextPref5.setSummary("Current amount is " + sharedPreferences.getString(key, OPT_FAV_AMOUNT_DEF[4]));
+		} else if (key.equals(ONE_SRV_AMOUNT)) {
+			mEditTextPrefSrv.setSummary("Current amount is " + sharedPreferences.getString(key, String.format("%s", DEFAULT_FAV_AMOUNT)));
 		} else if (key.equals(OPT_UNITS)) {
 			String unitsPref = sharedPreferences.getString(key, OPT_UNITS_DEF);
 			if (unitsPref.equals(String.valueOf(UNITS_US))) {

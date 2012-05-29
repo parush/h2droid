@@ -112,9 +112,6 @@ public class AppWidget extends AppWidgetProvider {
     	launchAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
     	
     	double displayAmount = mAmount;
-    	if (mUnitSystem == Settings.UNITS_METRIC) {
-    		displayAmount /= Entry.ouncePerMililiter;
-    	}
     	
     	if (mLargeUnits) {
 			Amount currentAmount = new Amount(mAmount, mUnitSystem);

@@ -305,6 +305,16 @@ public class h2droid extends Activity {
     	String goalText = String.format("Daily goal: %.1f %s", prefsGoal, originalUnits);
     	goalTextView.setText(goalText);	
     	
+    	// Last entry
+    	final TextView lastEntryTextView = (TextView) findViewById(R.id.last_entry_textview);
+    	String lastEntryMsg = getLastEntry();
+    	if (lastEntryMsg == null) {
+    		lastEntryTextView.setVisibility(View.INVISIBLE);
+    	} else {
+    		lastEntryTextView.setVisibility(View.VISIBLE);
+    		lastEntryTextView.setText(String.format("Last entry: %s", lastEntryMsg));	
+    	}
+    	
     	// Broadcast an Intent to update Widget
     	// Use putExtra so AppWidget class does not need
     	// to do ContentProvider pull
@@ -331,7 +341,7 @@ public class h2droid extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
     	if (keyCode == KeyEvent.KEYCODE_VOLUME_UP && Settings.getOverrideVolumeUp(this)) {
-    		Entry e = new Entry(Settings.getVolumeUpAmount(this), true);
+    		Entry e = new Entry(Settings.getVolumeUpAmount(this), mIsNonMetric);
     		addNewEntry(e);
     		return true;
     	} else if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN && Settings.getOverrideVolumeDown(this)) {
@@ -340,5 +350,19 @@ public class h2droid extends Activity {
     	} else {
     		return super.onKeyDown(keyCode, event);
     	}
+    }
+    
+    private String getLastEntry() {
+    	String result = null;
+    	String sortOrder = WaterProvider.KEY_DATE + " DESC LIMIT 1";
+    	String[] projection = {WaterProvider.KEY_DATE};
+    	
+    	Cursor c = mContentResolver.query(WaterProvider.CONTENT_URI, projection, null, null, sortOrder);
+    	if (c.moveToFirst()) {
+    		result = c.getString(0);
+    	}
+    	c.close();
+    	
+    	return result;
     }
 }

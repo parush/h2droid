@@ -35,6 +35,7 @@ public class h2droid extends Activity {
 	private Context mContext = null;
 	private int mUnitsPref;
 	private ContentResolver mContentResolver = null;
+	private String mOneServingText = null;
 	
     /** Called when the activity is first created. */
     @Override
@@ -98,7 +99,7 @@ public class h2droid extends Activity {
     
     /** Handle "add one serving" action */
     public void onOneServingClick(View v) {
-		Entry oneServing = new Entry(8, true);
+		Entry oneServing = new Entry(Settings.getOneServingAmount(this), mIsNonMetric);
 		addNewEntry(oneServing);
     }
     
@@ -264,6 +265,9 @@ public class h2droid extends Activity {
 
     	// update the +N add button text according to the unit system
     	final Button nButton = (Button)findViewById(R.id.add_custom_serving_button);
+    	// update one serving button
+    	final Button oneSrvButton = (Button)findViewById(com.frankcalise.h2droid.R.id.add_one_serving_button);
+    	
     	
     	// Show consumption amount	
     	String originalUnits = "";
@@ -276,6 +280,8 @@ public class h2droid extends Activity {
     	} else {
     		nButton.setText("+N oz");
     	}
+    	mOneServingText = String.format("%s (%s %s)", getString(com.frankcalise.h2droid.R.string.one_serving_button_label), Settings.getOneServingAmount(this), displayUnits);
+    	oneSrvButton.setText(mOneServingText);
     	
     	originalUnits = displayUnits;
     	

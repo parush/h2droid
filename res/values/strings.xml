@@ -44,6 +44,8 @@
     <string name="settings_vol_down_summary">Undo last entry when volume down is pressed</string>
     <string name="settings_vol_up_amount">Volume up amount</string>
     <string name="settings_vol_up_amount_summary">Amount of water to add when volume up is pressed</string>
+    <string name="settings_amount_category">Amount settings</string>
+    <string name="settings_one_srv">One serving amount</string>
     
     <!-- main layout strings -->
     <string name="one_serving_button_label">+1 srv</string>

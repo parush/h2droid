@@ -326,7 +326,12 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		boolean result = false;
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date entryDate = new Date();
+		Date entryDate = null;
+		try {
+			entryDate = sdf.parse(entryDateStr);
+		} catch (ParseException e) {
+			return true;
+		}
 		Date sleepDate = new Date();
 		Date wakeDate = new Date();
 		
@@ -340,16 +345,18 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			wakeDate = sdf.parse(wakeDateStr);
 		} catch (ParseException pe) {
 			Log.d("SLEEP_HOURS", "catch sdf " + pe.getMessage());
-			return false;
+			return true;
 		}
 		
 		try {
 			int sleep = Integer.parseInt(sleepTime.replace(":", ""));
 			int wake = Integer.parseInt(wakeTime.replace(":", ""));
-			
-			if (wake < sleep) {
+
+			if (wake < sleep && entryDate.getHours() >= 12){
 				// need to add a day to the date
 				wakeDate.setDate(wakeDate.getDate()+1);
+			} else {
+				sleepDate.setDate(sleepDate.getDate()-1);
 			}
 			
 			// check current time is between the limits set by user
@@ -358,7 +365,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			}
 			
 		} catch (NumberFormatException nfe) {
-			return false;
+			result = true;
 		}
 		
 		return result;

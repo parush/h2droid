@@ -56,14 +56,14 @@
     
     <!-- about activity -->
     <string name="about_title">About Hydrate</string>
-    <string name="about_text">Version: 1.4.2\n\n
+    <string name="about_text">Version: 1.5\n\n
     	Developed by Frank Calise\n
 		fcalise@gmail.com\n
 		http://frankcalise.com\n
 		http://twitter.com/frankcalise
     </string>
     <string name="about_close_label">Close</string>
-    <string name="about_version">Version 1.4.2</string>
+    <string name="about_version">Version 1.5</string>
     <string name="about_dev_name">Frank Calise</string>
     <string name="about_dev_contact">e: fcalise@gmail.com\nt: @frankcalise\nu: frankcalise.com</string>
     

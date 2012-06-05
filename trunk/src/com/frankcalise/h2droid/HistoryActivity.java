@@ -107,21 +107,20 @@ public class HistoryActivity extends ListActivity {
     	// sums up the total amount
         double totalAmount = getTotalAmount(mEntryList);
 		double displayAmount = totalAmount;
-		String displayUnits = "fl oz";
+		String displayUnits = getString(R.string.unit_fl_oz);
 		if (mUnitSystem == Settings.UNITS_METRIC) {
-			//displayAmount /= Entry.ouncePerMililiter;
-			displayUnits = "ml";
+			displayUnits = getString(R.string.unit_mililiters);
 		}
 		
 		if (mLargeUnits) {
-			Amount currentAmount = new Amount(totalAmount, mUnitSystem);
+			Amount currentAmount = new Amount(totalAmount, mUnitSystem, this);
     		displayAmount = currentAmount.getAmount();
     		displayUnits = currentAmount.getUnits();
 		}
         
         TextView tvAmount = new TextView(this);
         tvAmount.setId(R.id.headerAmountTextView);
-    	tvAmount.setText(String.format("%s\nTotal: %.1f %s", mSelectedDate, displayAmount, displayUnits));
+    	tvAmount.setText(String.format("%s\n%s: %.1f %s", mSelectedDate, getString(R.string.history_total), displayAmount, displayUnits));
     	tvAmount.setTextSize(getResources().getDimension(R.dimen.listview_header_text_size));
     	int layoutPadding = getResources().getDimensionPixelSize(R.dimen.layout_padding);
     	tvAmount.setPadding(layoutPadding, layoutPadding, layoutPadding, layoutPadding);
@@ -132,20 +131,19 @@ public class HistoryActivity extends ListActivity {
     private void updateHeaderView() {
     	double totalAmount = getTotalAmount(mEntryList);
 		double displayAmount = totalAmount;
-		String displayUnits = "fl oz";
+		String displayUnits = getString(R.string.unit_fl_oz);
 		if (mUnitSystem == Settings.UNITS_METRIC) {
-			//displayAmount /= Entry.ouncePerMililiter;
-			displayUnits = "ml";
+			displayUnits = getString(R.string.unit_mililiters);
 		}
 		
 		if (mLargeUnits) {
-			Amount currentAmount = new Amount(totalAmount, mUnitSystem);
+			Amount currentAmount = new Amount(totalAmount, mUnitSystem, this);
     		displayAmount = currentAmount.getAmount();
     		displayUnits = currentAmount.getUnits();
 		}
 		
     	TextView tvAmount = (TextView)findViewById(R.id.headerAmountTextView);
-    	tvAmount.setText(String.format("%s\nTotal: %.1f %s", mSelectedDate, displayAmount, displayUnits));
+    	tvAmount.setText(String.format("%s\n: %.1f %s", mSelectedDate, getString(R.string.history_total), displayAmount, displayUnits));
     }
     
     private List<Entry> getEntries() {
@@ -246,7 +244,7 @@ public class HistoryActivity extends ListActivity {
     		inflater.inflate(R.menu.detail_history_menu, menu);
     	}
     	
-    	menu.setHeaderTitle("History");
+    	menu.setHeaderTitle(getString(R.string.history_activity_title));
     }
     
     // Handle long press click

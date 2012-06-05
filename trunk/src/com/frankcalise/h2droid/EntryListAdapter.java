@@ -16,15 +16,17 @@ public class EntryListAdapter extends BaseAdapter {
 	private boolean mIsDetail;
 	private boolean mLargeUnits;
 	private int mUnitSystem;
+	private Context mContext;
 	
 	public EntryListAdapter(List<Entry> _entryList, Context _context, boolean _isDetail) {
 		this.mEntryList = _entryList;
 		this.mIsDetail = _isDetail;
+		this.mContext = _context;
 		
-		this.mUnitSystem = Settings.getUnitSystem(_context);
-		this.mLargeUnits = Settings.getLargeUnitsSetting(_context);
+		this.mUnitSystem = Settings.getUnitSystem(mContext);
+		this.mLargeUnits = Settings.getLargeUnitsSetting(mContext);
 		
-		mInflater = LayoutInflater.from(_context);
+		mInflater = LayoutInflater.from(mContext);
 	}
 
 	@Override
@@ -57,15 +59,15 @@ public class EntryListAdapter extends BaseAdapter {
 		}
 		
 		double displayAmount = e.getNonMetricAmount();
-		String displayUnits = "fl oz";
+		String displayUnits = mContext.getString(R.string.unit_fl_oz);
 		if (mUnitSystem == Settings.UNITS_METRIC) {
 			displayAmount = e.getMetricAmount();
-			displayUnits = "ml";
+			displayUnits = mContext.getString(R.string.unit_mililiters);
 		}
 		
 		
 		if (mLargeUnits) {
-			Amount currentAmount = new Amount(displayAmount, mUnitSystem);
+			Amount currentAmount = new Amount(displayAmount, mUnitSystem, mContext);
     		displayAmount = currentAmount.getAmount();
     		displayUnits = currentAmount.getUnits();
 		}

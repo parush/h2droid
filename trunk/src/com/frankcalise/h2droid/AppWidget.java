@@ -60,9 +60,9 @@ public class AppWidget extends AppWidgetProvider {
 		mLargeUnits = Settings.getLargeUnitsSetting(context);
 		
 		// Setup units string
-		String displayUnits = "fl oz";
+		String displayUnits = context.getString(R.string.unit_fl_oz);
 		if (mUnitSystem == Settings.UNITS_METRIC) {
-			displayUnits = "mL";
+			displayUnits = context.getString(R.string.unit_mililiters);
 		}
 		
 		// Grab the data from today's entries
@@ -114,7 +114,7 @@ public class AppWidget extends AppWidgetProvider {
     	double displayAmount = mAmount;
     	
     	if (mLargeUnits) {
-			Amount currentAmount = new Amount(mAmount, mUnitSystem);
+			Amount currentAmount = new Amount(mAmount, mUnitSystem, context);
     		displayAmount = currentAmount.getAmount();
     		displayUnits = currentAmount.getUnits();
 		}

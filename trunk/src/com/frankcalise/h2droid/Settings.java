@@ -296,7 +296,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	
 	public static Date getWakeTime(Context context) {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM-d-y HH:mm");
-		String wakeTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_WAKE, "-1");
+		String wakeTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_WAKE, "08:00");
 		Date wakeDate;
 		try {
 			wakeDate = sdf.parse(wakeTime);
@@ -310,7 +310,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	
 	public static Date getSleepTime(Context context) {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM-d-y HH:mm");
-		String sleepTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_SLEEP, "-1");
+		String sleepTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_SLEEP, "22:00");
 		Date sleepDate;
 		try {
 			sleepDate = sdf.parse(sleepTime);
@@ -335,9 +335,9 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		Date sleepDate = new Date();
 		Date wakeDate = new Date();
 		
-		String sleepTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_SLEEP, "-1");
+		String sleepTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_SLEEP, "22:00");
 		String sleepDateStr = entryDateStr.substring(0, 11) + sleepTime + ":00";
-		String wakeTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_WAKE, "-1");
+		String wakeTime = PreferenceManager.getDefaultSharedPreferences(context).getString(OPT_REMINDER_WAKE, "08:00");
 		String wakeDateStr = entryDateStr.substring(0, 11) + wakeTime + ":00";
 		
 		try {
@@ -433,6 +433,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 		    			cal.add(Calendar.MINUTE, addMinutes);
 		    			// set up the new alarm
 		    			Intent intent = new Intent(this, AlarmReceiver.class);
+		    			intent.putExtra("entryDate", strDate);
 		    			PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		    			am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
 	    			} catch (ParseException e) {

@@ -150,13 +150,13 @@ public class h2droid extends Activity {
     	
     	// Make a toast displaying add complete
     	double displayAmount = _entry.getNonMetricAmount();
-    	String displayUnits = "fl oz";
+    	String displayUnits = getString(R.string.unit_fl_oz);
     	if (mUnitsPref == Settings.UNITS_METRIC) {
-    		displayUnits = "ml";
+    		displayUnits = getString(R.string.unit_mililiters);
     		displayAmount = _entry.getMetricAmount();
     	}
     	
-    	String toastMsg = String.format("Added %.1f %s", displayAmount, displayUnits);
+    	String toastMsg = String.format("%s %.1f %s", getString(R.string.home_added_toast), displayAmount, displayUnits);
     	Toast toast = Toast.makeText(mContext, toastMsg, Toast.LENGTH_SHORT);
     	toast.setGravity(Gravity.BOTTOM, 0, 0);
     	if (mShowToasts)
@@ -213,9 +213,9 @@ public class h2droid extends Activity {
     	String toastMsg;
     	if (results > 0) {
     		loadTodaysEntriesFromProvider();
-    		toastMsg = "Undoing last entry...";
+    		toastMsg = getString(R.string.home_undo_toast);
     	} else {
-    		toastMsg = "No entries from today!";
+    		toastMsg = getString(R.string.home_no_entries_toast);
     	}
     	
     	Toast toast = Toast.makeText(mContext, toastMsg, Toast.LENGTH_SHORT);
@@ -272,13 +272,12 @@ public class h2droid extends Activity {
     	// Show consumption amount	
     	String originalUnits = "";
     	double displayAmount = mConsumption;
-    	String displayUnits = "fl oz";
+    	String displayUnits = getString(R.string.unit_fl_oz);
     	if (mUnitsPref == Settings.UNITS_METRIC) {
-    		//displayAmount = mConsumption / Entry.ouncePerMililiter;
-    		displayUnits = "ml";
-    		nButton.setText("+N ml");
+    		displayUnits = getString(R.string.unit_mililiters);
+    		nButton.setText(getString(R.string.home_n_add_ml));
     	} else {
-    		nButton.setText("+N oz");
+    		nButton.setText(getString(R.string.home_n_add_oz));
     	}
     	mOneServingText = String.format("%s (%s %s)", getString(com.frankcalise.h2droid.R.string.one_serving_button_label), Settings.getOneServingAmount(this), displayUnits);
     	oneSrvButton.setText(mOneServingText);
@@ -286,7 +285,7 @@ public class h2droid extends Activity {
     	originalUnits = displayUnits;
     	
     	if (Settings.getLargeUnitsSetting(mContext)) {
-    		Amount currentAmount = new Amount(mConsumption, mUnitsPref);
+    		Amount currentAmount = new Amount(mConsumption, mUnitsPref, mContext);
     		displayAmount = currentAmount.getAmount();
     		displayUnits = currentAmount.getUnits();
     	}
@@ -308,7 +307,7 @@ public class h2droid extends Activity {
  
     	// Show current goal setting
     	final TextView goalTextView = (TextView)findViewById(R.id.goal_textview);
-    	String goalText = String.format("Daily goal: %.1f %s", prefsGoal, originalUnits);
+    	String goalText = String.format("%s: %.1f %s", getString(R.string.home_daily_goal), prefsGoal, originalUnits);
     	goalTextView.setText(goalText);	
     	
     	// Last entry
@@ -318,7 +317,7 @@ public class h2droid extends Activity {
     		lastEntryTextView.setVisibility(View.INVISIBLE);
     	} else {
     		lastEntryTextView.setVisibility(View.VISIBLE);
-    		lastEntryTextView.setText(String.format("Last entry: %s", lastEntryMsg));	
+    		lastEntryTextView.setText(String.format("%s: %s", getString(R.string.home_last_entry), lastEntryMsg));	
     	}
     	
     	// Broadcast an Intent to update Widget

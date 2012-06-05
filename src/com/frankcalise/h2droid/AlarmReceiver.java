@@ -19,7 +19,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     		reminderIntent.setAction(Intent.ACTION_MAIN);
     		reminderIntent.addCategory(Intent.CATEGORY_LAUNCHER);
     		reminder.setLatestEventInfo(context,
-    				"Hydrate", "Reminder to drink more water!",
+    				context.getString(R.string.app_name), context.getString(R.string.notification_text),
     				PendingIntent.getActivity(context, 0, reminderIntent,
     				PendingIntent.FLAG_UPDATE_CURRENT));
     		nm.notify(0, reminder);

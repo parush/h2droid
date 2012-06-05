@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Hydrate</string>
-    
+    <string name="notification_text">Reminder to drink more water!</string>
+        
     <!-- main_menu strings -->
     <string name="menu_add_label">Add Entry</string>
     <string name="menu_add_shortcut">a</string>
@@ -53,6 +54,13 @@
     <string name="custom_serving_button_label">+N oz</string>
     <string name="undo_serving_button_label">Undo</string>
     <string name="consumption_label">Today\'s water consumption: 0 oz</string>
+    <string name="home_added_toast">Added</string>
+	<string name="home_undo_toast">Undoing last entry&#8230;</string>
+	<string name="home_no_entries_toast">No entries from today!</string>
+	<string name="home_n_add_oz">+N oz</string>
+	<string name="home_n_add_ml">+N ml</string>
+	<string name="home_daily_goal">Daily goal</string>
+	<string name="home_last_entry">Last entry</string>
     
     <!-- about activity -->
     <string name="about_title">About Hydrate</string>
@@ -84,6 +92,7 @@
     <string name="disclosure_indicator">&#160;&#160;&#160;&gt;</string>
     <string name="menu_delete_cancel">Cancel</string>
     <string name="menu_add_to_day">Add historical entry</string>
+    <string name="history_total">Total</string>
     
     <!-- widget strings -->
     <string name="one_cell_widget_label">Hydrate (1 Cell)</string>
@@ -96,4 +105,13 @@
     <string name="facts_title">Hydration Facts</string>
     <string name="facts_disclaimer">* Any water consumption tips are recommendations only. If you have any medical conditions or are unsure of how much water to drink, make certain to consult your physician.</string>
     <string name="facts_source">(Facts provided by WebMD.com) </string>
+    
+    <!-- units -->
+    <string name="unit_liters">L</string>
+    <string name="unit_mililiters">ml</string>
+    <string name="unit_gallons">gal</string>
+    <string name="unit_quarts">qt</string>
+    <string name="unit_pints">pt</string>
+    <string name="unit_cups">cp</string>
+    <string name="unit_fl_oz">fl oz</string>
 </resources>

@@ -154,8 +154,6 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     			isNonMetric = false;
     		}
     		
-    		//Log.d("ADD", "pickers: " + mTimePicker.getCurrentHour() + ":" + mTimePicker.getCurrentMinute());
-    		//Log.d("ADD", "pickers: " + mDatePicker.getMonth() + "/" + mDatePicker.getDayOfMonth() + "/" + mDatePicker.getYear());
     		Entry e = null;
     		if (mIsHistorical == true) {
     			String date = String.format("%d-%d-%d %d:%d:00", mDatePicker.getYear(), mDatePicker.getMonth()+1, mDatePicker.getDayOfMonth(), mTimePicker.getCurrentHour(), mTimePicker.getCurrentMinute());
@@ -172,7 +170,6 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     }
     
     public void onCancelClick(View v) {
-    	Log.d("CANCEL", "user cancelled this add");
     	finish();
     }
     
@@ -181,8 +178,6 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     }
     
     private void addNewEntry(Entry _entry) {
-    	Log.d("CONTENT", "in addNewEntry");
-    	    	
     	// Check to see if user wants Toast message
     	boolean showToasts = Settings.getToastsSetting(getApplicationContext());
     	
@@ -199,9 +194,9 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     	// Make a toast displaying add complete
     	int unitsPref = Settings.getUnitSystem(this);
     	double displayAmount = _entry.getNonMetricAmount();
-    	String displayUnits = "fl oz";
+    	String displayUnits = getString(R.string.unit_fl_oz);
     	if (unitsPref == Settings.UNITS_METRIC) {
-    		displayUnits = "ml";
+    		displayUnits = getString(R.string.unit_mililiters);
     		displayAmount = _entry.getMetricAmount();
     	}
     	String toastMsg = String.format("Added %.1f %s", displayAmount, displayUnits);

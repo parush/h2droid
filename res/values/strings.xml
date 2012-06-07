@@ -61,6 +61,16 @@
 	<string name="home_n_add_ml">+N ml</string>
 	<string name="home_daily_goal">Daily goal</string>
 	<string name="home_last_entry">Last entry</string>
+	<string name="default_time_ago">less than a minute ago</string>
+	<string name="time_ago_unit_week">week</string>
+	<string name="time_ago_unit_hour">hour</string>
+	<string name="time_ago_unit_day">day</string>
+	<string name="time_ago_unit_minute">minute</string>
+	<string name="time_ago_unit_week_pl">weeks</string>
+	<string name="time_ago_unit_hour_pl">hours</string>
+	<string name="time_ago_unit_day_pl">days</string>
+	<string name="time_ago_unit_minute_pl">minutes</string>
+	<string name="time_ago_ago">ago</string>
     
     <!-- about activity -->
     <string name="about_title">About Hydrate</string>

@@ -1,5 +1,6 @@
 package com.frankcalise.h2droid;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -312,12 +313,13 @@ public class h2droid extends Activity {
     	
     	// Last entry
     	final TextView lastEntryTextView = (TextView) findViewById(R.id.last_entry_textview);
-    	String lastEntryMsg = getLastEntry();
-    	if (lastEntryMsg == null) {
+    	String lastEntryDate = getLastEntry();
+    	if (lastEntryDate == null) {
     		lastEntryTextView.setVisibility(View.INVISIBLE);
     	} else {
     		lastEntryTextView.setVisibility(View.VISIBLE);
-    		lastEntryTextView.setText(String.format("%s: %s", getString(R.string.home_last_entry), lastEntryMsg));	
+    		lastEntryTextView.setText(getLastEntryText(lastEntryDate));
+    		//lastEntryTextView.setText(String.format("%s: %s", getString(R.string.home_last_entry), lastEntryMsg));	
     	}
     	
     	// Broadcast an Intent to update Widget
@@ -368,6 +370,46 @@ public class h2droid extends Activity {
     	}
     	c.close();
     	
+    	return result;
+    }
+    
+    private String getLastEntryText(String lastEntryDate) {
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	
+		try {
+			Date date = sdf.parse(lastEntryDate);
+			long timeInSecondsSinceEpoch = date.getTime();
+			return String.format("%s: %s", getString(R.string.home_last_entry), timeAgo(timeInSecondsSinceEpoch));
+		} catch (ParseException e) {
+		}
+    	
+    	return "";
+    }
+    
+    // Jamie Bicknell - Twitter Like Time Ago Function
+    // http://jamiebicknell.tumblr.com/post/413449751/twitter-like-time-ago-function
+    private String timeAgo(long timestamp) {
+    	String result = getString(R.string.default_time_ago);
+    	Date now = new Date();
+    	long timediff = ((now.getTime()) - timestamp) / 1000;
+    	long[] units = new long[]{604800,86400,3600,60};
+    	String[] unitsStr = new String[]{getString(R.string.time_ago_unit_week),
+    			getString(R.string.time_ago_unit_day),
+    			getString(R.string.time_ago_unit_hour),
+    			getString(R.string.time_ago_unit_minute)
+    	};
+    	String[] unitsPluralStr = new String[]{getString(R.string.time_ago_unit_week_pl),
+    			getString(R.string.time_ago_unit_day_pl),
+    			getString(R.string.time_ago_unit_hour_pl),
+    			getString(R.string.time_ago_unit_minute_pl)
+    	};
+    	for (int i = 0; i < 4; i++) {
+    		if (units[i] <= timediff) {
+    			long value = (long) Math.floor(timediff/units[i]);
+    			result = String.format("%d %s %s", value, (value == 1 ? unitsStr[i] : unitsPluralStr[i]), getString(R.string.time_ago_ago));
+    			break;
+    		}
+    	}
     	return result;
     }
 }

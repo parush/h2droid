@@ -28,7 +28,7 @@ public class TwoCellAppWidget extends AppWidgetProvider {
 						 AppWidgetManager appWidgetManager,
 						 int[] appWidgetIds) {
 		mAmount = mPercentGoal = -1;
-		updateAmount(context, appWidgetManager, appWidgetIds);
+		//updateAmount(context, appWidgetManager, appWidgetIds);
 	}
 	
 	@Override
@@ -36,16 +36,16 @@ public class TwoCellAppWidget extends AppWidgetProvider {
 		super.onReceive(context, intent);
 		
 		// Check if Intent received matches widget update string
-		if (FORCE_WIDGET_UPDATE.equals(intent.getAction())) {
-			// Get the passed in values to display
-			mAmount = intent.getExtras().getDouble("AMOUNT");
-			mPercentGoal = intent.getExtras().getDouble("PERCENT");
-			
-			// Update the UI
-			updateAmount(context);
-		} else {
-			Log.d("WIDGET", intent.getAction());
-		}
+//		if (FORCE_WIDGET_UPDATE.equals(intent.getAction())) {
+//			// Get the passed in values to display
+//			mAmount = intent.getExtras().getDouble("AMOUNT");
+//			mPercentGoal = intent.getExtras().getDouble("PERCENT");
+//			
+//			// Update the UI
+//			updateAmount(context);
+//		} else {
+//			Log.d("WIDGET", intent.getAction());
+//		}
 	}
 	
 	public void updateAmount(Context context,

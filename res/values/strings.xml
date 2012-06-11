@@ -37,7 +37,7 @@
     <string name="settings_toasts">Enable toasts</string>
     <string name="settings_toasts_summary">Show message confirming add/undo of entries</string>
     <string name="settings_convert_large">Convert to large units</string>
-    <string name="settings_convert_large_summary">Display in form of fl oz/cp/pt/qt/gal or mL/L</string>
+    <string name="settings_convert_large_summary">Display in form of fl oz/cp/pt/qt/gal or ml/L</string>
     <string name="settings_quick_action">Quick action settings</string>
     <string name="settings_vol_up">Override volume up</string>
     <string name="settings_vol_up_summary">Add custom amount when volume up is pressed</string>

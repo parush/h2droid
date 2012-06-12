@@ -240,11 +240,6 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 				reminderInterval = DEFAULT_REMINDER_INT;
 			}
 			
-			// Create the calendar object for the notification
-			// adjusted for user's interval preference
-			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.MINUTE, reminderInterval);
-			
 			// Setup notification object
 			String wordMinutes = "minute";
 			if (reminderInterval != 1) {
@@ -253,7 +248,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			String reminderMsg = String.format("Hydrate - %d %s since last entry", reminderInterval, wordMinutes);
 			Notification reminder = new Notification(R.drawable.icon,
 													 reminderMsg,
-													 cal.getTimeInMillis());
+													 System.currentTimeMillis());
 			reminder.flags |= Notification.FLAG_AUTO_CANCEL;
 			
 			// Setup the blinking LED if necessary

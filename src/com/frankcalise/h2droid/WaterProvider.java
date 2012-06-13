@@ -188,8 +188,6 @@ public class WaterProvider extends ContentProvider {
 			orderBy = sortOrder;
 		}
 		
-		Log.d("CONTENTPROVIDER", qb.toString());
-		
 		// Apply the query to the underlying database
 		Cursor c = qb.query(waterDB,
 							projection,

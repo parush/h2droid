@@ -225,5 +225,4 @@ public class WaterProvider extends ContentProvider {
 		getContext().getContentResolver().notifyChange(uri, null);
 		return count;
 	}
-
 }

@@ -139,9 +139,7 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     	}
     }
     
-    public void onSaveClick(View v) {
-    	Log.d("ADD", "add new entry here");
-    	
+    public void onSaveClick(View v) {   	
     	try {
     		double amount = Double.valueOf(mAmountEditText.getText().toString()).doubleValue();
     		

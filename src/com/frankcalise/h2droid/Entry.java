@@ -1,8 +1,12 @@
 package com.frankcalise.h2droid;
 
-import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import android.content.Context;
+
+import com.frankcalise.h2droid.util.UIUtils;
 
 public class Entry {
 	private int id = 0;
@@ -11,6 +15,20 @@ public class Entry {
 	private double metricAmount;
 	
 	public static final double ouncePerMililiter = 0.0338140227;
+	
+	public String getLocalTimestamp(Context context) {
+		String result = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		try {
+			Date date = sdf.parse(this.date);
+			result = android.text.format.DateUtils.formatDateTime(context, date.getTime(), UIUtils.TIME_FLAGS);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 	
 	// String Date getter with passed in format
 	public String getDateWithFormat(String _format) {

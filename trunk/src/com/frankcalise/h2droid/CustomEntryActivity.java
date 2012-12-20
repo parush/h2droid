@@ -5,8 +5,6 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,6 +35,7 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
 	private TimePicker mTimePicker;
 	private CheckBox mHistoricalCheck;
 	private boolean mIsHistorical = false;
+	private WaterDB mWaterDB = WaterDB.getInstance();
 	
 	/** Called when the activity is first created. */
     @Override
@@ -50,7 +49,6 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
         final RadioButton metricRadioButton = (RadioButton)findViewById(R.id.radio_metric);
         final RadioButton imperialRadioButton = (RadioButton)findViewById(R.id.radio_non_metric);
         int unitsPref = Settings.getUnitSystem(getApplicationContext());
-        
         
         mTimePicker = (TimePicker)findViewById(R.id.add_time_picker);
         mDatePicker = (DatePicker)findViewById(R.id.add_date_picker);
@@ -99,7 +97,6 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
         	@Override
         	public void onTextChanged(CharSequence s, int start, int before,
         			int count) {
-        		
         	}
 
 			@Override
@@ -110,8 +107,6 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-			
-				
 			}
         });
         
@@ -175,27 +170,28 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
     	updateConversionTextView();
     }
     
-    private void addNewEntry(Entry _entry) {
+    private void addNewEntry(Entry entry) {
     	// Check to see if user wants Toast message
     	boolean showToasts = Settings.getToastsSetting(getApplicationContext());
     	
-    	ContentResolver cr = getContentResolver();
-    	
-    	// Insert the new entry into the provider
-    	ContentValues values = new ContentValues();
-    	
-    	values.put(WaterProvider.KEY_DATE, _entry.getDate());
-    	values.put(WaterProvider.KEY_AMOUNT, _entry.getMetricAmount());
-    	
-    	cr.insert(WaterProvider.CONTENT_URI, values);
+//    	ContentResolver cr = getContentResolver();
+//    	
+//    	// Insert the new entry into the provider
+//    	ContentValues values = new ContentValues();
+//    	
+//    	values.put(WaterProvider.KEY_DATE, _entry.getDate());
+//    	values.put(WaterProvider.KEY_AMOUNT, _entry.getMetricAmount());
+//    	
+//    	cr.insert(WaterProvider.CONTENT_URI, values);
+    	mWaterDB.addNewEntry(getContentResolver(), entry);
     	
     	// Make a toast displaying add complete
     	int unitsPref = Settings.getUnitSystem(this);
-    	double displayAmount = _entry.getNonMetricAmount();
+    	double displayAmount = entry.getNonMetricAmount();
     	String displayUnits = getString(R.string.unit_fl_oz);
     	if (unitsPref == Settings.UNITS_METRIC) {
     		displayUnits = getString(R.string.unit_mililiters);
-    		displayAmount = _entry.getMetricAmount();
+    		displayAmount = entry.getMetricAmount();
     	}
     	String toastMsg = String.format("Added %.1f %s", displayAmount, displayUnits);
     	Toast toast = Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_SHORT);
@@ -223,7 +219,7 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
 			
 			// set up the new alarm
 			Intent intent = new Intent(this, AlarmReceiver.class);
-			intent.putExtra("entryDate", _entry.getDate());
+			intent.putExtra("entryDate", entry.getDate());
 			PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
     	}

@@ -11,6 +11,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -31,6 +32,11 @@ public class AppWidget extends AppWidgetProvider {
 						 int[] appWidgetIds) {
 
 		mAmount = mPercentGoal = -1;
+		
+		Log.d("WIDGET--", "onUpdate");
+		
+		updateAmount(context);
+		
 		updateAmount(context, appWidgetManager, appWidgetIds);
 	}
 	
@@ -45,6 +51,8 @@ public class AppWidget extends AppWidgetProvider {
 			mPercentGoal = intent.getExtras().getDouble("PERCENT");
 			mUnitSystem = intent.getExtras().getInt("UNITS");
 			
+			Log.d("WIDGET--", intent.getAction());
+			
 			// Update the UI
 			updateAmount(context);
 		} else {
@@ -55,8 +63,24 @@ public class AppWidget extends AppWidgetProvider {
 	public void updateAmount(Context context,
 							 AppWidgetManager appWidgetManager,
 							 int[] appWidgetIds) {
+		Log.d("WIDGET--", "updateAmount");
+		GlassView glassView = new GlassView(context);
+		glassView.measure(150, 150);
+		glassView.layout(0, 0, 150, 150);
+		glassView.setAmount((float) mAmount);
+		glassView.setDrawingCacheEnabled(true);
+		
+		Bitmap bitmap = glassView.getDrawingCache();
 
-		mUnitSystem = Settings.getUnitSystem(context);
+		final int N = appWidgetIds.length;
+    	for (int i = 0; i < N; i++) {
+    		int appWidgetId = appWidgetIds[i];
+    		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.one_cell_widget);
+    		views.setImageViewBitmap(R.id.widget_glass_view, bitmap);
+    		appWidgetManager.updateAppWidget(appWidgetId, views);
+    	}
+		
+		/*mUnitSystem = Settings.getUnitSystem(context);
 		mLargeUnits = Settings.getLargeUnitsSetting(context);
 		
 		// Setup units string
@@ -136,7 +160,7 @@ public class AppWidget extends AppWidgetProvider {
     		views.setOnClickPendingIntent(R.id.widget_background, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
     		
     		appWidgetManager.updateAppWidget(appWidgetId, views);
-    	}
+    	}*/
 	}
 	
 	// Obtain an instance of AppWidgetManager from the context

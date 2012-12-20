@@ -18,6 +18,7 @@ import android.widget.RemoteViews;
 public class AppWidget extends AppWidgetProvider {
 	
 	private double mAmount;
+	private double mGoalAmount;
 	private double mPercentGoal;
 	private int mUnitSystem;
 	private boolean mLargeUnits;
@@ -48,6 +49,7 @@ public class AppWidget extends AppWidgetProvider {
 		if (FORCE_WIDGET_UPDATE.equals(intent.getAction())) {
 			// Get the passed in values to display
 			mAmount = intent.getExtras().getDouble("AMOUNT");
+			mGoalAmount = intent.getExtras().getDouble("GOAL");
 			mPercentGoal = intent.getExtras().getDouble("PERCENT");
 			mUnitSystem = intent.getExtras().getInt("UNITS");
 			
@@ -63,20 +65,25 @@ public class AppWidget extends AppWidgetProvider {
 	public void updateAmount(Context context,
 							 AppWidgetManager appWidgetManager,
 							 int[] appWidgetIds) {
-		Log.d("WIDGET--", "updateAmount");
-		GlassView glassView = new GlassView(context);
+		Log.d("WIDGET--", "updateAmount" + mAmount + " / " + mGoalAmount);
+		GlassView glassView = new GlassView(context,(float) mAmount, (float) mGoalAmount);
 		glassView.measure(150, 150);
 		glassView.layout(0, 0, 150, 150);
-		glassView.setAmount((float) mAmount);
 		glassView.setDrawingCacheEnabled(true);
 		
 		Bitmap bitmap = glassView.getDrawingCache();
 
+		Intent launchAppIntent = new Intent(context, h2droid.class);
+    	launchAppIntent.setAction(Intent.ACTION_MAIN);
+    	launchAppIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+		
 		final int N = appWidgetIds.length;
     	for (int i = 0; i < N; i++) {
     		int appWidgetId = appWidgetIds[i];
     		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.one_cell_widget);
     		views.setImageViewBitmap(R.id.widget_glass_view, bitmap);
+    		views.setOnClickPendingIntent(R.id.widget_background, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
+    		views.setOnClickPendingIntent(R.id.widget_glass_view, PendingIntent.getActivity(context, 0, launchAppIntent, 0));
     		appWidgetManager.updateAppWidget(appWidgetId, views);
     	}
 		

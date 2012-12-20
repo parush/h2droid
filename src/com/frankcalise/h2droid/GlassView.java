@@ -11,6 +11,7 @@ import android.view.View;
 
 public class GlassView extends View {
 	private float mAmount;
+	private float mGoalAmount = 0.0f;
 	private Paint mOutlinePaint;
 	private Paint mWaterPaint;
 	private Paint mGoalTextPaint;
@@ -18,6 +19,15 @@ public class GlassView extends View {
 	
 	public GlassView(Context context) {
 		super(context);
+		initGlassView();
+	}
+	
+	public GlassView(Context context, float amount, float goalAmount) {
+		super(context);
+		
+		this.mAmount = amount;
+		this.mGoalAmount = goalAmount;
+		
 		initGlassView();
 	}
 	
@@ -36,7 +46,7 @@ public class GlassView extends View {
 	protected void initGlassView() {
 		setFocusable(true);
 		
-		this.mAmount = 100.0f;
+//		this.mAmount = 100.0f;
 		
 		Resources r = this.getResources();
 		
@@ -70,9 +80,11 @@ public class GlassView extends View {
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
+		mFillPath.reset();
+
 		int px = getMeasuredWidth();
 		int py = getMeasuredHeight();
-
+		
 		float upperLeftX = 0.0f;
 		float upperLeftY = 0.0f;
 		float bottomLeftX = px/4;
@@ -88,8 +100,13 @@ public class GlassView extends View {
 		// Draw the water in the glass
 		// Find the height according to the percentage of the goal complete
 		// Subtract from 100% and push water level down
-		float goalOffset = py - (mAmount/100)*py;
-
+		
+		float goalOffset = 0.0f;
+		if (mAmount <= mGoalAmount)
+		{
+			goalOffset = py - (mAmount/mGoalAmount)*py;
+		}
+		
 		// Find the slope of the outline of the glass
 		// This slope will be used to determine the x point
 		// to fit the water inside the glass
@@ -110,7 +127,7 @@ public class GlassView extends View {
 		canvas.drawLine(bottomLeftX, bottomLeftY, bottomRightX, bottomLeftY, mOutlinePaint);				// center line
 		canvas.drawLine(bottomLeftX, bottomLeftY-offset, bottomRightX, bottomLeftY-offset, mOutlinePaint);	// center line offset, to make bottom look thicker
 		canvas.drawLine(bottomRightX, bottomRightY, upperRightX, upperRightY, mOutlinePaint);				// diagonal bottom to top right
-		
+
 		// Save current matrix and clip onto private stack
 		canvas.save();
 	}
@@ -150,5 +167,13 @@ public class GlassView extends View {
 	
 	public float getAmount() {
 		return mAmount;
+	}
+	
+	public void setGoal(float _amount) {
+		mGoalAmount = _amount;
+	}
+	
+	public float getGoalAmount() {
+		return mGoalAmount;
 	}
 }

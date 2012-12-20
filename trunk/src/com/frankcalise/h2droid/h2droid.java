@@ -37,6 +37,7 @@ public class h2droid extends Activity {
 	private int mUnitsPref;
 	private ContentResolver mContentResolver = null;
 	private WaterDB mWaterDB = null;
+	private GlassView mGlassView = null;
 	
     /** Called when the activity is first created. */
     @Override
@@ -46,9 +47,15 @@ public class h2droid extends Activity {
         mContentResolver = getContentResolver();
         mContext = getApplicationContext();
         mWaterDB = WaterDB.getInstance();
-        
+
         // Set up main layout
         setContentView(R.layout.main);
+        
+        mGlassView = (GlassView)findViewById(R.id.home_glassview);
+        if (mGlassView == null)
+        {
+        	android.util.Log.e("GLASSVIEW", "NULL!!!");
+        }
     }
     
     /** Called when activity returns to foreground */
@@ -290,16 +297,29 @@ public class h2droid extends Activity {
     		//lastEntryTextView.setText(String.format("%s: %s", getString(R.string.home_last_entry), lastEntryMsg));	
     	}
     	
-    	updateWidget(percentGoal);
+    	try{
+    		mGlassView.setAmount((float)mConsumption);
+    		mGlassView.setGoal((float)prefsGoal);
+//    		mGlassView.invalidate();
+    		android.util.Log.d("GLASSVIEW","" + mConsumption);
+    		android.util.Log.d("GLASSVIEW","" + prefsGoal);
+    	}
+    	catch (Exception e)
+    	{
+    		android.util.Log.e("GLASSVIEW","error");
+    	}
+    	
+    	updateWidget(percentGoal, prefsGoal);
     	
     }
     
-    private void updateWidget(double percentGoal) {
+    private void updateWidget(double percentGoal, double prefsGoal) {
     	// Broadcast an Intent to update Widget
     	// Use putExtra so AppWidget class does not need
     	// to do ContentProvider pull
     	Intent widgetIntent = new Intent(AppWidget.FORCE_WIDGET_UPDATE);
     	widgetIntent.putExtra("AMOUNT", mConsumption);
+    	widgetIntent.putExtra("GOAL", prefsGoal);
     	widgetIntent.putExtra("PERCENT", percentGoal);
     	widgetIntent.putExtra("UNITS", mUnitsPref);
     	this.sendBroadcast(widgetIntent);

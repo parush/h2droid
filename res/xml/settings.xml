@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:title="General settings">
+	<PreferenceCategory android:title="@string/general_title">
 		<EditTextPreference
 					 	android:key="SETTING_GOAL"
 						android:title="@string/settings_goal_label"
@@ -19,6 +19,13 @@
 						android:title="@string/settings_convert_large"
 						android:summary="@string/settings_convert_large_summary"
 						android:defaultValue="false" />
+		<ListPreference 
+		    			android:key="SETTING_THEME"
+		    			android:title="@string/settings_theme"
+		    			android:summary="@string/settings_theme_summary"
+		    			android:defaultValue="@string/light_theme"
+		    			android:entries="@array/settings_theme_names"
+		    			android:entryValues="@array/settings_theme_names" />
 		<CheckBoxPreference
 						android:key="SETTING_TOASTS"
 						android:title="@string/settings_toasts"
@@ -58,7 +65,7 @@
 						android:inputType="numberDecimal" />
 	</PreferenceCategory>
 
-	<PreferenceCategory android:title="Reminder settings">
+	<PreferenceCategory android:title="@string/settings_notifications_title">
 		<CheckBoxPreference
 							android:key="SETTING_ENABLE_REMINDERS"
 							android:title="@string/settings_reminder_label"

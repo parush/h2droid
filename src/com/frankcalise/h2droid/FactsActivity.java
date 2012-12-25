@@ -1,10 +1,13 @@
 package com.frankcalise.h2droid;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class FactsActivity extends Activity {
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
+
+public class FactsActivity extends SherlockActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -12,6 +15,10 @@ public class FactsActivity extends Activity {
         
         // Set up main layout
         setContentView(R.layout.activity_water_facts);
+        
+        getSupportActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle(R.string.facts_title);
         
         // Get facts from string array resource and
         // create string for text view
@@ -27,5 +34,19 @@ public class FactsActivity extends Activity {
         // string of facts
         final TextView tv = (TextView)findViewById(R.id.facts_tv);
         tv.setText(factsText);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch (item.getItemId()) {
+    		case android.R.id.home:
+    			// App icon in ActionBar pressed, go home
+    			Intent intent = new Intent(this, h2droid.class);
+    			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    			startActivity(intent);
+    			return true;
+    		default:
+    			return super.onOptionsItemSelected(item);
+    	}
     }
 }

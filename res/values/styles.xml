@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-	<style name="Theme.Hydrate" parent="android:style/Theme.Light">
-		<item name="android:windowNoTitle">true</item>
+	<style name="Theme.Hydrate" parent="Theme.Sherlock.Light">
+		<!--  <item name="android:windowNoTitle">true</item>-->
+	</style>
+	
+	<style name="Theme.Hydrate.Dark" parent="Theme.Sherlock">
+	    
 	</style>
 	
 	<style name="TitleBar">

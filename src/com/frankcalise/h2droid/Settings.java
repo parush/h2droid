@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -18,15 +21,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class Settings extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+public class Settings extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener {
 	
 	private static final String OPT_AMOUNT = "SETTING_GOAL";
 	private static final String OPT_UNITS = "SETTING_UNITS";
 	private static final String OPT_TOASTS = "SETTING_TOASTS";
+	private static final String OPT_THEME = "SETTING_THEME";
 	private static final String OPT_LARGE_UNITS = "SETTING_LARGE_UNITS";
 	private static final String OPT_ENABLE_VOL_UP = "SETTING_ENABLE_VOL_UP";
 	private static final String OPT_ENABLE_VOL_DOWN = "SETTING_ENABLE_VOL_DOWN";
@@ -45,6 +48,7 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	private static final double DEFAULT_AMOUNT = 64.0;
 	private static final double DEFAULT_FAV_AMOUNT = 8.0;
 	private static final int DEFAULT_REMINDER_INT = 60;
+	private static final String DEFAULT_THEME = "Light";
 	public static final int UNITS_METRIC = 0;
 	public static final int UNITS_US = 1;
 	private static final String[] OPT_FAV_AMOUNT = {"FAV_AMOUNT_ONE", 
@@ -64,10 +68,22 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceBundle) {
+        // Apply user's desired theme
+        String userTheme = Settings.getUserTheme(this);
+        Log.d("HOME_ACTIVITY", "user theme = " +userTheme);
+        if (userTheme.equals(getString(R.string.light_theme))) {
+        	setTheme(R.style.Theme_Hydrate);
+        } else {
+        	setTheme(R.style.Theme_Hydrate_Dark);
+        }
+        
 		super.onCreate(savedInstanceBundle);
 		
 		// Load XML prefs file
 		addPreferencesFromResource(R.xml.settings);
+		
+		getSupportActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		// Get reference to preferences to update summaries
 		mEditTextPref1 = (EditTextPreference)getPreferenceScreen().findPreference(OPT_FAV_AMOUNT[0]);
@@ -202,6 +218,11 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 	public static boolean getReminderEnabled(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
 			.getBoolean(OPT_ENABLE_REMINDERS, false);
+	}
+	
+	public static String getUserTheme(Context context) {
+		return PreferenceManager.getDefaultSharedPreferences(context)
+				.getString(OPT_THEME, DEFAULT_THEME);
 	}
 	
 	public static int getReminderInterval(Context context) {
@@ -383,6 +404,15 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			mEditTextPref5.setSummary("Current amount is " + sharedPreferences.getString(key, OPT_FAV_AMOUNT_DEF[4]));
 		} else if (key.equals(ONE_SRV_AMOUNT)) {
 			mEditTextPrefSrv.setSummary("Current amount is " + sharedPreferences.getString(key, String.format("%s", DEFAULT_FAV_AMOUNT)));
+		} else if (key.equals(OPT_THEME)) {
+			
+			Intent intent = getIntent();
+			overridePendingTransition(0, 0);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+			finish();
+			
+			overridePendingTransition(0, 0);
+			startActivity(intent);
 		} else if (key.equals(OPT_UNITS)) {
 			String unitsPref = sharedPreferences.getString(key, OPT_UNITS_DEF);
 			if (unitsPref.equals(String.valueOf(UNITS_US))) {
@@ -446,4 +476,28 @@ public class Settings extends PreferenceActivity implements OnSharedPreferenceCh
 			}
 		}
 	}
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch (item.getItemId()) {
+    		case android.R.id.home:
+    			// App icon in ActionBar pressed, go home
+    			Intent intent = new Intent(this, h2droid.class);
+    			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+    			startActivity(intent);
+    			return true;
+    		default:
+    			return super.onOptionsItemSelected(item);
+    	}
+    }
+    
+    @Override
+    public void onBackPressed()
+    {
+    	// App icon in ActionBar pressed, go home
+		Intent intent = new Intent(this, h2droid.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+    	return;
+    }
 }

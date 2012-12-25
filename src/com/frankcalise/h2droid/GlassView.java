@@ -46,8 +46,6 @@ public class GlassView extends View {
 	protected void initGlassView() {
 		setFocusable(true);
 		
-//		this.mAmount = 100.0f;
-		
 		Resources r = this.getResources();
 		
 		mOutlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -70,8 +68,10 @@ public class GlassView extends View {
 	
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		int measuredWidth = measure(widthMeasureSpec) * 3/4;
+		int measuredWidth = measure(widthMeasureSpec);
 		int measuredHeight = measure(heightMeasureSpec);
+		
+		android.util.Log.d("GLASSVIEW", measuredWidth + " x " + measuredHeight);
 		
 		int d = Math.min(measuredWidth, measuredHeight);
 		

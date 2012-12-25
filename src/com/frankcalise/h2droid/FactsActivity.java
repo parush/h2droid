@@ -2,6 +2,7 @@ package com.frankcalise.h2droid;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockActivity;
@@ -11,6 +12,15 @@ public class FactsActivity extends SherlockActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Apply user's desired theme
+        String userTheme = Settings.getUserTheme(this);
+        Log.d("HOME_ACTIVITY", "user theme = " +userTheme);
+        if (userTheme.equals(getString(R.string.light_theme))) {
+        	setTheme(R.style.Theme_Hydrate);
+        } else {
+        	setTheme(R.style.Theme_Hydrate_Dark);
+        }
+    	
         super.onCreate(savedInstanceState);
         
         // Set up main layout

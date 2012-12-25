@@ -64,6 +64,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 	private EditTextPreference mEditTextPref4;
 	private EditTextPreference mEditTextPref5;
 	private EditTextPreference mEditTextPrefSrv;
+	private EditTextPreference mEditGoalPref;
 	private ListPreference mUnitsPref;
 	
 	@Override
@@ -92,6 +93,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		mEditTextPref4 = (EditTextPreference)getPreferenceScreen().findPreference(OPT_FAV_AMOUNT[3]);
 		mEditTextPref5 = (EditTextPreference)getPreferenceScreen().findPreference(OPT_FAV_AMOUNT[4]);
 		mEditTextPrefSrv = (EditTextPreference)getPreferenceScreen().findPreference(ONE_SRV_AMOUNT);
+		mEditGoalPref = (EditTextPreference)getPreferenceScreen().findPreference(OPT_AMOUNT);
 		mUnitsPref = (ListPreference)getPreferenceScreen().findPreference(OPT_UNITS);
 	}
 	
@@ -106,6 +108,7 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 		mEditTextPref4.setSummary("Current amount is " + getPreferenceScreen().getSharedPreferences().getString(OPT_FAV_AMOUNT[3], OPT_FAV_AMOUNT_DEF[3]));
 		mEditTextPref5.setSummary("Current amount is " + getPreferenceScreen().getSharedPreferences().getString(OPT_FAV_AMOUNT[4], OPT_FAV_AMOUNT_DEF[4]));
 		mEditTextPrefSrv.setSummary("Current amount is " + getPreferenceScreen().getSharedPreferences().getString(ONE_SRV_AMOUNT, String.format("%s", DEFAULT_FAV_AMOUNT)));
+		mEditGoalPref.setSummary(String.format("Amount of water needed to reach your goal (%s)", getPreferenceScreen().getSharedPreferences().getString(OPT_AMOUNT, OPT_AMOUNT_DEF)));
 		
 		String unitsPref = getPreferenceScreen().getSharedPreferences().getString(OPT_UNITS, OPT_UNITS_DEF);
 
@@ -404,6 +407,8 @@ public class Settings extends SherlockPreferenceActivity implements OnSharedPref
 			mEditTextPref5.setSummary("Current amount is " + sharedPreferences.getString(key, OPT_FAV_AMOUNT_DEF[4]));
 		} else if (key.equals(ONE_SRV_AMOUNT)) {
 			mEditTextPrefSrv.setSummary("Current amount is " + sharedPreferences.getString(key, String.format("%s", DEFAULT_FAV_AMOUNT)));
+		} else if (key.equals(OPT_AMOUNT)) {
+			mEditGoalPref.setSummary(String.format("Amount of water needed to reach your goal (%s)", sharedPreferences.getString(key, OPT_AMOUNT_DEF)));
 		} else if (key.equals(OPT_THEME)) {
 			
 			Intent intent = getIntent();

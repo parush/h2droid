@@ -39,6 +39,15 @@ public class HistoryActivity extends SherlockListActivity {
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Apply user's desired theme
+        String userTheme = Settings.getUserTheme(this);
+        Log.d("HOME_ACTIVITY", "user theme = " +userTheme);
+        if (userTheme.equals(getString(R.string.light_theme))) {
+        	setTheme(R.style.Theme_Hydrate);
+        } else {
+        	setTheme(R.style.Theme_Hydrate_Dark);
+        }
+        
         super.onCreate(savedInstanceState);
         
         // Set up main layout

@@ -2,7 +2,6 @@ package com.frankcalise.h2droid;
 
 import java.util.Calendar;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -27,7 +26,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class CustomEntryActivity extends Activity implements OnGestureListener {
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
+
+public class CustomEntryActivity extends SherlockActivity implements OnGestureListener {
 	
 	private EditText mAmountEditText;
 	private GestureDetector mGestureScanner;
@@ -40,10 +42,21 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    	// Apply user's desired theme
+        String userTheme = Settings.getUserTheme(this);
+        if (userTheme.equals(getString(R.string.light_theme))) {
+        	setTheme(R.style.Theme_Hydrate);
+        } else {
+        	setTheme(R.style.Theme_Hydrate_Dark);
+        }
+        
+    	super.onCreate(savedInstanceState);
         
         // Inflate the layout
         setContentView(R.layout.activity_custom_entry);
+        
+        getSupportActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
         // Enable default metric or non-metric via Settings
         final RadioButton metricRadioButton = (RadioButton)findViewById(R.id.radio_metric);
@@ -111,6 +124,20 @@ public class CustomEntryActivity extends Activity implements OnGestureListener {
         });
         
         mGestureScanner = new GestureDetector(this);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch (item.getItemId()) {
+    		case android.R.id.home:
+    			// App icon in ActionBar pressed, go home
+    			Intent intent = new Intent(this, h2droid.class);
+    			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    			startActivity(intent);
+    			return true;
+    		default:
+    			return super.onOptionsItemSelected(item);
+    	}
     }
     
     private void updateConversionTextView() {

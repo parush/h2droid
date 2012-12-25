@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.frankcalise.h2droid"
-      android:versionCode="11"
-      android:versionName="1.5.1"
+      android:versionCode="12"
+      android:versionName="2.0"
       android:installLocation="auto">
-    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="10" />
+    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="16" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-feature android:name="android.hardware.touchscreen" />
     <application android:icon="@drawable/icon"
                  android:label="@string/app_name"
-                 android:debuggable="true">
+                 android:allowBackup="true">
         <activity android:name=".h2droid"
                   android:label="@string/app_name"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/Theme.Hydrate">
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Settings"
-        		  android:label="@string/menu_settings_label"
-        		  android:theme="@android:style/Theme.Light.NoTitleBar" >
+        		  android:label="@string/menu_settings_label">
         </activity>
         <!-- <activity android:name=".AboutActivity"
         		  android:label="@string/about_title"
@@ -32,7 +30,6 @@
         </activity>
         <activity android:name=".CustomEntryActivity"
         		  android:label="@string/custom_entry_title"
-        		  android:theme="@style/Theme.Hydrate"
         		  android:screenOrientation="portrait" >
         </activity>
         <activity android:name=".HistoryActivity"
@@ -41,7 +38,7 @@
         </activity>
 		<provider android:name=".WaterProvider"
 				  android:authorities="com.frankcalise.provider.h2droid" />
-		<receiver  android:process=":remote" android:name="AlarmReceiver" />
+		<receiver android:process=":remote" android:name="AlarmReceiver" />
 		<receiver android:name=".AppWidget" android:label="@string/one_cell_widget_label">
 	   		<intent-filter>
 	   			<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -53,7 +50,7 @@
 	   			android:name="android.appwidget.provider"
 	   			android:resource="@xml/one_cell_widget_settings" />
    		</receiver>
-   		<receiver android:name=".TwoCellAppWidget" android:label="@string/two_cell_widget_label">
+   		<!-- <receiver android:name=".TwoCellAppWidget" android:label="@string/two_cell_widget_label">
    			<intent-filter>
    				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
    			</intent-filter>

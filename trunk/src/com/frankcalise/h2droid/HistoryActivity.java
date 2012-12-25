@@ -5,7 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import android.app.ListActivity;
+
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,7 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
+//import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
@@ -23,7 +26,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class HistoryActivity extends ListActivity {
+public class HistoryActivity extends SherlockListActivity {
 	
 	private int mUnitSystem;
 	private boolean mLargeUnits;
@@ -40,6 +43,10 @@ public class HistoryActivity extends ListActivity {
         
         // Set up main layout
         setContentView(R.layout.activity_history);
+        
+        getSupportActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle(R.string.history_activity_title);
         
         mContentResolver = getContentResolver();
         mListView = getListView();
@@ -249,7 +256,7 @@ public class HistoryActivity extends ListActivity {
     
     // Handle long press click
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(android.view.MenuItem item) {
     	AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
     	switch (item.getItemId()) {
     		case R.id.menu_add_historical_entry:
@@ -298,6 +305,27 @@ public class HistoryActivity extends ListActivity {
     		mEntryList.remove(position-1);
     		updateHeaderView();
     		mAdapter.notifyDataSetChanged();
+    	}
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch (item.getItemId()) {
+    		case android.R.id.home:
+    			// App icon in ActionBar pressed, go home if on main history
+    			// otherwise if in detail, go up to main history
+    			Intent intent = null;
+				if (mSelectedDate == null) {
+					intent = new Intent(this, h2droid.class);
+					
+				} else {
+					intent = new Intent(this, HistoryActivity.class);
+				}
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    			startActivity(intent);
+    			return true;
+    		default:
+    			return super.onOptionsItemSelected(item);
     	}
     }
 }

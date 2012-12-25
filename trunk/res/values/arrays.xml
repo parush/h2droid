@@ -18,7 +18,14 @@
 		<item>3</item>
 		<item>6</item>
 	</string-array>
-	
+	<array name="settings_themes">
+	    <item>Light</item>
+	    <item>Dark</item>
+	</array>
+	<string-array name="settings_theme_names">
+	    <item>@string/light_theme</item>
+	    <item>@string/dark_theme</item>
+	</string-array>
 	<string-array name="water_facts">
 		<item>+ Eight 8-ounce glasses of water is the recommended amount per day. More water may be necessary if one exercises or sweats heavily.</item>
 		<item>+ Water increases metabolism</item>

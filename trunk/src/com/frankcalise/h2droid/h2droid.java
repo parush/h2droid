@@ -5,10 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.frankcalise.h2droid.util.UIUtils;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+//import com.frankcalise.h2droid.util.UIUtils;
 import com.frankcalise.h2droid.util.UnitLocale;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -18,17 +20,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+//import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class h2droid extends Activity {
+public class h2droid extends SherlockActivity {
 	private double mConsumption = 0;
 	private boolean mShowToasts;
 	private boolean mIsNonMetric = true;
@@ -42,27 +43,32 @@ public class h2droid extends Activity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Apply user's desired theme
+        String userTheme = Settings.getUserTheme(this);
+        Log.d("HOME_ACTIVITY", "user theme = " +userTheme);
+        if (userTheme.equals(getString(R.string.light_theme))) {
+        	setTheme(R.style.Theme_Hydrate);
+        } else {
+        	setTheme(R.style.Theme_Hydrate_Dark);
+        }
+        
         super.onCreate(savedInstanceState);
         
         mContentResolver = getContentResolver();
         mContext = getApplicationContext();
-        mWaterDB = WaterDB.getInstance();
-
+        mWaterDB = WaterDB.getInstance();      
+       
         // Set up main layout
         setContentView(R.layout.main);
         
         mGlassView = (GlassView)findViewById(R.id.home_glassview);
-        if (mGlassView == null)
-        {
-        	android.util.Log.e("GLASSVIEW", "NULL!!!");
-        }
     }
     
     /** Called when activity returns to foreground */
     @Override
     protected void onResume() {
     	super.onResume();
-    	
+
     	mShowToasts = Settings.getToastsSetting(mContext);
     	mUnitsPref = Settings.getUnitSystem(mContext);
     	if (mUnitsPref == Settings.UNITS_US) {
@@ -80,8 +86,9 @@ public class h2droid extends Activity {
     	super.onCreateOptionsMenu(menu);
     	
     	// Inflate the main menu
-    	MenuInflater inflater = getMenuInflater();
-    	inflater.inflate(R.menu.main_menu, menu);
+//    	MenuInflater inflater = getMenuInflater();
+    	getSupportMenuInflater().inflate(R.menu.main_menu, menu);
+//    	inflater.inflate(R.menu.main_menu, menu);
     	
     	return true;
     }
@@ -91,6 +98,31 @@ public class h2droid extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
     	// Start activity depending on menu choice
     	switch (item.getItemId()) {
+    		case R.id.menu_add:
+    			Entry oneServing = new Entry(Settings.getOneServingAmount(this), mIsNonMetric);
+    			addNewEntry(oneServing);
+    			return true;
+    		case R.id.menu_star:
+    			String[] itemsArr = Settings.getArrayOfFavoriteAmounts(this);
+    			new AlertDialog.Builder(this)
+    				.setTitle("Add favorite amount")
+    				.setItems(itemsArr, 
+    					new DialogInterface.OnClickListener() {
+    						@Override
+    						public void onClick(DialogInterface dialog, int which) {
+    							double favAmount = Settings.getFavoriteAmountDouble(which, mContext);
+    							Entry favServing = new Entry(favAmount, mIsNonMetric);
+    							addNewEntry(favServing);
+    						}
+    					})
+    			.show();
+    			return true;
+    		case R.id.menu_custom_amount:
+    			startActivity(new Intent(this, CustomEntryActivity.class));
+    			return true;
+    		case R.id.menu_undo:
+    			undoTodaysLastEntry();
+    			return true;
     		case R.id.menu_settings:
     			startActivity(new Intent(this, Settings.class));
     			return true;
@@ -239,9 +271,9 @@ public class h2droid extends Activity {
 //    	}
 
     	// update the +N add button text according to the unit system
-    	final Button nButton = (Button)findViewById(R.id.add_custom_serving_button);
+    	//final Button nButton = (Button)findViewById(R.id.add_custom_serving_button);
     	// update one serving button
-    	final Button oneSrvButton = (Button)findViewById(com.frankcalise.h2droid.R.id.add_one_serving_button);
+    	//final Button oneSrvButton = (Button)findViewById(com.frankcalise.h2droid.R.id.add_one_serving_button);
     	
     	
     	// Show consumption amount	
@@ -255,8 +287,8 @@ public class h2droid extends Activity {
 //    		nButton.setText(getString(R.string.home_n_add_oz));
     	}
     	//mOneServingText = String.format("%s (%s %s)", getString(com.frankcalise.h2droid.R.string.one_serving_button_label), Settings.getOneServingAmount(this), displayUnits);
-    	nButton.setText(UIUtils.formatCustomAmountButtonText(mContext));
-    	oneSrvButton.setText(UIUtils.formatOneServingButtonText(mContext));
+    	//nButton.setText(UIUtils.formatCustomAmountButtonText(mContext));
+    	//oneSrvButton.setText(UIUtils.formatOneServingButtonText(mContext));
     	
     	originalUnits = displayUnits;
     	
@@ -297,20 +329,11 @@ public class h2droid extends Activity {
     		//lastEntryTextView.setText(String.format("%s: %s", getString(R.string.home_last_entry), lastEntryMsg));	
     	}
     	
-    	try{
-    		mGlassView.setAmount((float)mConsumption);
-    		mGlassView.setGoal((float)prefsGoal);
-//    		mGlassView.invalidate();
-    		android.util.Log.d("GLASSVIEW","" + mConsumption);
-    		android.util.Log.d("GLASSVIEW","" + prefsGoal);
-    	}
-    	catch (Exception e)
-    	{
-    		android.util.Log.e("GLASSVIEW","error");
-    	}
+    	mGlassView.setAmount((float)mConsumption);
+    	mGlassView.setGoal((float)prefsGoal);
+    	mGlassView.invalidate();
     	
     	updateWidget(percentGoal, prefsGoal);
-    	
     }
     
     private void updateWidget(double percentGoal, double prefsGoal) {
